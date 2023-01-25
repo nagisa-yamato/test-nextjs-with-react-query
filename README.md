@@ -2,6 +2,8 @@
 
 [TanStack Query に載っている Next.js と合わせた使い方](https://tanstack.com/query/latest/docs/react/guides/ssr)
 
+\+
+
 - graphql-codegen
 - graphql-eslint
 - @lukemorales/query-key-factory
