@@ -18,6 +18,7 @@ specifiers:
   graphql: ^16.6.0
   graphql-request: ^5.1.0
   next: 13.1.5
+  prettier: ^2.8.3
   react: 18.2.0
   react-dom: 18.2.0
   ts-node: ^10.9.1
@@ -45,6 +46,7 @@ devDependencies:
   '@graphql-codegen/client-preset': 1.2.6_graphql@16.6.0
   '@graphql-eslint/eslint-plugin': 3.14.3_ykzowzmb7rcumunkscnbisnkom
   eslint-config-prettier: 8.6.0_eslint@8.32.0
+  prettier: 2.8.3
   ts-node: 10.9.1_awa2wsr5thmg3i7jqycphctjfq
   typescript: 4.9.4
 
@@ -4330,6 +4332,12 @@ packages:
   /prelude-ls/1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
+
+  /prettier/2.8.3:
+    resolution: {integrity: sha512-tJ/oJ4amDihPoufT5sM0Z1SKEuKay8LfVAMlbbhnnkvt6BUserZylqo2PN+p9KeljLr0OHa2rXHU1T8reeoTrw==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: true
 
   /promise/7.3.1:
     resolution: {integrity: sha512-nolQXZ/4L+bP/UGlkfaIujX9BKxGwmQ9OT4mOt5yvy8iK1h3wqTEJCijzGANTCCl9nWjY41juyAn2K3Q1hLLTg==}

@@ -1,3 +1,15 @@
+# なにこれ
+
+[TanStack Query に載っている Next.js と合わせた使い方](https://tanstack.com/query/latest/docs/react/guides/ssr)
+
+- graphql-codegen
+- graphql-eslint
+- @lukemorales/query-key-factory
+
+注: [pnpm](https://pnpm.io/installation#using-corepack) を使用しています
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
