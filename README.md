@@ -7,6 +7,7 @@
 - graphql-codegen
 - graphql-eslint
 - @lukemorales/query-key-factory
+- @typescript-eslint
 
 注: [pnpm](https://pnpm.io/installation#using-corepack) を使用しています
 

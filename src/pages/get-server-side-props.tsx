@@ -25,7 +25,9 @@ const GetServerSideProps = () => {
           {character?.image && (
             <Image
               src={character.image}
-              alt={`Picture of ${character?.name}`}
+              alt={`Picture of ${
+                character?.name ?? "a Rick and Morty character"
+              }`}
               width={250}
               height={250}
             />
