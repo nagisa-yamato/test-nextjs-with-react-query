@@ -8,6 +8,7 @@ module.exports = {
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
     "prettier",
   ],
   parser: "@typescript-eslint/parser",
@@ -26,7 +27,15 @@ module.exports = {
       extends: "plugin:@graphql-eslint/operations-recommended",
       parserOptions: {
         operations: "./src/**/*.(ts|tsx)",
-        schema: "https://rickandmortyapi.com/graphql",
+        schema: [
+          "https://rickandmortyapi.com/graphql",
+          "https://stage-api.stagefam.com/graphql",
+        ],
+        schemaOptions: {
+          headers: {
+            Authorization: "",
+          },
+        },
       },
     },
   ],

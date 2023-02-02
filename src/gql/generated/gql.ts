@@ -13,7 +13,11 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
+    "\n  fragment PageInfoFragment on PageInfo {\n    hasNextPage\n    hasPreviousPage\n    startCursor\n    endCursor\n  }\n": types.PageInfoFragmentFragmentDoc,
+    "\n  fragment GalleryFragment on Gallery {\n    id\n    name\n    description\n    releaseDay\n    isViewable\n    isCommentable\n  }\n": types.GalleryFragmentFragmentDoc,
+    "\n  fragment GalleryConnectionFragment on GalleryConnection {\n    pageInfo {\n      ...PageInfoFragment\n    }\n    edges {\n      node {\n        ...GalleryFragment\n      }\n      cursor\n    }\n    totalCount\n  }\n": types.GalleryConnectionFragmentFragmentDoc,
     "\n  query getCharacters($page: Int) {\n    characters(page: $page) {\n      info {\n        count\n        next\n        pages\n        prev\n      }\n      results {\n        id\n        image\n        name\n      }\n    }\n  }\n": types.GetCharactersDocument,
+    "\n  query getGalleryGroup(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    galleryGroup(slug: $slug) {\n      id\n      name\n      slug\n      isAvailable\n      galleries(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: ASC, field: START_AT }\n      ) {\n        ...GalleryConnectionFragment\n      }\n    }\n  }\n": types.GetGalleryGroupDocument,
 };
 
 /**
@@ -33,7 +37,23 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  fragment PageInfoFragment on PageInfo {\n    hasNextPage\n    hasPreviousPage\n    startCursor\n    endCursor\n  }\n"): (typeof documents)["\n  fragment PageInfoFragment on PageInfo {\n    hasNextPage\n    hasPreviousPage\n    startCursor\n    endCursor\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment GalleryFragment on Gallery {\n    id\n    name\n    description\n    releaseDay\n    isViewable\n    isCommentable\n  }\n"): (typeof documents)["\n  fragment GalleryFragment on Gallery {\n    id\n    name\n    description\n    releaseDay\n    isViewable\n    isCommentable\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment GalleryConnectionFragment on GalleryConnection {\n    pageInfo {\n      ...PageInfoFragment\n    }\n    edges {\n      node {\n        ...GalleryFragment\n      }\n      cursor\n    }\n    totalCount\n  }\n"): (typeof documents)["\n  fragment GalleryConnectionFragment on GalleryConnection {\n    pageInfo {\n      ...PageInfoFragment\n    }\n    edges {\n      node {\n        ...GalleryFragment\n      }\n      cursor\n    }\n    totalCount\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  query getCharacters($page: Int) {\n    characters(page: $page) {\n      info {\n        count\n        next\n        pages\n        prev\n      }\n      results {\n        id\n        image\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  query getCharacters($page: Int) {\n    characters(page: $page) {\n      info {\n        count\n        next\n        pages\n        prev\n      }\n      results {\n        id\n        image\n        name\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query getGalleryGroup(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    galleryGroup(slug: $slug) {\n      id\n      name\n      slug\n      isAvailable\n      galleries(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: ASC, field: START_AT }\n      ) {\n        ...GalleryConnectionFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query getGalleryGroup(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    galleryGroup(slug: $slug) {\n      id\n      name\n      slug\n      isAvailable\n      galleries(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: ASC, field: START_AT }\n      ) {\n        ...GalleryConnectionFragment\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

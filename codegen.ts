@@ -3,7 +3,17 @@
 import { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
-  schema: "https://rickandmortyapi.com/graphql",
+  // https://the-guild.dev/graphql/codegen/docs/config-reference/schema-field
+  schema: [
+    "https://rickandmortyapi.com/graphql",
+    {
+      "https://stage-api.stagefam.com/graphql": {
+        headers: {
+          Authorization: "",
+        },
+      },
+    },
+  ],
   // https://the-guild.dev/graphql/codegen/docs/config-reference/documents-field#document-scanner
   documents: "src/**/!(*.d).{ts,tsx}",
   ignoreNoDocuments: true, // for better experience with the watcher
