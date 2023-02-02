@@ -11,6 +11,12 @@
 
 注: [pnpm](https://pnpm.io/installation#using-corepack) を使用しています
 
+## HELP
+
+🧨 graphql-eslint VSCode で動いてない
+
+https://github.com/B2o5T/graphql-eslint/issues/1091
+
 ---
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
