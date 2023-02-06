@@ -1,13 +1,25 @@
 import { graphql } from "@/gql/generated";
 
+export const GalleryContentFragment = graphql(`
+  fragment GalleryContentFragment on GalleryContent {
+    id
+    contentFile {
+      id
+      url
+      alternativeContent
+    }
+  }
+`);
+
 export const GalleryFragment = graphql(`
   fragment GalleryFragment on Gallery {
     id
     name
-    description
     releaseDay
     isViewable
-    isCommentable
+    contents {
+      ...GalleryContentFragment
+    }
   }
 `);
 

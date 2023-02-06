@@ -1,7 +1,7 @@
 import { getCharactersKeys } from "@/gql/queries/getCharacters";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import styles from "@/styles/GetServerSideProps.module.css";
+import styles from "@/styles/pages/GetServerSideProps.module.css";
 
 export const getServerSideProps = async () => {
   const queryClient = new QueryClient();
@@ -32,7 +32,6 @@ const GetServerSideProps = () => {
                 }`}
                 width={250}
                 height={250}
-                className={styles.image}
               />
             )}
           </article>

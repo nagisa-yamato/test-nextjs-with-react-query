@@ -13,9 +13,6 @@ const getGalleryGroupQueryDocument = graphql(`
   ) {
     galleryGroup(slug: $slug) {
       id
-      name
-      slug
-      isAvailable
       galleries(
         first: $first
         after: $after

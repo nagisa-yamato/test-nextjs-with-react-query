@@ -9,6 +9,12 @@ const nextConfig = {
         port: "",
         pathname: "/api/**",
       },
+      {
+        protocol: "https",
+        hostname: "stg-fam-fansite.imgix.net",
+        port: "",
+        pathname: "/shared_file/**",
+      },
     ],
   },
 };

@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Head from "next/head";
-import mainStyles from "@/styles/Main.module.css";
+import mainStyles from "@/styles/pages/Main.module.css";
 import Header from "@/components/Header/Header";
 
 export default function App({
