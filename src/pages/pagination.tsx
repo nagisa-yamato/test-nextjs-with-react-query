@@ -1,17 +1,23 @@
-import { getGalleryGroupKeys } from "@/gql/queries/getGalleryGroup";
+import {
+  getGalleryGroup,
+  getGalleryGroupKeys,
+} from "@/gql/queries/getGalleryGroup";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
-import Cookies from "js-cookie";
-import { COOKIE_NAME } from "@/constants";
+import { COOKIE_NAME_ACCESS_TOKEN } from "@/constants";
+import { cookiesApi } from "@/lib/js-cookie";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(
-    getGalleryGroupKeys(req.cookies[COOKIE_NAME]).withVariables({
-      slug: "blurry pictures of cats",
-      first: 10,
-    })
-  );
+  const variables = {
+    slug: "blurry pictures of cats",
+    first: 10,
+  };
+  await queryClient.prefetchQuery({
+    ...getGalleryGroupKeys.withVariables(variables),
+    queryFn: () =>
+      getGalleryGroup(variables, req.cookies[COOKIE_NAME_ACCESS_TOKEN]),
+  });
 
   return {
     props: { dehydratedState: dehydrate(queryClient) },
@@ -19,11 +25,14 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 };
 
 const Pagination = () => {
+  const variables = {
+    slug: "blurry pictures of cats",
+    first: 10,
+  };
   const { data, isLoading, error } = useQuery({
-    ...getGalleryGroupKeys(Cookies.get(COOKIE_NAME)).withVariables({
-      slug: "blurry pictures of cats",
-      first: 10,
-    }),
+    ...getGalleryGroupKeys.withVariables(variables),
+    queryFn: () =>
+      getGalleryGroup(variables, cookiesApi.get(COOKIE_NAME_ACCESS_TOKEN)),
     retry: 0,
   });
 

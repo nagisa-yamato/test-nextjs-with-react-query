@@ -9,9 +9,8 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Head from "next/head";
-import Link from "next/link";
 import mainStyles from "@/styles/Main.module.css";
-import headerStyles from "@/styles/Header.module.css";
+import Header from "@/components/Header/Header";
 
 export default function App({
   Component,
@@ -30,23 +29,7 @@ AppProps<{ dehydratedState: DehydratedState }>) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <header className={headerStyles.header}>
-            <nav>
-              <ul className={headerStyles.ul}>
-                <li>
-                  <Link href="/">home</Link>
-                </li>
-                <li>
-                  <Link href="/get-server-side-props">
-                    get-server-side-props
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/pagination">pagination</Link>
-                </li>
-              </ul>
-            </nav>
-          </header>
+          <Header />
           <main className={mainStyles.main}>
             <Component {...pageProps} />
           </main>

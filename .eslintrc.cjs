@@ -18,6 +18,16 @@ module.exports = {
         "plugin:@tanstack/eslint-plugin-query/recommended",
         "prettier",
       ],
+      rules: {
+        "@typescript-eslint/no-misused-promises": [
+          "error",
+          {
+            checksVoidReturn: {
+              attributes: false,
+            },
+          },
+        ],
+      },
       parser: "@typescript-eslint/parser",
       plugins: ["@typescript-eslint"],
       parserOptions: {
