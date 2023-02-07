@@ -8,9 +8,9 @@ import { cookiesApi } from "@/lib/js-cookie";
 import { signOut } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import styles from "./Header.module.css";
+import styles from "./AppHeader.module.css";
 
-const Header = () => {
+const AppHeader = () => {
   const isLoggedIn = useIsLoggedIn();
   const router = useRouter();
 
@@ -49,4 +49,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default AppHeader;

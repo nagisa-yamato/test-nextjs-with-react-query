@@ -10,7 +10,7 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Head from "next/head";
 import mainStyles from "@/styles/pages/Main.module.css";
-import Header from "@/components/Header/Header";
+import AppHeader from "@/components/AppHeader/AppHeader";
 
 export default function App({
   Component,
@@ -29,7 +29,7 @@ AppProps<{ dehydratedState: DehydratedState }>) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <Header />
+          <AppHeader />
           <main className={mainStyles.main}>
             <Component {...pageProps} />
           </main>
