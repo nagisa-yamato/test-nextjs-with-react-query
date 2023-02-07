@@ -16,3 +16,9 @@
 .image {
   object-fit: cover;
 }
+
+.buttons {
+  display: flex;
+  column-gap: 16px;
+  justify-content: flex-end;
+}

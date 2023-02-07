@@ -1,7 +1,7 @@
 import { graphql } from "@/gql/generated";
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { GetGalleryGroupQueryVariables } from "@/gql/generated/graphql";
-import client from "../graphql-request";
+import { FAMStageAPI } from "../graphql-request";
 
 const getGalleryGroupQueryDocument = graphql(`
   query getGalleryGroup(
@@ -30,12 +30,10 @@ export const getGalleryGroup = async (
   variables: GetGalleryGroupQueryVariables,
   token?: string
 ) => {
-  client.setEndpoint("https://stage-api.stagefam.com/graphql");
   if (token) {
-    client.setHeader("Authorization", `Bearer ${token}`);
+    FAMStageAPI.setHeader("Authorization", `Bearer ${token}`);
   }
-  client.setHeader("X-Referer", "https://sample.stagefam.com");
-  const response = await client.request(
+  const response = await FAMStageAPI.request(
     getGalleryGroupQueryDocument,
     variables
   );

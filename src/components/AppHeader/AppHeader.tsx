@@ -2,7 +2,7 @@ import {
   COOKIE_NAME_ACCESS_TOKEN,
   COOKIE_NAME_REFRESH_TOKEN,
 } from "@/constants";
-import useIsLoggedIn from "@/hooks/useIsLoggedIn";
+import useAuth from "@/hooks/useAuth";
 import { auth } from "@/lib/firebase/config";
 import { cookiesApi } from "@/lib/js-cookie";
 import { signOut } from "firebase/auth";
@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import styles from "./AppHeader.module.css";
 
 const AppHeader = () => {
-  const isLoggedIn = useIsLoggedIn();
+  const { isLoggedIn } = useAuth();
   const router = useRouter();
 
   return (

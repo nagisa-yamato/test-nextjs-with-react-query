@@ -1,15 +1,15 @@
 import { useRouter } from "next/router";
-import useIsLoggedIn from "@/hooks/useIsLoggedIn";
+import useAuth from "@/hooks/useAuth";
 import LoginForm from "@/components/LoginForm/LoginForm";
 import { useEffect } from "react";
 
 const Login = () => {
-  const isLoggedIn = useIsLoggedIn();
+  const { isLoggedIn } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (isLoggedIn) {
-      router.push("/pagination");
+      void (async () => await router.push("/pagination"))();
     }
   }, [isLoggedIn, router]);
 

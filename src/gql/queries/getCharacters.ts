@@ -1,7 +1,7 @@
 import { graphql } from "@/gql/generated";
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { GetCharactersQueryVariables } from "../generated/graphql";
-import client from "../graphql-request";
+import { RickAndMortyAPIClient } from "../graphql-request";
 
 const getCharactersQueryDocument = graphql(`
   query getCharacters($page: Int) {
@@ -22,7 +22,10 @@ const getCharactersQueryDocument = graphql(`
 `);
 
 const getCharacters = async (variables: GetCharactersQueryVariables) => {
-  const response = await client.request(getCharactersQueryDocument, variables);
+  const response = await RickAndMortyAPIClient.request(
+    getCharactersQueryDocument,
+    variables
+  );
   return response.characters;
 };
 

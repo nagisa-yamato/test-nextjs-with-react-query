@@ -11,6 +11,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Head from "next/head";
 import mainStyles from "@/styles/pages/Main.module.css";
 import AppHeader from "@/components/AppHeader/AppHeader";
+import { AuthProvider } from "@/context/AuthProvider";
 
 export default function App({
   Component,
@@ -29,10 +30,12 @@ AppProps<{ dehydratedState: DehydratedState }>) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <AppHeader />
-          <main className={mainStyles.main}>
-            <Component {...pageProps} />
-          </main>
+          <AuthProvider>
+            <AppHeader />
+            <main className={mainStyles.main}>
+              <Component {...pageProps} />
+            </main>
+          </AuthProvider>
         </Hydrate>
         <ReactQueryDevtools />
       </QueryClientProvider>
