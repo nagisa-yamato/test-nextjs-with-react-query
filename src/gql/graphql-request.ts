@@ -8,3 +8,7 @@ export const client = new GraphQLClient(
     },
   }
 );
+
+export const setAuthorizationHeader = (token: string) => {
+  client.setHeader("Authorization", `Bearer ${token}`);
+};

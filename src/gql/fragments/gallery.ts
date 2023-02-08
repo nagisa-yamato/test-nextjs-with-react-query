@@ -4,9 +4,7 @@ export const GalleryContentFragment = graphql(`
   fragment GalleryContentFragment on GalleryContent {
     id
     contentFile {
-      id
-      url
-      alternativeContent
+      ...SharedFileFragment
     }
   }
 `);

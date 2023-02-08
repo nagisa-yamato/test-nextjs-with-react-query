@@ -1,7 +1,7 @@
 import { graphql } from "@/gql/generated";
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { GetGalleryGroupQueryVariables } from "@/gql/generated/graphql";
-import { client } from "../graphql-request";
+import { client, setAuthorizationHeader } from "../graphql-request";
 
 const getGalleryGroupQueryDocument = graphql(`
   query getGalleryGroup(
@@ -18,7 +18,7 @@ const getGalleryGroupQueryDocument = graphql(`
         after: $after
         last: $last
         before: $before
-        orderBy: { direction: ASC, field: START_AT }
+        orderBy: { direction: DESC, field: START_AT }
       ) {
         ...GalleryConnectionFragment
       }
@@ -31,7 +31,7 @@ export const getGalleryGroup = async (
   token?: string
 ) => {
   if (token) {
-    client.setHeader("Authorization", `Bearer ${token}`);
+    setAuthorizationHeader(token);
   }
   const response = await client.request(
     getGalleryGroupQueryDocument,

@@ -8,3 +8,11 @@ export const PageInfoFragment = graphql(`
     endCursor
   }
 `);
+
+export const SharedFileFragment = graphql(`
+  fragment SharedFileFragment on SharedFile {
+    id
+    url
+    alternativeContent
+  }
+`);

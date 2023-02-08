@@ -13,11 +13,16 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
+    "\n  fragment BlogCategoryFragment on BlogCategory {\n    id\n    name\n  }\n": types.BlogCategoryFragmentFragmentDoc,
+    "\n  fragment BlogPostFragment on BlogPost {\n    id\n    subject\n    category {\n      ...BlogCategoryFragment\n    }\n    thumbnailFile {\n      ...SharedFileFragment\n    }\n  }\n": types.BlogPostFragmentFragmentDoc,
+    "\n  fragment BlogPostConnectionFragment on BlogPostConnection {\n    pageInfo {\n      ...PageInfoFragment\n    }\n    edges {\n      node {\n        ...BlogPostFragment\n      }\n      cursor\n    }\n    totalCount\n  }\n": types.BlogPostConnectionFragmentFragmentDoc,
     "\n  fragment PageInfoFragment on PageInfo {\n    hasNextPage\n    hasPreviousPage\n    startCursor\n    endCursor\n  }\n": types.PageInfoFragmentFragmentDoc,
-    "\n  fragment GalleryContentFragment on GalleryContent {\n    id\n    contentFile {\n      id\n      url\n      alternativeContent\n    }\n  }\n": types.GalleryContentFragmentFragmentDoc,
+    "\n  fragment SharedFileFragment on SharedFile {\n    id\n    url\n    alternativeContent\n  }\n": types.SharedFileFragmentFragmentDoc,
+    "\n  fragment GalleryContentFragment on GalleryContent {\n    id\n    contentFile {\n      ...SharedFileFragment\n    }\n  }\n": types.GalleryContentFragmentFragmentDoc,
     "\n  fragment GalleryFragment on Gallery {\n    id\n    name\n    releaseDay\n    isViewable\n    contents {\n      ...GalleryContentFragment\n    }\n  }\n": types.GalleryFragmentFragmentDoc,
     "\n  fragment GalleryConnectionFragment on GalleryConnection {\n    pageInfo {\n      ...PageInfoFragment\n    }\n    edges {\n      node {\n        ...GalleryFragment\n      }\n      cursor\n    }\n    totalCount\n  }\n": types.GalleryConnectionFragmentFragmentDoc,
-    "\n  query getGalleryGroup(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    galleryGroup(slug: $slug) {\n      id\n      galleries(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: ASC, field: START_AT }\n      ) {\n        ...GalleryConnectionFragment\n      }\n    }\n  }\n": types.GetGalleryGroupDocument,
+    "\n  query getBlog(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    blog(slug: $slug) {\n      id\n      posts(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: DESC, field: START_AT }\n      ) {\n        ...BlogPostConnectionFragment\n      }\n    }\n  }\n": types.GetBlogDocument,
+    "\n  query getGalleryGroup(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    galleryGroup(slug: $slug) {\n      id\n      galleries(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: DESC, field: START_AT }\n      ) {\n        ...GalleryConnectionFragment\n      }\n    }\n  }\n": types.GetGalleryGroupDocument,
 };
 
 /**
@@ -37,11 +42,27 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  fragment BlogCategoryFragment on BlogCategory {\n    id\n    name\n  }\n"): (typeof documents)["\n  fragment BlogCategoryFragment on BlogCategory {\n    id\n    name\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment BlogPostFragment on BlogPost {\n    id\n    subject\n    category {\n      ...BlogCategoryFragment\n    }\n    thumbnailFile {\n      ...SharedFileFragment\n    }\n  }\n"): (typeof documents)["\n  fragment BlogPostFragment on BlogPost {\n    id\n    subject\n    category {\n      ...BlogCategoryFragment\n    }\n    thumbnailFile {\n      ...SharedFileFragment\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment BlogPostConnectionFragment on BlogPostConnection {\n    pageInfo {\n      ...PageInfoFragment\n    }\n    edges {\n      node {\n        ...BlogPostFragment\n      }\n      cursor\n    }\n    totalCount\n  }\n"): (typeof documents)["\n  fragment BlogPostConnectionFragment on BlogPostConnection {\n    pageInfo {\n      ...PageInfoFragment\n    }\n    edges {\n      node {\n        ...BlogPostFragment\n      }\n      cursor\n    }\n    totalCount\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  fragment PageInfoFragment on PageInfo {\n    hasNextPage\n    hasPreviousPage\n    startCursor\n    endCursor\n  }\n"): (typeof documents)["\n  fragment PageInfoFragment on PageInfo {\n    hasNextPage\n    hasPreviousPage\n    startCursor\n    endCursor\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment GalleryContentFragment on GalleryContent {\n    id\n    contentFile {\n      id\n      url\n      alternativeContent\n    }\n  }\n"): (typeof documents)["\n  fragment GalleryContentFragment on GalleryContent {\n    id\n    contentFile {\n      id\n      url\n      alternativeContent\n    }\n  }\n"];
+export function graphql(source: "\n  fragment SharedFileFragment on SharedFile {\n    id\n    url\n    alternativeContent\n  }\n"): (typeof documents)["\n  fragment SharedFileFragment on SharedFile {\n    id\n    url\n    alternativeContent\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  fragment GalleryContentFragment on GalleryContent {\n    id\n    contentFile {\n      ...SharedFileFragment\n    }\n  }\n"): (typeof documents)["\n  fragment GalleryContentFragment on GalleryContent {\n    id\n    contentFile {\n      ...SharedFileFragment\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -53,7 +74,11 @@ export function graphql(source: "\n  fragment GalleryConnectionFragment on Galle
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query getGalleryGroup(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    galleryGroup(slug: $slug) {\n      id\n      galleries(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: ASC, field: START_AT }\n      ) {\n        ...GalleryConnectionFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query getGalleryGroup(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    galleryGroup(slug: $slug) {\n      id\n      galleries(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: ASC, field: START_AT }\n      ) {\n        ...GalleryConnectionFragment\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query getBlog(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    blog(slug: $slug) {\n      id\n      posts(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: DESC, field: START_AT }\n      ) {\n        ...BlogPostConnectionFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query getBlog(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    blog(slug: $slug) {\n      id\n      posts(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: DESC, field: START_AT }\n      ) {\n        ...BlogPostConnectionFragment\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query getGalleryGroup(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    galleryGroup(slug: $slug) {\n      id\n      galleries(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: DESC, field: START_AT }\n      ) {\n        ...GalleryConnectionFragment\n      }\n    }\n  }\n"): (typeof documents)["\n  query getGalleryGroup(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    galleryGroup(slug: $slug) {\n      id\n      galleries(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: DESC, field: START_AT }\n      ) {\n        ...GalleryConnectionFragment\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

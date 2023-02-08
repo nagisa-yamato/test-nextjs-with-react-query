@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Head from "next/head";
-import mainStyles from "@/styles/pages/Main.module.css";
+import styles from "@/styles/Main.module.css";
 import AppHeader from "@/components/AppHeader/AppHeader";
 import { AuthProvider } from "@/context/AuthProvider";
 
@@ -32,7 +32,7 @@ AppProps<{ dehydratedState: DehydratedState }>) {
         <Hydrate state={pageProps.dehydratedState}>
           <AuthProvider>
             <AppHeader />
-            <main className={mainStyles.main}>
+            <main className={styles.main}>
               <Component {...pageProps} />
             </main>
           </AuthProvider>
