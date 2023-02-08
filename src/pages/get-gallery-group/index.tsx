@@ -66,7 +66,7 @@ const PagesGetGalleryGroup = () => {
     error instanceof ClientError &&
     error.response.status === 401
   ) {
-    console.warn("refreshIdToken @pagination.tsx");
+    console.warn("refreshIdToken get-gallery-group/index.tsx");
     void (async () => await refreshIdToken())();
     return null;
   }

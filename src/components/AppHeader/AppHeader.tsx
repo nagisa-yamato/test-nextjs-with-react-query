@@ -19,7 +19,7 @@ const AppHeader = () => {
       <nav>
         <ul className={styles.ul}>
           <li>
-            <Link href="/">home</Link>
+            <Link href="/">index</Link>
           </li>
           <li>
             <Link href="/get-gallery-group">get-gallery-group</Link>

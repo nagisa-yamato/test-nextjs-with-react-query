@@ -1,4 +1,10 @@
+import Pagination from "@/components/Pagination/Pagination";
 import { COOKIE_NAME_ACCESS_TOKEN, ITEMS_PER_PAGE } from "@/constants";
+import {
+  BlogPostConnectionFragment,
+  BlogPostFragment,
+} from "@/gql/fragments/blog";
+import { useFragment } from "@/gql/generated";
 import { GetBlogQueryVariables } from "@/gql/generated/graphql";
 import { getBlog, getBlogKeys } from "@/gql/queries/getBlog";
 import useAuth from "@/hooks/useAuth";
@@ -7,6 +13,8 @@ import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { ClientError } from "graphql-request";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
+import styles from "./PagesGetBlog.module.css";
+import BlogArticle from "@/components/BlogArticle/BlogArticle";
 const BLOG_SLUG = "むっくり";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
@@ -29,10 +37,15 @@ const PagesGetBlog = () => {
     slug: BLOG_SLUG,
     first: ITEMS_PER_PAGE,
   });
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error, isPreviousData } = useQuery({
     ...getBlogKeys.withVariables(variables),
     queryFn: () => getBlog(variables, cookiesApi.get(COOKIE_NAME_ACCESS_TOKEN)),
+    keepPreviousData: true,
   });
+  const blogPostConnectionFragment = useFragment(
+    BlogPostConnectionFragment,
+    data?.posts
+  );
   const { refreshIdToken } = useAuth();
 
   if (isLoading) {
@@ -44,7 +57,7 @@ const PagesGetBlog = () => {
     error instanceof ClientError &&
     error.response.status === 401
   ) {
-    console.warn("refreshIdToken @pagination.tsx");
+    console.warn("refreshIdToken get-blog/index.tsx");
     void (async () => await refreshIdToken())();
     return null;
   }
@@ -56,7 +69,26 @@ const PagesGetBlog = () => {
   return (
     <>
       <h1>get-blog</h1>
-      <div>{JSON.stringify(data)}</div>
+      <div className={styles.blogs}>
+        {blogPostConnectionFragment?.edges.map(({ node }) => {
+          /* eslint-disable react-hooks/rules-of-hooks */
+          const blogPostFragment = useFragment(BlogPostFragment, node);
+          /* eslint-enable */
+          return <BlogArticle key={blogPostFragment.id} blogPost={node} />;
+        })}
+      </div>
+      {blogPostConnectionFragment?.pageInfo && (
+        <Pagination
+          {...{
+            pageInfoFragment: blogPostConnectionFragment.pageInfo,
+            variables,
+            setVariables,
+            totalCount: blogPostConnectionFragment?.totalCount ?? 0,
+            currentCount: blogPostConnectionFragment?.edges.length ?? 0,
+            isPreviousData,
+          }}
+        />
+      )}
     </>
   );
 };
