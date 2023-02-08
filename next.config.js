@@ -5,12 +5,6 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "rickandmortyapi.com",
-        port: "",
-        pathname: "/api/**",
-      },
-      {
-        protocol: "https",
         hostname: "stg-fam-fansite.imgix.net",
         port: "",
         pathname: "/shared_file/**",

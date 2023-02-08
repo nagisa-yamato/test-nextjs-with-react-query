@@ -45,10 +45,7 @@ module.exports = {
       extends: "plugin:@graphql-eslint/operations-recommended",
       parserOptions: {
         operations: "./src/**/*.(ts|tsx)",
-        schema: [
-          "https://rickandmortyapi.com/graphql",
-          "https://stage-api.stagefam.com/graphql",
-        ],
+        schema: "https://stage-api.stagefam.com/graphql",
         schemaOptions: {
           headers: {
             Authorization: "",

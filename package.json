@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "pnpm generate && next dev",
+    "build": "pnpm generate && next build",
     "start": "next start",
     "lint": "eslint . --ignore-path .gitignore",
-    "codegen:watch": "graphql-codegen --watch"
+    "generate": "graphql-codegen",
+    "generate:watch": "graphql-codegen --watch"
   },
   "dependencies": {
     "@graphql-typed-document-node/core": "^3.1.1",

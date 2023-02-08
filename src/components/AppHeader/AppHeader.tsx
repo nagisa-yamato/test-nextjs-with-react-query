@@ -22,10 +22,10 @@ const AppHeader = () => {
             <Link href="/">home</Link>
           </li>
           <li>
-            <Link href="/get-server-side-props">get-server-side-props</Link>
+            <Link href="/get-gallery-group">get-gallery-group</Link>
           </li>
           <li>
-            <Link href="/pagination">pagination</Link>
+            <Link href="/get-blog">get-blog</Link>
           </li>
           <li>
             {isLoggedIn ? (

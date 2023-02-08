@@ -5,7 +5,6 @@ import { CodegenConfig } from "@graphql-codegen/cli";
 const config: CodegenConfig = {
   // https://the-guild.dev/graphql/codegen/docs/config-reference/schema-field
   schema: [
-    "https://rickandmortyapi.com/graphql",
     {
       "https://stage-api.stagefam.com/graphql": {
         headers: {

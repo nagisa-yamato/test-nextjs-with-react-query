@@ -1,10 +1,6 @@
 import { GraphQLClient } from "graphql-request";
 
-export const RickAndMortyAPIClient = new GraphQLClient(
-  "https://rickandmortyapi.com/graphql"
-);
-
-export const FAMStageAPI = new GraphQLClient(
+export const client = new GraphQLClient(
   "https://stage-api.stagefam.com/graphql",
   {
     headers: {

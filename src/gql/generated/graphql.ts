@@ -22,7 +22,6 @@ export type Scalars = {
    * ex) 2006-01-02T15:04:05Z07:00
    */
   Datetime: any;
-  /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
@@ -249,11 +248,6 @@ export type BlogPostOrderInput = {
   field: BlogPostOrderField;
 };
 
-export enum CacheControlScope {
-  Private = 'PRIVATE',
-  Public = 'PUBLIC'
-}
-
 /** サブスク解約 - Input */
 export type CancelSubscriptionInput = {
   /** プランID */
@@ -322,41 +316,6 @@ export type ChangeSubscriptionPaymentMethodToCarrierInput = {
   successPath?: InputMaybe<Scalars['String']>;
   /** 成功URL（deprecated: successRedirectPathを使用） */
   successReturnURL?: InputMaybe<Scalars['String']>;
-};
-
-export type Character = {
-  __typename?: 'Character';
-  /** Time at which the character was created in the database. */
-  created?: Maybe<Scalars['String']>;
-  /** Episodes in which this character appeared. */
-  episode: Array<Maybe<Episode>>;
-  /** The gender of the character ('Female', 'Male', 'Genderless' or 'unknown'). */
-  gender?: Maybe<Scalars['String']>;
-  /** The id of the character. */
-  id?: Maybe<Scalars['ID']>;
-  /**
-   * Link to the character's image.
-   * All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
-   */
-  image?: Maybe<Scalars['String']>;
-  /** The character's last known location */
-  location?: Maybe<Location>;
-  /** The name of the character. */
-  name?: Maybe<Scalars['String']>;
-  /** The character's origin location */
-  origin?: Maybe<Location>;
-  /** The species of the character. */
-  species?: Maybe<Scalars['String']>;
-  /** The status of the character ('Alive', 'Dead' or 'unknown'). */
-  status?: Maybe<Scalars['String']>;
-  /** The type or subspecies of the character. */
-  type?: Maybe<Scalars['String']>;
-};
-
-export type Characters = {
-  __typename?: 'Characters';
-  info?: Maybe<Info>;
-  results?: Maybe<Array<Maybe<Character>>>;
 };
 
 /** コイン獲得履歴 */
@@ -729,28 +688,6 @@ export type Edge = {
   node?: Maybe<Node>;
 };
 
-export type Episode = {
-  __typename?: 'Episode';
-  /** The air date of the episode. */
-  air_date?: Maybe<Scalars['String']>;
-  /** List of characters who have been seen in the episode. */
-  characters: Array<Maybe<Character>>;
-  /** Time at which the episode was created in the database. */
-  created?: Maybe<Scalars['String']>;
-  /** The code of the episode. */
-  episode?: Maybe<Scalars['String']>;
-  /** The id of the episode. */
-  id?: Maybe<Scalars['ID']>;
-  /** The name of the episode. */
-  name?: Maybe<Scalars['String']>;
-};
-
-export type Episodes = {
-  __typename?: 'Episodes';
-  info?: Maybe<Info>;
-  results?: Maybe<Array<Maybe<Episode>>>;
-};
-
 export type ExchangeLotteryPrizeQuantityInput = {
   /** 賞品ID */
   prizeId: Scalars['ID'];
@@ -816,25 +753,6 @@ export enum FeatureSlug {
   Music = 'MUSIC',
   News = 'NEWS'
 }
-
-export type FilterCharacter = {
-  gender?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  species?: InputMaybe<Scalars['String']>;
-  status?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<Scalars['String']>;
-};
-
-export type FilterEpisode = {
-  episode?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-};
-
-export type FilterLocation = {
-  dimension?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<Scalars['String']>;
-};
 
 export type Gallery = Node & {
   __typename?: 'Gallery';
@@ -989,18 +907,6 @@ export enum ImageDisplayType {
   Repeat = 'REPEAT'
 }
 
-export type Info = {
-  __typename?: 'Info';
-  /** The length of the response. */
-  count?: Maybe<Scalars['Int']>;
-  /** Number of the next page (if it exists) */
-  next?: Maybe<Scalars['Int']>;
-  /** The amount of pages. */
-  pages?: Maybe<Scalars['Int']>;
-  /** Number of the previous page (if it exists) */
-  prev?: Maybe<Scalars['Int']>;
-};
-
 export type InquireInput = {
   /** 問い合わせ内容 */
   content: Scalars['String'];
@@ -1140,7 +1046,7 @@ export type LayoutSectionCustomHtmlDetail = {
   sectionId: Scalars['ID'];
 };
 
-export type LayoutSectionDetail = LayoutSectionBannerGroupDetail | LayoutSectionBlogDetail | LayoutSectionCustomHtmlDetail | LayoutSectionImageDetail | LayoutSectionImageMovieAndTextDetail | LayoutSectionImageMovieUpperTextDetail | LayoutSectionMemberRegistrationButtonDetail | LayoutSectionNewsDetail | LayoutSectionPostedGalleryDetail | LayoutSectionPostedMovieDetail | LayoutSectionTextButtonDetail | LayoutSectionTwitterTimelineDetail;
+export type LayoutSectionDetail = LayoutSectionBannerGroupDetail | LayoutSectionBlogDetail | LayoutSectionCustomHtmlDetail | LayoutSectionImageDetail | LayoutSectionImageMovieAndTextDetail | LayoutSectionImageMovieUpperTextDetail | LayoutSectionMemberRegistrationButtonDetail | LayoutSectionMusicDetail | LayoutSectionNewsDetail | LayoutSectionPostedGalleryDetail | LayoutSectionPostedMovieDetail | LayoutSectionTextButtonDetail | LayoutSectionTwitterTimelineDetail;
 
 /** レイアウト画像詳細 */
 export type LayoutSectionImageDetail = {
@@ -1194,6 +1100,31 @@ export type LayoutSectionMemberRegistrationButtonDetail = {
   file?: Maybe<SharedFile>;
   /** 見出しテキスト */
   headerText: Scalars['String'];
+  /** セクションID */
+  sectionId: Scalars['ID'];
+};
+
+export enum LayoutSectionMusicContentType {
+  Album = 'ALBUM',
+  Playlist = 'PLAYLIST',
+  Single = 'SINGLE'
+}
+
+/** 音楽セクション詳細 */
+export type LayoutSectionMusicDetail = {
+  __typename?: 'LayoutSectionMusicDetail';
+  /** アルバム一覧 */
+  albums?: Maybe<Array<MusicAlbum>>;
+  /** コンテンツタイプ */
+  contentType: LayoutSectionMusicContentType;
+  /** 表示件数 */
+  displayLimit: Scalars['Int'];
+  /** ファイル */
+  file?: Maybe<SharedFile>;
+  /** 見出しテキスト */
+  headerText: Scalars['String'];
+  /** プレイリスト一覧 */
+  playlists?: Maybe<Array<MusicPlaylist>>;
   /** セクションID */
   sectionId: Scalars['ID'];
 };
@@ -1485,28 +1416,6 @@ export type LiveBroadcastToken = {
   token: Scalars['String'];
   /** Agora ユーザーID */
   uid: Scalars['String'];
-};
-
-export type Location = {
-  __typename?: 'Location';
-  /** Time at which the location was created in the database. */
-  created?: Maybe<Scalars['String']>;
-  /** The dimension in which the location is located. */
-  dimension?: Maybe<Scalars['String']>;
-  /** The id of the location. */
-  id?: Maybe<Scalars['ID']>;
-  /** The name of the location. */
-  name?: Maybe<Scalars['String']>;
-  /** List of characters who have been last seen in the location. */
-  residents: Array<Maybe<Character>>;
-  /** The type of the location. */
-  type?: Maybe<Scalars['String']>;
-};
-
-export type Locations = {
-  __typename?: 'Locations';
-  info?: Maybe<Info>;
-  results?: Maybe<Array<Maybe<Location>>>;
 };
 
 /** ロゴ表示位置 */
@@ -2777,19 +2686,7 @@ export type Query = {
   blogPost?: Maybe<BlogPost>;
   /** 獲得したデジタルコンテンツくじ一覧取得 */
   capturedDigitalContentLotteries: LotteryConnection;
-  /** Get a specific character by ID */
-  character?: Maybe<Character>;
-  /** Get the list of all characters */
-  characters?: Maybe<Characters>;
-  /** Get a list of characters selected by ids */
-  charactersByIds?: Maybe<Array<Maybe<Character>>>;
   coinProducts?: Maybe<Array<CoinProduct>>;
-  /** Get a specific episode by ID */
-  episode?: Maybe<Episode>;
-  /** Get the list of all episodes */
-  episodes?: Maybe<Episodes>;
-  /** Get a list of episodes selected by ids */
-  episodesByIds?: Maybe<Array<Maybe<Episode>>>;
   /** 引換可能くじ一覧取得 */
   exchangeableLotteries: LotteryConnection;
   /** Get a gallery by id */
@@ -2799,12 +2696,6 @@ export type Query = {
   inquiryTypes: Array<InquiryType>;
   /** 生配信詳細 */
   liveBroadcast: LiveBroadcast;
-  /** Get a specific locations by ID */
-  location?: Maybe<Location>;
-  /** Get the list of all locations */
-  locations?: Maybe<Locations>;
-  /** Get a list of locations selected by ids */
-  locationsByIds?: Maybe<Array<Maybe<Location>>>;
   /** くじリスト取得 */
   lotteries: LotteryConnection;
   /** くじを取得 */
@@ -2874,38 +2765,6 @@ export type QueryCapturedDigitalContentLotteriesArgs = {
 };
 
 
-export type QueryCharacterArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryCharactersArgs = {
-  filter?: InputMaybe<FilterCharacter>;
-  page?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type QueryCharactersByIdsArgs = {
-  ids: Array<Scalars['ID']>;
-};
-
-
-export type QueryEpisodeArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryEpisodesArgs = {
-  filter?: InputMaybe<FilterEpisode>;
-  page?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type QueryEpisodesByIdsArgs = {
-  ids: Array<Scalars['ID']>;
-};
-
-
 export type QueryExchangeableLotteriesArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -2926,22 +2785,6 @@ export type QueryGalleryGroupArgs = {
 
 export type QueryLiveBroadcastArgs = {
   id: Scalars['ID'];
-};
-
-
-export type QueryLocationArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryLocationsArgs = {
-  filter?: InputMaybe<FilterLocation>;
-  page?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type QueryLocationsByIdsArgs = {
-  ids: Array<Scalars['ID']>;
 };
 
 
@@ -3791,13 +3634,6 @@ export type GalleryConnectionFragmentFragment = { __typename?: 'GalleryConnectio
       & { ' $fragmentRefs'?: { 'GalleryFragmentFragment': GalleryFragmentFragment } }
     ) }> } & { ' $fragmentName'?: 'GalleryConnectionFragmentFragment' };
 
-export type GetCharactersQueryVariables = Exact<{
-  page?: InputMaybe<Scalars['Int']>;
-}>;
-
-
-export type GetCharactersQuery = { __typename?: 'Query', characters?: { __typename?: 'Characters', info?: { __typename?: 'Info', count?: number | null, next?: number | null, pages?: number | null, prev?: number | null } | null, results?: Array<{ __typename?: 'Character', id?: string | null, image?: string | null, name?: string | null } | null> | null } | null };
-
 export type GetGalleryGroupQueryVariables = Exact<{
   slug: Scalars['String'];
   first?: InputMaybe<Scalars['Int']>;
@@ -3816,5 +3652,4 @@ export const PageInfoFragmentFragmentDoc = {"kind":"Document","definitions":[{"k
 export const GalleryContentFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"GalleryContentFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"GalleryContent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contentFile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"alternativeContent"}}]}}]}}]} as unknown as DocumentNode<GalleryContentFragmentFragment, unknown>;
 export const GalleryFragmentFragmentDoc = {"kind":"Document", "definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"GalleryFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Gallery"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"releaseDay"}},{"kind":"Field","name":{"kind":"Name","value":"isViewable"}},{"kind":"Field","name":{"kind":"Name","value":"contents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"GalleryContentFragment"}}]}}]}},...GalleryContentFragmentFragmentDoc.definitions]} as unknown as DocumentNode<GalleryFragmentFragment, unknown>;
 export const GalleryConnectionFragmentFragmentDoc = {"kind":"Document", "definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"GalleryConnectionFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"GalleryConnection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageInfoFragment"}}]}},{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"GalleryFragment"}}]}},{"kind":"Field","name":{"kind":"Name","value":"cursor"}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}},...PageInfoFragmentFragmentDoc.definitions,...GalleryFragmentFragmentDoc.definitions]} as unknown as DocumentNode<GalleryConnectionFragmentFragment, unknown>;
-export const GetCharactersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getCharacters"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"characters"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"info"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"next"}},{"kind":"Field","name":{"kind":"Name","value":"pages"}},{"kind":"Field","name":{"kind":"Name","value":"prev"}}]}},{"kind":"Field","name":{"kind":"Name","value":"results"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"image"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetCharactersQuery, GetCharactersQueryVariables>;
 export const GetGalleryGroupDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getGalleryGroup"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"galleryGroup"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"galleries"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"direction"},"value":{"kind":"EnumValue","value":"ASC"}},{"kind":"ObjectField","name":{"kind":"Name","value":"field"},"value":{"kind":"EnumValue","value":"START_AT"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"GalleryConnectionFragment"}}]}}]}}]}},...GalleryConnectionFragmentFragmentDoc.definitions]} as unknown as DocumentNode<GetGalleryGroupQuery, GetGalleryGroupQueryVariables>;

@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   };
 };
 
-const Pagination = () => {
+const PagesGetGalleryGroup = () => {
   const [variables, setVariables] = useState<GetGalleryGroupQueryVariables>({
     slug: GALLERY_GROUP_SLUG,
     first: ITEMS_PER_PAGE,
@@ -142,4 +142,4 @@ const Pagination = () => {
   );
 };
 
-export default Pagination;
+export default PagesGetGalleryGroup;

@@ -3,7 +3,7 @@ import useAuth from "@/hooks/useAuth";
 import LoginForm from "@/components/LoginForm/LoginForm";
 import { useEffect } from "react";
 
-const Login = () => {
+const PagesLogin = () => {
   const { isLoggedIn } = useAuth();
   const router = useRouter();
 
@@ -25,4 +25,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default PagesLogin;
