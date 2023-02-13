@@ -1,7 +1,7 @@
 import { graphql } from "@/gql/generated";
 
 export const PageInfoFragment = graphql(`
-  fragment PageInfoFragment on PageInfo {
+  fragment PageInfo on PageInfo {
     hasNextPage
     hasPreviousPage
     startCursor
@@ -10,7 +10,7 @@ export const PageInfoFragment = graphql(`
 `);
 
 export const SharedFileFragment = graphql(`
-  fragment SharedFileFragment on SharedFile {
+  fragment SharedFile on SharedFile {
     id
     url
     alternativeContent

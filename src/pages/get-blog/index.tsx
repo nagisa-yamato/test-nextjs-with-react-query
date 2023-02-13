@@ -5,8 +5,8 @@ import {
   BlogPostFragment,
 } from "@/gql/fragments/blog";
 import { useFragment } from "@/gql/generated";
-import { GetBlogQueryVariables } from "@/gql/generated/graphql";
-import { getBlog, getBlogKeys } from "@/gql/queries/getBlog";
+import { BlogQueryVariables } from "@/gql/generated/graphql";
+import { getBlog, getBlogKeys } from "@/gql/queries/GetBlog";
 import useAuth from "@/hooks/useAuth";
 import { cookiesApi } from "@/lib/js-cookie";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 };
 
 const PagesGetBlog = () => {
-  const [variables, setVariables] = useState<GetBlogQueryVariables>({
+  const [variables, setVariables] = useState<BlogQueryVariables>({
     slug: BLOG_SLUG,
     first: ITEMS_PER_PAGE,
   });

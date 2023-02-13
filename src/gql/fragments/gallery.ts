@@ -1,34 +1,34 @@
 import { graphql } from "@/gql/generated";
 
 export const GalleryContentFragment = graphql(`
-  fragment GalleryContentFragment on GalleryContent {
+  fragment GalleryContent on GalleryContent {
     id
     contentFile {
-      ...SharedFileFragment
+      ...SharedFile
     }
   }
 `);
 
 export const GalleryFragment = graphql(`
-  fragment GalleryFragment on Gallery {
+  fragment Gallery on Gallery {
     id
     name
     releaseDay
     isViewable
     contents {
-      ...GalleryContentFragment
+      ...GalleryContent
     }
   }
 `);
 
 export const GalleryConnectionFragment = graphql(`
-  fragment GalleryConnectionFragment on GalleryConnection {
+  fragment GalleryConnection on GalleryConnection {
     pageInfo {
-      ...PageInfoFragment
+      ...PageInfo
     }
     edges {
       node {
-        ...GalleryFragment
+        ...Gallery
       }
       cursor
     }

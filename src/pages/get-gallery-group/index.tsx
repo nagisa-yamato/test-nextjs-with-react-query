@@ -1,7 +1,7 @@
 import {
   getGalleryGroup,
   getGalleryGroupKeys,
-} from "@/gql/queries/getGalleryGroup";
+} from "@/gql/queries/GetGalleryGroup";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 import { COOKIE_NAME_ACCESS_TOKEN, ITEMS_PER_PAGE } from "@/constants";
@@ -13,7 +13,7 @@ import {
 } from "@/gql/fragments/gallery";
 import styles from "./PagesGetGalleryGroup.module.css";
 import { useState } from "react";
-import { GetGalleryGroupQueryVariables } from "@/gql/generated/graphql";
+import { GalleryGroupQueryVariables } from "@/gql/generated/graphql";
 import { ClientError } from "graphql-request";
 const GALLERY_GROUP_SLUG = "blurry pictures of cats";
 import useAuth from "@/hooks/useAuth";
@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 };
 
 const PagesGetGalleryGroup = () => {
-  const [variables, setVariables] = useState<GetGalleryGroupQueryVariables>({
+  const [variables, setVariables] = useState<GalleryGroupQueryVariables>({
     slug: GALLERY_GROUP_SLUG,
     first: ITEMS_PER_PAGE,
   });

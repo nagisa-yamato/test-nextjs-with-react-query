@@ -1,33 +1,33 @@
 import { graphql } from "../generated";
 
 export const BlogCategoryFragment = graphql(`
-  fragment BlogCategoryFragment on BlogCategory {
+  fragment BlogCategory on BlogCategory {
     id
     name
   }
 `);
 
 export const BlogPostFragment = graphql(`
-  fragment BlogPostFragment on BlogPost {
+  fragment BlogPost on BlogPost {
     id
     subject
     category {
-      ...BlogCategoryFragment
+      ...BlogCategory
     }
     thumbnailFile {
-      ...SharedFileFragment
+      ...SharedFile
     }
   }
 `);
 
 export const BlogPostConnectionFragment = graphql(`
-  fragment BlogPostConnectionFragment on BlogPostConnection {
+  fragment BlogPostConnection on BlogPostConnection {
     pageInfo {
-      ...PageInfoFragment
+      ...PageInfo
     }
     edges {
       node {
-        ...BlogPostFragment
+        ...BlogPost
       }
       cursor
     }

@@ -1,10 +1,10 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { graphql } from "../generated";
-import { GetBlogQueryVariables } from "../generated/graphql";
+import { BlogQueryVariables } from "../generated/graphql";
 import { client, setAuthorizationHeader } from "../graphql-request";
 
-const getBlogQueryDocument = graphql(`
-  query getBlog(
+const BlogQueryDocument = graphql(`
+  query Blog(
     $slug: String!
     $first: Int
     $after: String
@@ -20,25 +20,25 @@ const getBlogQueryDocument = graphql(`
         before: $before
         orderBy: { direction: DESC, field: START_AT }
       ) {
-        ...BlogPostConnectionFragment
+        ...BlogPostConnection
       }
     }
   }
 `);
 
 export const getBlog = async (
-  variables: GetBlogQueryVariables,
+  variables: BlogQueryVariables,
   token?: string
 ) => {
   if (token) {
     setAuthorizationHeader(token);
   }
-  const response = await client.request(getBlogQueryDocument, variables);
+  const response = await client.request(BlogQueryDocument, variables);
   return response.blog;
 };
 
 export const getBlogKeys = createQueryKeys("getBlog", {
-  withVariables: (variables: GetBlogQueryVariables) => ({
+  withVariables: (variables: BlogQueryVariables) => ({
     queryKey: [{ ...variables }],
   }),
 });

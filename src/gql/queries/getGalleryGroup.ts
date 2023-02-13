@@ -1,10 +1,10 @@
 import { graphql } from "@/gql/generated";
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { GetGalleryGroupQueryVariables } from "@/gql/generated/graphql";
+import { GalleryGroupQueryVariables } from "@/gql/generated/graphql";
 import { client, setAuthorizationHeader } from "../graphql-request";
 
-const getGalleryGroupQueryDocument = graphql(`
-  query getGalleryGroup(
+const GalleryGroupQueryDocument = graphql(`
+  query GalleryGroup(
     $slug: String!
     $first: Int
     $after: String
@@ -20,23 +20,20 @@ const getGalleryGroupQueryDocument = graphql(`
         before: $before
         orderBy: { direction: DESC, field: START_AT }
       ) {
-        ...GalleryConnectionFragment
+        ...GalleryConnection
       }
     }
   }
 `);
 
 export const getGalleryGroup = async (
-  variables: GetGalleryGroupQueryVariables,
+  variables: GalleryGroupQueryVariables,
   token?: string
 ) => {
   if (token) {
     setAuthorizationHeader(token);
   }
-  const response = await client.request(
-    getGalleryGroupQueryDocument,
-    variables
-  );
+  const response = await client.request(GalleryGroupQueryDocument, variables);
   return response.galleryGroup;
 };
 
@@ -44,7 +41,7 @@ export const getGalleryGroup = async (
  * @see https://github.com/lukemorales/query-key-factory#fine-grained-declaration-colocated-by-features
  */
 export const getGalleryGroupKeys = createQueryKeys("getGalleryGroup", {
-  withVariables: (variables: GetGalleryGroupQueryVariables) => ({
+  withVariables: (variables: GalleryGroupQueryVariables) => ({
     queryKey: [{ ...variables }],
   }),
 });

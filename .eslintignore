@@ -1,5 +1,7 @@
 .eslintrc.cjs
 next.config.js
+commitlint.config.js
+/src/gql/generated/**
 
 # 以下 .gitignore と同じ
 
