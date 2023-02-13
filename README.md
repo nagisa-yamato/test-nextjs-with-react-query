@@ -42,12 +42,6 @@ pnpm start
 
 ## commit
 
-`git commit` (メッセージ無し) を推奨します
+`pnpm commit` を推奨します (`commitizen` が走ります)
 
-- eslint
-- commitizen
-- commitlint
-
-が自動的に実行されます
-
-> commitizen うざい気もするので commitizen は husky から剥がしていいかも
+あまりにも雑なコミットメッセージは `commitlint` で弾きます
