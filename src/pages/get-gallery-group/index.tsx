@@ -86,7 +86,7 @@ const PagesGetGalleryGroup = () => {
         })}
       </div>
       {galleryConnectionFragment?.pageInfo && (
-        <Pagination
+        <Pagination<GalleryGroupQueryVariables>
           {...{
             pageInfoFragment: galleryConnectionFragment.pageInfo,
             variables,

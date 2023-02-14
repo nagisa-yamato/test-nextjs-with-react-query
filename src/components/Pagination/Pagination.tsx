@@ -1,7 +1,8 @@
 import { ITEMS_PER_PAGE } from "@/constants";
 import { PageInfoFragment } from "@/gql/fragments/common";
 import { FragmentType, useFragment } from "@/gql/generated";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useRouter } from "next/router";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import styles from "./Pagination.module.css";
 
 export default function Pagination<VariableType>(props: {
@@ -20,19 +21,37 @@ export default function Pagination<VariableType>(props: {
     props.pageInfoFragment
   );
   const [page, setPage] = useState(props.page ?? 1);
+  const router = useRouter();
+  const pathWithoutQueryParams = useMemo(
+    () => router.asPath.split("?")[0],
+    [router.asPath]
+  );
 
   return (
     <div className={styles.buttons}>
       <button
-        disabled={!pageInfoFragment?.hasPreviousPage}
-        onClick={() => {
-          setVariables({
+        disabled={!pageInfoFragment?.hasPreviousPage || !router.isReady}
+        onClick={async () => {
+          const newVariables: VariableType & {
+            first?: number;
+            after?: string;
+          } = {
             ...variables,
-            first: undefined,
-            after: undefined,
             last: ITEMS_PER_PAGE,
             before: pageInfoFragment?.startCursor,
-          });
+          };
+          if (Object.hasOwn(newVariables, "first")) {
+            delete newVariables.first;
+          }
+          if (Object.hasOwn(newVariables, "after")) {
+            delete newVariables.after;
+          }
+          setVariables(newVariables);
+          await router.push(
+            { pathname: pathWithoutQueryParams, query: newVariables },
+            undefined,
+            { shallow: true }
+          );
           setPage((prev) => prev - 1);
         }}
       >
@@ -41,15 +60,30 @@ export default function Pagination<VariableType>(props: {
       全 {totalCount} 件中 {(page - 1) * ITEMS_PER_PAGE + 1} 〜{" "}
       {isPreviousData ? "..." : (page - 1) * 10 + currentCount} 件目
       <button
-        disabled={!pageInfoFragment?.hasNextPage}
-        onClick={() => {
-          setVariables({
+        disabled={!pageInfoFragment?.hasNextPage || !router.isReady}
+        onClick={async () => {
+          const newVariables: VariableType & {
+            last?: number;
+            before?: string;
+          } = {
             ...variables,
-            last: undefined,
-            before: undefined,
             first: ITEMS_PER_PAGE,
             after: pageInfoFragment?.endCursor,
-          });
+          };
+          if (Object.hasOwn(newVariables, "last")) {
+            delete newVariables.last;
+          }
+          if (Object.hasOwn(newVariables, "before")) {
+            delete newVariables.before;
+          }
+          setVariables(newVariables);
+          await router.push(
+            { pathname: pathWithoutQueryParams, query: newVariables },
+            undefined,
+            {
+              shallow: true,
+            }
+          );
           setPage((prev) => prev + 1);
         }}
       >

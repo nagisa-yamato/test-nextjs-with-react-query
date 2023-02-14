@@ -78,7 +78,7 @@ const PagesGetBlog = () => {
         })}
       </div>
       {blogPostConnectionFragment?.pageInfo && (
-        <Pagination
+        <Pagination<BlogQueryVariables>
           {...{
             pageInfoFragment: blogPostConnectionFragment.pageInfo,
             variables,
