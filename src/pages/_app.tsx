@@ -1,4 +1,3 @@
-import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { useState } from "react";
 import {
@@ -9,9 +8,10 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Head from "next/head";
-import styles from "@/styles/Main.module.css";
 import AppHeader from "@/components/AppHeader/AppHeader";
 import { AuthProvider } from "@/context/AuthProvider";
+import GlobalStyle from "@/components/GlobalStyle.styles";
+import { AppMain } from "@/components/AppMain/AppMain.styles";
 
 export default function App({
   Component,
@@ -30,11 +30,12 @@ AppProps<{ dehydratedState: DehydratedState }>) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
+          <GlobalStyle />
           <AuthProvider>
             <AppHeader />
-            <main className={styles.main}>
+            <AppMain>
               <Component {...pageProps} />
-            </main>
+            </AppMain>
           </AuthProvider>
         </Hydrate>
         <ReactQueryDevtools />
