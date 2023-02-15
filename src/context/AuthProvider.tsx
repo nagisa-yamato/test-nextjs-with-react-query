@@ -16,12 +16,14 @@ export const AuthProvider = (props: { children: ReactNode }) => {
     const unsubscribe = auth.onIdTokenChanged(async (user) => {
       console.warn("onIdTokenChanged");
       if (user) {
+        console.warn("has user");
         const token = await user.getIdToken();
         setUser(user);
         cookiesApi.set(COOKIE_NAME_ACCESS_TOKEN, token);
         cookiesApi.set(COOKIE_NAME_REFRESH_TOKEN, user.refreshToken);
         return;
       }
+      console.warn("no user");
       setUser(null);
       cookiesApi.remove(COOKIE_NAME_ACCESS_TOKEN);
       cookiesApi.remove(COOKIE_NAME_REFRESH_TOKEN);

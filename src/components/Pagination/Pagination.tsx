@@ -22,6 +22,12 @@ export const deletePagePropertyFromObject = <Type,>(
   return object;
 };
 
+/**
+ * ページネーションコンポーネント
+ *
+ * @param props PageInfo, クエリのvariables, variablesのsetState, totalCount(全件数), currentCount(クエリ結果の件数), isPreviousData(useQueryの返り値)
+ * @returns
+ */
 const Pagination = <VariableType,>(props: {
   pageInfoFragment: FragmentType<typeof PageInfoFragment>;
   variables: VariableType;

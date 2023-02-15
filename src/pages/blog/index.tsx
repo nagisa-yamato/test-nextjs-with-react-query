@@ -49,6 +49,10 @@ export const getServerSideProps: GetServerSideProps = async ({
   };
 };
 
+/**
+ * ページ > ブログ一覧demo
+ * @returns
+ */
 const PagesBlog = () => {
   const router = useRouter();
   /**

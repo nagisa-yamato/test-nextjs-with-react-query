@@ -37,7 +37,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   };
 };
 
-const PagesGetGalleryGroup = () => {
+/**
+ * ページ > ギャラリー一覧demo
+ * @returns
+ */
+const PagesGalleryGroup = () => {
   const [variables, setVariables] = useState<GalleryGroupQueryVariables>({
     slug: GALLERY_GROUP_SLUG,
     first: ITEMS_PER_PAGE,
@@ -101,4 +105,4 @@ const PagesGetGalleryGroup = () => {
   );
 };
 
-export default PagesGetGalleryGroup;
+export default PagesGalleryGroup;
