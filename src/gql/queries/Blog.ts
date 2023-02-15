@@ -37,7 +37,7 @@ export const fetchBlog = async (
   return response.blog;
 };
 
-export const blogKeys = createQueryKeys("getBlog", {
+export const blogKeys = createQueryKeys("Blog", {
   withVariables: (variables: BlogQueryVariables) => ({
     queryKey: [{ ...variables }],
   }),

@@ -66,7 +66,7 @@ const PagesGetGalleryGroup = () => {
     error instanceof ClientError &&
     error.response.status === 401
   ) {
-    console.warn("refreshIdToken get-gallery-group/index.tsx");
+    console.warn("refreshIdToken gallery-group/index.tsx");
     void (async () => await refreshIdToken())();
     return null;
   }
@@ -77,7 +77,7 @@ const PagesGetGalleryGroup = () => {
 
   return (
     <>
-      <h1>get-gallery-group</h1>
+      <h1>gallery-group</h1>
       <GalleryWrap>
         {galleryConnectionFragment?.edges.map(({ node }) => {
           // eslint-disable-next-line react-hooks/rules-of-hooks

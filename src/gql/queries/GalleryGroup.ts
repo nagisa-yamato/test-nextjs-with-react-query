@@ -40,7 +40,7 @@ export const fetchGalleryGroup = async (
 /**
  * @see https://github.com/lukemorales/query-key-factory#fine-grained-declaration-colocated-by-features
  */
-export const galleryGroupKeys = createQueryKeys("getGalleryGroup", {
+export const galleryGroupKeys = createQueryKeys("GalleryGroup", {
   withVariables: (variables: GalleryGroupQueryVariables) => ({
     queryKey: [{ ...variables }],
   }),
