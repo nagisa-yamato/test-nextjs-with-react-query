@@ -26,7 +26,7 @@ const BlogQueryDocument = graphql(`
   }
 `);
 
-export const getBlog = async (
+export const fetchBlog = async (
   variables: BlogQueryVariables,
   token?: string
 ) => {
@@ -37,7 +37,7 @@ export const getBlog = async (
   return response.blog;
 };
 
-export const getBlogKeys = createQueryKeys("getBlog", {
+export const blogKeys = createQueryKeys("getBlog", {
   withVariables: (variables: BlogQueryVariables) => ({
     queryKey: [{ ...variables }],
   }),

@@ -8,24 +8,24 @@ import { cookiesApi } from "@/lib/js-cookie";
 import { signOut } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import styles from "./AppHeader.module.css";
+import { Header, UL } from "./AppHeader.styles";
 
 const AppHeader = () => {
   const { isLoggedIn } = useAuth();
   const router = useRouter();
 
   return (
-    <header className={styles.header}>
+    <Header>
       <nav>
-        <ul className={styles.ul}>
+        <UL>
           <li>
             <Link href="/">index</Link>
           </li>
           <li>
-            <Link href="/get-gallery-group">get-gallery-group</Link>
+            <Link href="/gallery-group">gallery-group</Link>
           </li>
           <li>
-            <Link href="/get-blog">get-blog</Link>
+            <Link href="/blog">blog</Link>
           </li>
           <li>
             {isLoggedIn ? (
@@ -43,9 +43,9 @@ const AppHeader = () => {
               <Link href="/login">login</Link>
             )}
           </li>
-        </ul>
+        </UL>
       </nav>
-    </header>
+    </Header>
   );
 };
 

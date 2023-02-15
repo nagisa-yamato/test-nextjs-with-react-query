@@ -3,7 +3,7 @@ import { PageInfoFragment } from "@/gql/fragments/common";
 import { FragmentType, useFragment } from "@/gql/generated";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
-import styles from "./Pagination.module.css";
+import { ButtonsWrap } from "./Pagination.styles";
 
 export default function Pagination<VariableType>(props: {
   pageInfoFragment: FragmentType<typeof PageInfoFragment>;
@@ -28,7 +28,7 @@ export default function Pagination<VariableType>(props: {
   );
 
   return (
-    <div className={styles.buttons}>
+    <ButtonsWrap>
       <button
         disabled={!pageInfoFragment?.hasPreviousPage || !router.isReady}
         onClick={async () => {
@@ -89,6 +89,6 @@ export default function Pagination<VariableType>(props: {
       >
         進む
       </button>
-    </div>
+    </ButtonsWrap>
   );
 }

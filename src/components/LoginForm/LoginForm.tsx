@@ -7,7 +7,7 @@ import {
 } from "@/constants";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import styles from "./LoginForm.module.css";
+import { Form, Label } from "./LoginForm.styles";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -15,8 +15,7 @@ const LoginForm = () => {
   const router = useRouter();
 
   return (
-    <form
-      className={styles.form}
+    <Form
       onSubmit={async (event) => {
         event.preventDefault();
         const userCredential = await signInWithEmailAndPassword(
@@ -33,19 +32,19 @@ const LoginForm = () => {
         await router.push("/pagination");
       }}
     >
-      <label className={styles.label}>
+      <Label>
         email
         <input type="text" onChange={(event) => setEmail(event.target.value)} />
-      </label>
-      <label className={styles.label}>
+      </Label>
+      <Label>
         password
         <input
           type="password"
           onChange={(event) => setPassword(event.target.value)}
         />
-      </label>
+      </Label>
       <button type="submit">login</button>
-    </form>
+    </Form>
   );
 };
 

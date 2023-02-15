@@ -26,7 +26,7 @@ const GalleryGroupQueryDocument = graphql(`
   }
 `);
 
-export const getGalleryGroup = async (
+export const fetchGalleryGroup = async (
   variables: GalleryGroupQueryVariables,
   token?: string
 ) => {
@@ -40,7 +40,7 @@ export const getGalleryGroup = async (
 /**
  * @see https://github.com/lukemorales/query-key-factory#fine-grained-declaration-colocated-by-features
  */
-export const getGalleryGroupKeys = createQueryKeys("getGalleryGroup", {
+export const galleryGroupKeys = createQueryKeys("getGalleryGroup", {
   withVariables: (variables: GalleryGroupQueryVariables) => ({
     queryKey: [{ ...variables }],
   }),

@@ -4,15 +4,13 @@ import {
   GalleryContentFragment,
 } from "@/gql/fragments/gallery";
 import { FragmentType, useFragment } from "@/gql/generated";
-import styles from "./GalleryArticle.module.css";
-import Image from "next/image";
+import { Article, StyledImage } from "./GalleryArticle.styles";
 
 const GalleryArticle = ({
   gallery,
 }: {
   gallery: FragmentType<typeof GalleryFragment>;
 }) => {
-  /* eslint-disable react-hooks/rules-of-hooks */
   const galleryFragment = useFragment(GalleryFragment, gallery);
   const galleryContentFragment = useFragment(
     GalleryContentFragment,
@@ -22,21 +20,19 @@ const GalleryArticle = ({
     SharedFileFragment,
     galleryContentFragment?.[0].contentFile
   );
-  /* eslint-enable */
 
   return (
-    <article className={styles.article}>
+    <Article>
       <h2>{galleryFragment.name}</h2>
       {!!sharedFileFragment?.url && (
-        <Image
+        <StyledImage
           src={sharedFileFragment.url}
           alt={sharedFileFragment.alternativeContent}
           width={250}
           height={250}
-          className={styles.image}
         />
       )}
-    </article>
+    </Article>
   );
 };
 

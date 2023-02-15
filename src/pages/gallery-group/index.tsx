@@ -1,7 +1,7 @@
 import {
-  getGalleryGroup,
-  getGalleryGroupKeys,
-} from "@/gql/queries/GetGalleryGroup";
+  fetchGalleryGroup,
+  galleryGroupKeys,
+} from "@/gql/queries/GalleryGroup";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 import { COOKIE_NAME_ACCESS_TOKEN, ITEMS_PER_PAGE } from "@/constants";
@@ -11,7 +11,6 @@ import {
   GalleryConnectionFragment,
   GalleryFragment,
 } from "@/gql/fragments/gallery";
-import styles from "./PagesGetGalleryGroup.module.css";
 import { useState } from "react";
 import { GalleryGroupQueryVariables } from "@/gql/generated/graphql";
 import { ClientError } from "graphql-request";
@@ -19,6 +18,7 @@ const GALLERY_GROUP_SLUG = "blurry pictures of cats";
 import useAuth from "@/hooks/useAuth";
 import GalleryArticle from "@/components/GalleryArticle/GalleryArticle";
 import Pagination from "@/components/Pagination/Pagination";
+import { GalleryWrap } from "./GalleryGroup.styles";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const queryClient = new QueryClient();
@@ -27,9 +27,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     first: ITEMS_PER_PAGE,
   };
   await queryClient.prefetchQuery({
-    ...getGalleryGroupKeys.withVariables(variables),
+    ...galleryGroupKeys.withVariables(variables),
     queryFn: () =>
-      getGalleryGroup(variables, req.cookies[COOKIE_NAME_ACCESS_TOKEN]),
+      fetchGalleryGroup(variables, req.cookies[COOKIE_NAME_ACCESS_TOKEN]),
   });
 
   return {
@@ -43,9 +43,9 @@ const PagesGetGalleryGroup = () => {
     first: ITEMS_PER_PAGE,
   });
   const { data, isLoading, isError, error, isPreviousData } = useQuery({
-    ...getGalleryGroupKeys.withVariables(variables),
+    ...galleryGroupKeys.withVariables(variables),
     queryFn: () =>
-      getGalleryGroup(variables, cookiesApi.get(COOKIE_NAME_ACCESS_TOKEN)),
+      fetchGalleryGroup(variables, cookiesApi.get(COOKIE_NAME_ACCESS_TOKEN)),
     // NOTE:
     // クライアントサイドでfetchしたときのちらつき防止
     // https://tanstack.com/query/v4/docs/react/guides/paginated-queries#better-paginated-queries-with-keeppreviousdata
@@ -78,13 +78,13 @@ const PagesGetGalleryGroup = () => {
   return (
     <>
       <h1>get-gallery-group</h1>
-      <div className={styles.galleries}>
+      <GalleryWrap>
         {galleryConnectionFragment?.edges.map(({ node }) => {
           // eslint-disable-next-line react-hooks/rules-of-hooks
           const id = useFragment(GalleryFragment, node).id;
           return <GalleryArticle gallery={node} key={id} />;
         })}
-      </div>
+      </GalleryWrap>
       {galleryConnectionFragment?.pageInfo && (
         <Pagination<GalleryGroupQueryVariables>
           {...{

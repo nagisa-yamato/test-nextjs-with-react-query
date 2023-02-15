@@ -6,23 +6,23 @@ import {
 } from "@/gql/fragments/blog";
 import { useFragment } from "@/gql/generated";
 import { BlogQueryVariables } from "@/gql/generated/graphql";
-import { getBlog, getBlogKeys } from "@/gql/queries/GetBlog";
+import { fetchBlog, blogKeys } from "@/gql/queries/Blog";
 import useAuth from "@/hooks/useAuth";
 import { cookiesApi } from "@/lib/js-cookie";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { ClientError } from "graphql-request";
 import { GetServerSideProps } from "next";
 import { useState } from "react";
-import styles from "./PagesGetBlog.module.css";
 import BlogArticle from "@/components/BlogArticle/BlogArticle";
+import { BlogsWrap } from "./Blog.styles";
 const BLOG_SLUG = "むっくり";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const queryClient = new QueryClient();
   const variables = { slug: BLOG_SLUG, first: ITEMS_PER_PAGE };
   await queryClient.prefetchQuery({
-    ...getBlogKeys.withVariables(variables),
-    queryFn: () => getBlog(variables, req.cookies[COOKIE_NAME_ACCESS_TOKEN]),
+    ...blogKeys.withVariables(variables),
+    queryFn: () => fetchBlog(variables, req.cookies[COOKIE_NAME_ACCESS_TOKEN]),
   });
 
   return {
@@ -32,14 +32,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   };
 };
 
-const PagesGetBlog = () => {
+const PagesBlog = () => {
   const [variables, setVariables] = useState<BlogQueryVariables>({
     slug: BLOG_SLUG,
     first: ITEMS_PER_PAGE,
   });
   const { data, isLoading, isError, error, isPreviousData } = useQuery({
-    ...getBlogKeys.withVariables(variables),
-    queryFn: () => getBlog(variables, cookiesApi.get(COOKIE_NAME_ACCESS_TOKEN)),
+    ...blogKeys.withVariables(variables),
+    queryFn: () =>
+      fetchBlog(variables, cookiesApi.get(COOKIE_NAME_ACCESS_TOKEN)),
     keepPreviousData: true,
   });
   const blogPostConnectionFragment = useFragment(
@@ -57,7 +58,7 @@ const PagesGetBlog = () => {
     error instanceof ClientError &&
     error.response.status === 401
   ) {
-    console.warn("refreshIdToken get-blog/index.tsx");
+    console.warn("refreshIdToken blog/index.tsx");
     void (async () => await refreshIdToken())();
     return null;
   }
@@ -68,15 +69,15 @@ const PagesGetBlog = () => {
 
   return (
     <>
-      <h1>get-blog</h1>
-      <div className={styles.blogs}>
+      <h1>blog</h1>
+      <BlogsWrap>
         {blogPostConnectionFragment?.edges.map(({ node }) => {
           /* eslint-disable react-hooks/rules-of-hooks */
           const blogPostFragment = useFragment(BlogPostFragment, node);
           /* eslint-enable */
           return <BlogArticle key={blogPostFragment.id} blogPost={node} />;
         })}
-      </div>
+      </BlogsWrap>
       {blogPostConnectionFragment?.pageInfo && (
         <Pagination<BlogQueryVariables>
           {...{
@@ -93,4 +94,4 @@ const PagesGetBlog = () => {
   );
 };
 
-export default PagesGetBlog;
+export default PagesBlog;
