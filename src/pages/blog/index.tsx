@@ -30,16 +30,15 @@ export const getServerSideProps: GetServerSideProps = async ({
   query,
 }) => {
   const queryClient = new QueryClient();
-  const baseVariables: BlogQueryVariables = isEmptyObject(query)
+  const variables: BlogQueryVariables = isEmptyObject(query)
     ? DEFAULT_VARIABLES
     : deletePagePropertyFromObject<BlogQueryVariables>({
         ...query,
         slug: BLOG_SLUG,
       });
   await queryClient.prefetchQuery({
-    ...blogKeys.withVariables(baseVariables),
-    queryFn: () =>
-      fetchBlog(baseVariables, req.cookies[COOKIE_NAME_ACCESS_TOKEN]),
+    ...blogKeys.withVariables(variables),
+    queryFn: () => fetchBlog(variables, req.cookies[COOKIE_NAME_ACCESS_TOKEN]),
   });
 
   return {
