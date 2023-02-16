@@ -10,7 +10,7 @@ import AppHeader from "@/components/AppHeader/AppHeader";
 import { AuthProvider } from "@/context/AuthProvider";
 import GlobalStyle from "@/components/GlobalStyle.styles";
 import { AppMain } from "@/components/AppMain/AppMain.styles";
-import useCustomQueryClient from "@/hooks/useQueryClient";
+import useCustomQueryClient from "@/hooks/useCustomQueryClient";
 
 const App = ({
   Component,

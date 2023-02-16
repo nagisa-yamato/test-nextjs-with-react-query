@@ -9,6 +9,12 @@ export const client = new GraphQLClient(
   }
 );
 
-export const setAuthorizationHeader = (token: string) => {
-  client.setHeader("Authorization", `Bearer ${token}`);
+/**
+ * client.requestの第三引数(requestごとのヘッダー)に渡してください
+ * @see https://github.com/jasonkuhrt/graphql-request#passing-headers-in-each-request
+ * @param token
+ * @returns
+ */
+export const createAuthorizationHeader = (token: string | undefined) => {
+  return token ? { Authorization: `Bearer ${token}` } : undefined;
 };

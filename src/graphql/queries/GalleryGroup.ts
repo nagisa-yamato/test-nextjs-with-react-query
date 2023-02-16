@@ -1,7 +1,7 @@
 import { graphql } from "@/graphql/generated";
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { GalleryGroupQueryVariables } from "@/graphql/generated/graphql";
-import { client, setAuthorizationHeader } from "../graphql-request";
+import { client, createAuthorizationHeader } from "../graphql-request";
 
 const GalleryGroupQueryDocument = graphql(`
   query GalleryGroup(
@@ -30,10 +30,11 @@ export const fetchGalleryGroup = async (
   variables: GalleryGroupQueryVariables,
   token?: string
 ) => {
-  if (token) {
-    setAuthorizationHeader(token);
-  }
-  const response = await client.request(GalleryGroupQueryDocument, variables);
+  const response = await client.request(
+    GalleryGroupQueryDocument,
+    variables,
+    createAuthorizationHeader(token)
+  );
   return response.galleryGroup;
 };
 

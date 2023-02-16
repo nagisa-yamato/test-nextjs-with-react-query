@@ -9,7 +9,7 @@ const PagesLogin = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      void (async () => await router.push("/pagination"))();
+      void (async () => await router.push("/"))();
     }
   }, [isLoggedIn, router]);
 

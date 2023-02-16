@@ -1,11 +1,6 @@
-import {
-  COOKIE_NAME_ACCESS_TOKEN,
-  COOKIE_NAME_REFRESH_TOKEN,
-} from "@/constants";
 import useAuth from "@/hooks/useAuth";
-import { auth } from "@/lib/firebase/config";
-import { cookiesApi } from "@/lib/js-cookie";
-import { signOut } from "firebase/auth";
+import { logout } from "@/lib/firebase/auth/helpers";
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Header, UL } from "./AppHeader.styles";
@@ -13,6 +8,7 @@ import { Header, UL } from "./AppHeader.styles";
 const AppHeader = () => {
   const { isLoggedIn } = useAuth();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return (
     <Header>
@@ -31,9 +27,9 @@ const AppHeader = () => {
             {isLoggedIn ? (
               <button
                 onClick={async () => {
-                  await signOut(auth);
-                  cookiesApi.remove(COOKIE_NAME_ACCESS_TOKEN);
-                  cookiesApi.remove(COOKIE_NAME_REFRESH_TOKEN);
+                  await logout();
+                  // https://stackoverflow.com/a/67635388
+                  queryClient.removeQueries();
                   await router.push("/");
                 }}
               >

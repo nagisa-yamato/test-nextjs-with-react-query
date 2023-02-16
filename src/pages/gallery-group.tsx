@@ -17,7 +17,7 @@ import GalleryArticle from "@/components/GalleryArticle/GalleryArticle";
 import Pagination, {
   organizeQueryParamsToVariables,
 } from "@/components/Pagination/Pagination";
-import { GalleryWrap } from "./GalleryGroup.styles";
+import { GalleryWrap } from "../components/pages/GalleryGroup.styles";
 import { isEmptyObject } from "@/utils/isEmptyObject";
 import { useRouter } from "next/router";
 const GALLERY_GROUP_SLUG = "blurry pictures of cats";

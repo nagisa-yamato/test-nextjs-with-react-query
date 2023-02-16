@@ -9,14 +9,14 @@ import {
 import { useFragment } from "@/graphql/generated";
 import { BlogQueryVariables } from "@/graphql/generated/graphql";
 import { fetchBlog, blogKeys } from "@/graphql/queries/Blog";
-import { cookiesApi } from "@/lib/js-cookie";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 import { useEffect, useMemo, useState } from "react";
 import BlogArticle from "@/components/BlogArticle/BlogArticle";
-import { BlogsWrap } from "./Blog.styles";
+import { BlogsWrap } from "../components/pages/Blog.styles";
 import { isEmptyObject } from "@/utils/isEmptyObject";
 import { useRouter } from "next/router";
+import { cookiesApi } from "@/lib/js-cookie";
 const BLOG_SLUG = "むっくり";
 const DEFAULT_VARIABLES = {
   slug: BLOG_SLUG,
@@ -98,9 +98,8 @@ const PagesBlog = () => {
       <h1>blog</h1>
       <BlogsWrap>
         {blogPostConnectionFragment?.edges.map(({ node }) => {
-          /* eslint-disable react-hooks/rules-of-hooks */
+          // eslint-disable-next-line react-hooks/rules-of-hooks
           const blogPostFragment = useFragment(BlogPostFragment, node);
-          /* eslint-enable */
           return <BlogArticle key={blogPostFragment.id} blogPost={node} />;
         })}
       </BlogsWrap>

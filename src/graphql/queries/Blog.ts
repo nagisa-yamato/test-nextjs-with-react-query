@@ -1,7 +1,7 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { graphql } from "../generated";
 import { BlogQueryVariables } from "../generated/graphql";
-import { client, setAuthorizationHeader } from "../graphql-request";
+import { client, createAuthorizationHeader } from "../graphql-request";
 
 const BlogQueryDocument = graphql(`
   query Blog(
@@ -30,10 +30,11 @@ export const fetchBlog = async (
   variables: BlogQueryVariables,
   token?: string
 ) => {
-  if (token) {
-    setAuthorizationHeader(token);
-  }
-  const response = await client.request(BlogQueryDocument, variables);
+  const response = await client.request(
+    BlogQueryDocument,
+    variables,
+    createAuthorizationHeader(token)
+  );
   return response.blog;
 };
 
