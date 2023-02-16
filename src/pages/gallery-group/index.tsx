@@ -1,21 +1,19 @@
 import {
   fetchGalleryGroup,
   galleryGroupKeys,
-} from "@/gql/queries/GalleryGroup";
+} from "@/graphql/queries/GalleryGroup";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { GetServerSideProps } from "next";
 import { COOKIE_NAME_ACCESS_TOKEN, ITEMS_PER_PAGE } from "@/constants";
 import { cookiesApi } from "@/lib/js-cookie";
-import { useFragment } from "@/gql/generated/fragment-masking";
+import { useFragment } from "@/graphql/generated/fragment-masking";
 import {
   GalleryConnectionFragment,
   GalleryFragment,
-} from "@/gql/fragments/gallery";
+} from "@/graphql/fragments/gallery";
 import { useState } from "react";
-import { GalleryGroupQueryVariables } from "@/gql/generated/graphql";
-import { ClientError } from "graphql-request";
+import { GalleryGroupQueryVariables } from "@/graphql/generated/graphql";
 const GALLERY_GROUP_SLUG = "blurry pictures of cats";
-import useAuth from "@/hooks/useAuth";
 import GalleryArticle from "@/components/GalleryArticle/GalleryArticle";
 import Pagination from "@/components/Pagination/Pagination";
 import { GalleryWrap } from "./GalleryGroup.styles";
@@ -59,20 +57,9 @@ const PagesGalleryGroup = () => {
     GalleryConnectionFragment,
     data?.galleries
   );
-  const { refreshIdToken } = useAuth();
 
   if (isLoading) {
     return <h1>Loading...</h1>;
-  }
-
-  if (
-    isError &&
-    error instanceof ClientError &&
-    error.response.status === 401
-  ) {
-    console.warn("refreshIdToken gallery-group/index.tsx");
-    void (async () => await refreshIdToken())();
-    return null;
   }
 
   if (isError) {

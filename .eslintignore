@@ -1,4 +1,4 @@
-/src/gql/generated/**
+/src/graphql/generated/**
 
 # 以下 .gitignore と同じ
 

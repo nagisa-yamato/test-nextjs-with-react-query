@@ -5,14 +5,12 @@ import { COOKIE_NAME_ACCESS_TOKEN, ITEMS_PER_PAGE } from "@/constants";
 import {
   BlogPostConnectionFragment,
   BlogPostFragment,
-} from "@/gql/fragments/blog";
-import { useFragment } from "@/gql/generated";
-import { BlogQueryVariables } from "@/gql/generated/graphql";
-import { fetchBlog, blogKeys } from "@/gql/queries/Blog";
-import useAuth from "@/hooks/useAuth";
+} from "@/graphql/fragments/blog";
+import { useFragment } from "@/graphql/generated";
+import { BlogQueryVariables } from "@/graphql/generated/graphql";
+import { fetchBlog, blogKeys } from "@/graphql/queries/Blog";
 import { cookiesApi } from "@/lib/js-cookie";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
-import { ClientError } from "graphql-request";
 import { GetServerSideProps } from "next";
 import { useEffect, useMemo, useState } from "react";
 import BlogArticle from "@/components/BlogArticle/BlogArticle";
@@ -86,20 +84,8 @@ const PagesBlog = () => {
     data?.posts
   );
 
-  const { refreshIdToken } = useAuth();
-
   if (isLoading) {
     return <h1>Loading...</h1>;
-  }
-
-  if (
-    isError &&
-    error instanceof ClientError &&
-    error.response.status === 401
-  ) {
-    console.warn("refreshIdToken blog/index.tsx");
-    void (async () => await refreshIdToken())();
-    return null;
   }
 
   if (isError) {

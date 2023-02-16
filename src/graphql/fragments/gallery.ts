@@ -1,4 +1,4 @@
-import { graphql } from "@/gql/generated";
+import { graphql } from "@/graphql/generated";
 
 export const GalleryContentFragment = graphql(`
   fragment GalleryContent on GalleryContent {

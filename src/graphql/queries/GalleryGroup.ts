@@ -1,6 +1,6 @@
-import { graphql } from "@/gql/generated";
+import { graphql } from "@/graphql/generated";
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { GalleryGroupQueryVariables } from "@/gql/generated/graphql";
+import { GalleryGroupQueryVariables } from "@/graphql/generated/graphql";
 import { client, setAuthorizationHeader } from "../graphql-request";
 
 const GalleryGroupQueryDocument = graphql(`

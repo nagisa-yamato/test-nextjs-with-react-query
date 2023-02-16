@@ -1,6 +1,9 @@
-import { BlogCategoryFragment, BlogPostFragment } from "@/gql/fragments/blog";
-import { SharedFileFragment } from "@/gql/fragments/common";
-import { FragmentType, useFragment } from "@/gql/generated";
+import {
+  BlogCategoryFragment,
+  BlogPostFragment,
+} from "@/graphql/fragments/blog";
+import { SharedFileFragment } from "@/graphql/fragments/common";
+import { FragmentType, useFragment } from "@/graphql/generated";
 import { Article, StyledImage } from "./BlogArticle.styles";
 
 const BlogArticle = ({

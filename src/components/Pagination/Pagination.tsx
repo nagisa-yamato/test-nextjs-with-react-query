@@ -1,6 +1,6 @@
 import { ITEMS_PER_PAGE } from "@/constants";
-import { PageInfoFragment } from "@/gql/fragments/common";
-import { FragmentType, useFragment } from "@/gql/generated";
+import { PageInfoFragment } from "@/graphql/fragments/common";
+import { FragmentType, useFragment } from "@/graphql/generated";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { ButtonsWrap } from "./Pagination.styles";

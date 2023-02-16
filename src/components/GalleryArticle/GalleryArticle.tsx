@@ -1,9 +1,9 @@
-import { SharedFileFragment } from "@/gql/fragments/common";
+import { SharedFileFragment } from "@/graphql/fragments/common";
 import {
   GalleryFragment,
   GalleryContentFragment,
-} from "@/gql/fragments/gallery";
-import { FragmentType, useFragment } from "@/gql/generated";
+} from "@/graphql/fragments/gallery";
+import { FragmentType, useFragment } from "@/graphql/generated";
 import { Article, StyledImage } from "./GalleryArticle.styles";
 
 const GalleryArticle = ({

@@ -1,9 +1,7 @@
 import type { AppProps } from "next/app";
-import { useState } from "react";
 import {
   DehydratedState,
   Hydrate,
-  QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -12,13 +10,14 @@ import AppHeader from "@/components/AppHeader/AppHeader";
 import { AuthProvider } from "@/context/AuthProvider";
 import GlobalStyle from "@/components/GlobalStyle.styles";
 import { AppMain } from "@/components/AppMain/AppMain.styles";
+import useCustomQueryClient from "@/hooks/useQueryClient";
 
-export default function App({
+const App = ({
   Component,
   pageProps,
 }: // https://github.com/vercel/next.js/issues/40372#issuecomment-1279963091
-AppProps<{ dehydratedState: DehydratedState }>) {
-  const [queryClient] = useState(() => new QueryClient());
+AppProps<{ dehydratedState: DehydratedState }>) => {
+  const { customQueryClient: queryClient } = useCustomQueryClient();
 
   return (
     <>
@@ -42,4 +41,6 @@ AppProps<{ dehydratedState: DehydratedState }>) {
       </QueryClientProvider>
     </>
   );
-}
+};
+
+export default App;
