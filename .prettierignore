@@ -1,6 +1,7 @@
-/src/gql/generated/**
+next-env.d.ts
+pnpm-lock.yaml
 
-# 以下 .gitignore と同じ
+# 以下、.gitignoreと同じ
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 

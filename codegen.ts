@@ -22,6 +22,10 @@ const config: CodegenConfig = {
       plugins: [],
     },
   },
+  // https://the-guild.dev/graphql/codegen/docs/config-reference/lifecycle-hooks
+  hooks: {
+    afterOneFileWrite: ["prettier --write"],
+  },
 };
 
 export default config;
