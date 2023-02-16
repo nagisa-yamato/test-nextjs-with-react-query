@@ -5,21 +5,64 @@ import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { ButtonsWrap } from "./Pagination.styles";
 
+/** 仮設ページネーション型 他所で使う想定は無い */
+type PaginationVariables = {
+  first?: number;
+  after?: string;
+  last?: number;
+  before?: string;
+  page?: number;
+};
+
 /**
- * Objectに"page"属性が含まれていたら削除して返す
- *
- * 主にクエリパラメーターからページ同期用の"page"を削除する目的
- *
+ * "first"と"last"をnumber型に変換して返す (router.query等から受け取った場合、stringの可能性があるため)
  * @param object
  * @returns
  */
-export const deletePagePropertyFromObject = <Type,>(
-  object: Type & { page?: number }
+const convertFirstLastToNumber = <Type,>(
+  object: Type &
+    PaginationVariables & {
+      first?: string | number;
+      last?: string | number;
+    }
+) => {
+  Object.entries(object).forEach(([key, value]) => {
+    if (key !== "first" && key !== "last") {
+      return;
+    }
+    if (Number.isNaN(value)) {
+      return;
+    }
+    object[key] = Number(value);
+  });
+  return object;
+};
+
+/**
+ * Objectに"page"属性が含まれていたら削除して返す
+ * @param object
+ * @returns
+ */
+const deletePagePropertyFromObject = <Type,>(
+  object: Type & PaginationVariables
 ) => {
   if (Object.hasOwn(object, "page")) {
     delete object.page;
   }
   return object;
+};
+
+/**
+ * クエリパラメーターをAPI投げるときのvariablesに変換する
+ * @param object
+ * @returns
+ */
+export const organizeQueryParamsToVariables = <Type,>(
+  object: Type & PaginationVariables
+) => {
+  return convertFirstLastToNumber<Type>(
+    deletePagePropertyFromObject<Type>(object)
+  );
 };
 
 /**

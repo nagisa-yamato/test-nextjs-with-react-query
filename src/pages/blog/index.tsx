@@ -1,5 +1,5 @@
 import Pagination, {
-  deletePagePropertyFromObject,
+  organizeQueryParamsToVariables,
 } from "@/components/Pagination/Pagination";
 import { COOKIE_NAME_ACCESS_TOKEN, ITEMS_PER_PAGE } from "@/constants";
 import {
@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   const queryClient = new QueryClient();
   const variables: BlogQueryVariables = isEmptyObject(query)
     ? DEFAULT_VARIABLES
-    : deletePagePropertyFromObject<BlogQueryVariables>({
+    : organizeQueryParamsToVariables<BlogQueryVariables>({
         ...query,
         slug: BLOG_SLUG,
       });
@@ -56,11 +56,14 @@ const PagesBlog = () => {
    * NOTE:
    * memoizeしないと下記useEffectで無限ループ
    */
-  const baseVariables: BlogQueryVariables & { page?: number } = useMemo(
+  const baseVariables: BlogQueryVariables = useMemo(
     () =>
       isEmptyObject(router.query)
         ? DEFAULT_VARIABLES
-        : deletePagePropertyFromObject({ ...router.query, slug: BLOG_SLUG }),
+        : organizeQueryParamsToVariables<BlogQueryVariables>({
+            ...router.query,
+            slug: BLOG_SLUG,
+          }),
     [router.query]
   );
   const [variables, setVariables] = useState<BlogQueryVariables>(baseVariables);
@@ -69,9 +72,7 @@ const PagesBlog = () => {
    * AppHeaderのNextLinkで同じページに遷移する場合、
    * useEffectで明示的にvariablesを更新しないといけない
    */
-  useEffect(() => {
-    setVariables(baseVariables);
-  }, [baseVariables]);
+  useEffect(() => setVariables(baseVariables), [baseVariables]);
 
   const { data, isLoading, isError, error, isPreviousData } = useQuery({
     ...blogKeys.withVariables(variables),

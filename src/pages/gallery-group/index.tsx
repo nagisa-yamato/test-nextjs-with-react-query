@@ -11,19 +11,32 @@ import {
   GalleryConnectionFragment,
   GalleryFragment,
 } from "@/graphql/fragments/gallery";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GalleryGroupQueryVariables } from "@/graphql/generated/graphql";
-const GALLERY_GROUP_SLUG = "blurry pictures of cats";
 import GalleryArticle from "@/components/GalleryArticle/GalleryArticle";
-import Pagination from "@/components/Pagination/Pagination";
+import Pagination, {
+  organizeQueryParamsToVariables,
+} from "@/components/Pagination/Pagination";
 import { GalleryWrap } from "./GalleryGroup.styles";
+import { isEmptyObject } from "@/utils/isEmptyObject";
+import { useRouter } from "next/router";
+const GALLERY_GROUP_SLUG = "blurry pictures of cats";
+const DEFAULT_VARIABLES = {
+  slug: GALLERY_GROUP_SLUG,
+  first: ITEMS_PER_PAGE,
+} as const;
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  query,
+}) => {
   const queryClient = new QueryClient();
-  const variables = {
-    slug: GALLERY_GROUP_SLUG,
-    first: ITEMS_PER_PAGE,
-  };
+  const variables: GalleryGroupQueryVariables = isEmptyObject(query)
+    ? DEFAULT_VARIABLES
+    : organizeQueryParamsToVariables<GalleryGroupQueryVariables>({
+        ...query,
+        slug: GALLERY_GROUP_SLUG,
+      });
   await queryClient.prefetchQuery({
     ...galleryGroupKeys.withVariables(variables),
     queryFn: () =>
@@ -40,10 +53,21 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
  * @returns
  */
 const PagesGalleryGroup = () => {
-  const [variables, setVariables] = useState<GalleryGroupQueryVariables>({
-    slug: GALLERY_GROUP_SLUG,
-    first: ITEMS_PER_PAGE,
-  });
+  const router = useRouter();
+  const baseVariables: GalleryGroupQueryVariables = useMemo(
+    () =>
+      isEmptyObject(router.query)
+        ? DEFAULT_VARIABLES
+        : organizeQueryParamsToVariables<GalleryGroupQueryVariables>({
+            ...router.query,
+            slug: GALLERY_GROUP_SLUG,
+          }),
+    [router.query]
+  );
+  const [variables, setVariables] =
+    useState<GalleryGroupQueryVariables>(baseVariables);
+  useEffect(() => setVariables(baseVariables), [baseVariables]);
+
   const { data, isLoading, isError, error, isPreviousData } = useQuery({
     ...galleryGroupKeys.withVariables(variables),
     queryFn: () =>
