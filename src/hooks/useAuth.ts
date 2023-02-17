@@ -8,12 +8,7 @@ const useAuth = () => {
     return !!user;
   }, [user]);
 
-  const refreshIdToken = async () => {
-    console.warn("refreshIdToken @useAuth.ts");
-    await user?.getIdToken(true);
-  };
-
-  return { user, isLoggedIn, refreshIdToken };
+  return { user, isLoggedIn };
 };
 
 export default useAuth;
