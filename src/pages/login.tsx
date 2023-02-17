@@ -8,9 +8,12 @@ const PagesLogin = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoggedIn) {
-      void (async () => await router.push("/"))();
-    }
+    const redirect = async () => {
+      if (isLoggedIn) {
+        await router.push("/");
+      }
+    };
+    void redirect();
   }, [isLoggedIn, router]);
 
   if (isLoggedIn) {

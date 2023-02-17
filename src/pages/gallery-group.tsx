@@ -39,8 +39,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       });
   await queryClient.prefetchQuery({
     ...galleryGroupKeys.withVariables(variables),
-    queryFn: () =>
-      fetchGalleryGroup(variables, req.cookies[COOKIE_NAME_ACCESS_TOKEN]),
+    queryFn: ({ signal }) =>
+      fetchGalleryGroup({
+        variables,
+        token: req.cookies[COOKIE_NAME_ACCESS_TOKEN],
+        signal,
+      }),
   });
 
   return {
@@ -70,8 +74,12 @@ const PagesGalleryGroup = () => {
 
   const { data, isLoading, isError, error, isPreviousData } = useQuery({
     ...galleryGroupKeys.withVariables(variables),
-    queryFn: () =>
-      fetchGalleryGroup(variables, cookiesApi.get(COOKIE_NAME_ACCESS_TOKEN)),
+    queryFn: ({ signal }) =>
+      fetchGalleryGroup({
+        variables,
+        token: cookiesApi.get(COOKIE_NAME_ACCESS_TOKEN),
+        signal,
+      }),
     // NOTE:
     // クライアントサイドでfetchしたときのちらつき防止
     // https://tanstack.com/query/v4/docs/react/guides/paginated-queries#better-paginated-queries-with-keeppreviousdata

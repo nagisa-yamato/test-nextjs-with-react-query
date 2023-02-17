@@ -2,6 +2,7 @@ import { graphql } from "@/graphql/generated";
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { GalleryGroupQueryVariables } from "@/graphql/generated/graphql";
 import { client, createAuthorizationHeader } from "../graphql-request";
+import { RequestOptions } from "graphql-request";
 
 const GalleryGroupQueryDocument = graphql(`
   query GalleryGroup(
@@ -26,15 +27,23 @@ const GalleryGroupQueryDocument = graphql(`
   }
 `);
 
-export const fetchGalleryGroup = async (
-  variables: GalleryGroupQueryVariables,
-  token?: string
-) => {
-  const response = await client.request(
-    GalleryGroupQueryDocument,
+type FetchGalleryGroupParams = {
+  variables: GalleryGroupQueryVariables;
+  token?: string;
+  signal: RequestOptions["signal"];
+};
+
+export const fetchGalleryGroup = async ({
+  variables,
+  token,
+  signal,
+}: FetchGalleryGroupParams) => {
+  const response = await client.request({
+    document: GalleryGroupQueryDocument,
     variables,
-    createAuthorizationHeader(token)
-  );
+    requestHeaders: createAuthorizationHeader(token),
+    signal,
+  });
   return response.galleryGroup;
 };
 

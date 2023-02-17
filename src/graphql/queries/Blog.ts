@@ -1,4 +1,5 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
+import { RequestOptions } from "graphql-request";
 import { graphql } from "../generated";
 import { BlogQueryVariables } from "../generated/graphql";
 import { client, createAuthorizationHeader } from "../graphql-request";
@@ -26,15 +27,23 @@ const BlogQueryDocument = graphql(`
   }
 `);
 
-export const fetchBlog = async (
-  variables: BlogQueryVariables,
-  token?: string
-) => {
-  const response = await client.request(
-    BlogQueryDocument,
+type FetchBlogParams = {
+  variables: BlogQueryVariables;
+  token?: string;
+  signal: RequestOptions["signal"];
+};
+
+export const fetchBlog = async ({
+  variables,
+  token,
+  signal,
+}: FetchBlogParams) => {
+  const response = await client.request({
+    document: BlogQueryDocument,
     variables,
-    createAuthorizationHeader(token)
-  );
+    requestHeaders: createAuthorizationHeader(token),
+    signal,
+  });
   return response.blog;
 };
 

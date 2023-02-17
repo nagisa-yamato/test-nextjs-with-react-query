@@ -36,7 +36,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       });
   await queryClient.prefetchQuery({
     ...blogKeys.withVariables(variables),
-    queryFn: () => fetchBlog(variables, req.cookies[COOKIE_NAME_ACCESS_TOKEN]),
+    queryFn: ({ signal }) =>
+      fetchBlog({
+        variables,
+        token: req.cookies[COOKIE_NAME_ACCESS_TOKEN],
+        signal,
+      }),
   });
 
   return {
@@ -76,8 +81,12 @@ const PagesBlog = () => {
 
   const { data, isLoading, isError, error, isPreviousData } = useQuery({
     ...blogKeys.withVariables(variables),
-    queryFn: () =>
-      fetchBlog(variables, cookiesApi.get(COOKIE_NAME_ACCESS_TOKEN)),
+    queryFn: ({ signal }) =>
+      fetchBlog({
+        variables,
+        token: cookiesApi.get(COOKIE_NAME_ACCESS_TOKEN),
+        signal,
+      }),
     keepPreviousData: true,
   });
   const blogPostConnectionFragment = useFragment(
