@@ -30,10 +30,11 @@ const convertFirstLastToNumber = <Type,>(
     if (key !== "first" && key !== "last") {
       return;
     }
-    if (Number.isNaN(value)) {
+    const valueAsNumber = Number(value);
+    if (Number.isNaN(valueAsNumber)) {
       return;
     }
-    object[key] = Number(value);
+    object[key] = valueAsNumber;
   });
   return object;
 };
@@ -177,7 +178,7 @@ const Pagination = <VariableType,>(props: {
         戻る
       </button>
       全 {totalCount} 件中 {(page - 1) * ITEMS_PER_PAGE + 1} 〜{" "}
-      {isPreviousData ? "..." : (page - 1) * 10 + currentCount} 件目
+      {isPreviousData ? "..." : (page - 1) * ITEMS_PER_PAGE + currentCount} 件目
       <button
         disabled={!pageInfoFragment?.hasNextPage || !router.isReady}
         onClick={handleClickNext}

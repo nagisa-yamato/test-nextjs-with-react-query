@@ -4092,8 +4092,40 @@ export const BlogPostFragmentDoc = {
         ],
       },
     },
-    ...BlogCategoryFragmentDoc.definitions,
-    ...SharedFileFragmentDoc.definitions,
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "BlogCategory" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BlogCategory" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "SharedFile" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SharedFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "alternativeContent" },
+          },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<BlogPostFragment, unknown>;
 export const BlogPostConnectionFragmentDoc = {
@@ -4149,8 +4181,98 @@ export const BlogPostConnectionFragmentDoc = {
         ],
       },
     },
-    ...PageInfoFragmentDoc.definitions,
-    ...BlogPostFragmentDoc.definitions,
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "BlogCategory" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BlogCategory" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "SharedFile" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SharedFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "alternativeContent" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PageInfo" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "PageInfo" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
+          { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
+          { kind: "Field", name: { kind: "Name", value: "startCursor" } },
+          { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "BlogPost" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BlogPost" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "subject" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "category" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "BlogCategory" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "thumbnailFile" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "SharedFile" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<BlogPostConnectionFragment, unknown>;
 export const GalleryContentFragmentDoc = {
@@ -4183,7 +4305,25 @@ export const GalleryContentFragmentDoc = {
         ],
       },
     },
-    ...SharedFileFragmentDoc.definitions,
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "SharedFile" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SharedFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "alternativeContent" },
+          },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<GalleryContentFragment, unknown>;
 export const GalleryFragmentDoc = {
@@ -4219,7 +4359,52 @@ export const GalleryFragmentDoc = {
         ],
       },
     },
-    ...GalleryContentFragmentDoc.definitions,
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "SharedFile" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SharedFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "alternativeContent" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GalleryContent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "GalleryContent" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "contentFile" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "SharedFile" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<GalleryFragment, unknown>;
 export const GalleryConnectionFragmentDoc = {
@@ -4275,8 +4460,99 @@ export const GalleryConnectionFragmentDoc = {
         ],
       },
     },
-    ...PageInfoFragmentDoc.definitions,
-    ...GalleryFragmentDoc.definitions,
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "SharedFile" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SharedFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "alternativeContent" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GalleryContent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "GalleryContent" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "contentFile" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "SharedFile" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PageInfo" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "PageInfo" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
+          { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
+          { kind: "Field", name: { kind: "Name", value: "startCursor" } },
+          { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Gallery" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Gallery" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "releaseDay" } },
+          { kind: "Field", name: { kind: "Name", value: "isViewable" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "contents" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GalleryContent" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<GalleryConnectionFragment, unknown>;
 export const BlogDocument = {
@@ -4420,7 +4696,148 @@ export const BlogDocument = {
         ],
       },
     },
-    ...BlogPostConnectionFragmentDoc.definitions,
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PageInfo" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "PageInfo" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
+          { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
+          { kind: "Field", name: { kind: "Name", value: "startCursor" } },
+          { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "BlogCategory" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BlogCategory" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "SharedFile" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SharedFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "alternativeContent" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "BlogPost" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BlogPost" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "subject" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "category" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "BlogCategory" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "thumbnailFile" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "SharedFile" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "BlogPostConnection" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "BlogPostConnection" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "pageInfo" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "PageInfo" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "edges" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "node" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "BlogPost" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "cursor" } },
+              ],
+            },
+          },
+          { kind: "Field", name: { kind: "Name", value: "totalCount" } },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<BlogQuery, BlogQueryVariables>;
 export const GalleryGroupDocument = {
@@ -4564,6 +4981,148 @@ export const GalleryGroupDocument = {
         ],
       },
     },
-    ...GalleryConnectionFragmentDoc.definitions,
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PageInfo" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "PageInfo" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
+          { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
+          { kind: "Field", name: { kind: "Name", value: "startCursor" } },
+          { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "SharedFile" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SharedFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "alternativeContent" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GalleryContent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "GalleryContent" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "contentFile" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "SharedFile" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Gallery" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Gallery" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "name" } },
+          { kind: "Field", name: { kind: "Name", value: "releaseDay" } },
+          { kind: "Field", name: { kind: "Name", value: "isViewable" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "contents" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GalleryContent" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GalleryConnection" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "GalleryConnection" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "pageInfo" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "PageInfo" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "edges" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "node" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "Gallery" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "cursor" } },
+              ],
+            },
+          },
+          { kind: "Field", name: { kind: "Name", value: "totalCount" } },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<GalleryGroupQuery, GalleryGroupQueryVariables>;
