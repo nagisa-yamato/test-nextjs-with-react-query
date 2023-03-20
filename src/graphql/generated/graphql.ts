@@ -450,6 +450,68 @@ export type CookieValue = {
   value: Scalars["String"];
 };
 
+/** クーポン-Node */
+export type Coupon = Node & {
+  __typename?: "Coupon";
+  /** アクションタイプ */
+  actionType: CouponActionType;
+  /** ギフトコインアクション */
+  giftCoinAction?: Maybe<CouponGiftCoinAction>;
+  /** クーポンID */
+  id: Scalars["ID"];
+  /** サブスクリプションアクション */
+  subscriptionAction?: Maybe<CouponSubscriptionAction>;
+};
+
+/** クーポンアクションタイプ */
+export enum CouponActionType {
+  /** ギフトコイン */
+  GiftCoin = "GIFT_COIN",
+  /** サブスクリプション */
+  Subscription = "SUBSCRIPTION",
+}
+
+/** 割引タイプ */
+export enum CouponDiscountType {
+  /** 固定 */
+  Fixed = "FIXED",
+  /** 割合 */
+  Percentage = "PERCENTAGE",
+}
+
+/** クーポンギフトコインアクション */
+export type CouponGiftCoinAction = {
+  __typename?: "CouponGiftCoinAction";
+  /** 数量 */
+  amount: Scalars["Int"];
+  /** アクションID */
+  id: Scalars["ID"];
+};
+
+/** クーポンプロモーション-Node */
+export type CouponPromotion = Node & {
+  __typename?: "CouponPromotion";
+  /** クーポンリスト */
+  coupons?: Maybe<Array<Coupon>>;
+  /** プロモーションID */
+  id: Scalars["ID"];
+};
+
+/** クーポンサブスクリプションアクション */
+export type CouponSubscriptionAction = {
+  __typename?: "CouponSubscriptionAction";
+  /** 割引数量 */
+  discountAmount: Scalars["String"];
+  /** 割引タイプ */
+  discountType: CouponDiscountType;
+  /** 割引適用月数 */
+  durationInMonths: Scalars["Int"];
+  /** アクションID */
+  id: Scalars["ID"];
+  /** サブスクプランID */
+  subscriptionPlanId: Scalars["ID"];
+};
+
 export type CreateMemberInput = {
   displayName: Scalars["String"];
   isSentMail: Scalars["Boolean"];
@@ -762,6 +824,7 @@ export enum FeatureSlug {
   Movie = "MOVIE",
   Music = "MUSIC",
   News = "NEWS",
+  Schedule = "SCHEDULE",
 }
 
 export type Gallery = Node & {
@@ -1066,6 +1129,7 @@ export type LayoutSectionDetail =
   | LayoutSectionNewsDetail
   | LayoutSectionPostedGalleryDetail
   | LayoutSectionPostedMovieDetail
+  | LayoutSectionScheduleDetail
   | LayoutSectionTextButtonDetail
   | LayoutSectionTwitterTimelineDetail;
 
@@ -1195,6 +1259,22 @@ export type LayoutSectionPostedMovieDetail = {
   headerText: Scalars["String"];
   /** 動画リスト取得 */
   movies: Array<Movie>;
+  /** セクションID */
+  sectionId: Scalars["ID"];
+};
+
+/** スケジュールセクション詳細 */
+export type LayoutSectionScheduleDetail = {
+  __typename?: "LayoutSectionScheduleDetail";
+  category?: Maybe<ScheduleCategory>;
+  /** 表示件数 */
+  displayLimit: Scalars["Int"];
+  /** ファイル */
+  file?: Maybe<SharedFile>;
+  /** 見出しテキスト */
+  headerText: Scalars["String"];
+  /** スケジュールリスト */
+  schedules?: Maybe<Array<ScheduleDateGroup>>;
   /** セクションID */
   sectionId: Scalars["ID"];
 };
@@ -1872,6 +1952,8 @@ export enum MenuType {
   News = "NEWS",
   /** プロフィール */
   Profile = "PROFILE",
+  /** スケジュール */
+  Schedule = "SCHEDULE",
   /** 会員情報 */
   UserInfo = "USER_INFO",
   /** 会員登録 */
@@ -2225,8 +2307,11 @@ export type Mutation = {
   addMovieComment: MovieComment;
   /** 生配信コラボ申請キャンセル */
   cancelLiveBroadcastCollaborationRequest?: Maybe<LiveBroadcastCollaborationRequestStatus>;
+  /** サブスクキャンセル */
   cancelSubscription?: Maybe<UserSubscriptionByCardOrCarrier>;
+  /** サブスク決済方法変更(カード) */
   changeSubscriptionPaymentMethodToCard?: Maybe<UserSubscriptionByCard>;
+  /** サブスク決済方法変更(キャリア) */
   changeSubscriptionPaymentMethodToCarrier?: Maybe<CarrierAuth>;
   createMember?: Maybe<Member>;
   /** RTMトークン作成 */
@@ -2267,7 +2352,13 @@ export type Mutation = {
   musicPlayback?: Maybe<MusicPlaybackPayload>;
   /** スタンプ購入 */
   purchaseStamp: Stamp;
+  /** ギフトコインクーポン適用 */
+  redeemGiftCoinCoupon?: Maybe<RedeemGiftCoinCouponPayload>;
+  /** サブスククーポン適用 */
+  redeemSubscriptionCoupon?: Maybe<RedeemSubscriptionCouponPayload>;
+  /** サブスク登録(カード) */
   registerSubscriptionByCard?: Maybe<UserSubscriptionByCard>;
+  /** サブスク登録(キャリア) */
   registerSubscriptionByCarrier?: Maybe<CarrierAuth>;
   removeCreditCard?: Maybe<CreditCard>;
   resendVerifyMail?: Maybe<User>;
@@ -2401,6 +2492,14 @@ export type MutationMusicPlaybackArgs = {
 
 export type MutationPurchaseStampArgs = {
   input: PurchaseStampInput;
+};
+
+export type MutationRedeemGiftCoinCouponArgs = {
+  input: RedeemGiftCoinCouponInput;
+};
+
+export type MutationRedeemSubscriptionCouponArgs = {
+  input: RedeemSubscriptionCouponInput;
 };
 
 export type MutationRegisterSubscriptionByCardArgs = {
@@ -2667,6 +2766,12 @@ export type Query = {
   /** 獲得したデジタルコンテンツくじ一覧取得 */
   capturedDigitalContentLotteries: LotteryConnection;
   coinProducts?: Maybe<Array<CoinProduct>>;
+  /** ギフトコインアクション取得 */
+  couponGiftCoinActionByPromotionCode?: Maybe<CouponGiftCoinAction>;
+  /** クーポンプロモーション取得 */
+  couponPromotionByPromotionCode?: Maybe<CouponPromotion>;
+  /** クーポンサブスクリプションアクション取得 */
+  couponSubscriptionActionByPromotionCode?: Maybe<CouponSubscriptionAction>;
   /** 引換可能くじ一覧取得 */
   exchangeableLotteries: LotteryConnection;
   /** Get a gallery by id */
@@ -2714,6 +2819,17 @@ export type Query = {
   musicTrack?: Maybe<MusicTrack>;
   /** Get news by id */
   news?: Maybe<News>;
+  /** スケジュール詳細取得 */
+  schedule: Schedule;
+  /** スケジュールカテゴリ */
+  scheduleCategories: Array<ScheduleCategory>;
+  /**
+   * スケジュール日別リスト取得
+   * 日付ごとの配列で返却する
+   */
+  scheduleDateGroupList?: Maybe<Array<ScheduleDateGroup>>;
+  /** スケジュールリスト取得 */
+  scheduleList: ScheduleConnection;
   /** Shop注文情報を取得 */
   shopOrder?: Maybe<ShopOrder>;
   /** get site by domain(ex. https://www.fam.com/{domain}, https://www.{domain}) */
@@ -2739,6 +2855,19 @@ export type QueryCapturedDigitalContentLotteriesArgs = {
   before?: InputMaybe<Scalars["String"]>;
   first?: InputMaybe<Scalars["Int"]>;
   last?: InputMaybe<Scalars["Int"]>;
+};
+
+export type QueryCouponGiftCoinActionByPromotionCodeArgs = {
+  promotionCode: Scalars["String"];
+};
+
+export type QueryCouponPromotionByPromotionCodeArgs = {
+  promotionCode: Scalars["String"];
+};
+
+export type QueryCouponSubscriptionActionByPromotionCodeArgs = {
+  promotionCode: Scalars["String"];
+  subscriptionPlanId: Scalars["ID"];
 };
 
 export type QueryExchangeableLotteriesArgs = {
@@ -2847,6 +2976,25 @@ export type QueryNewsArgs = {
   id: Scalars["ID"];
 };
 
+export type QueryScheduleArgs = {
+  id: Scalars["ID"];
+};
+
+export type QueryScheduleDateGroupListArgs = {
+  categoryId?: InputMaybe<Scalars["ID"]>;
+  yearMonth: Scalars["String"];
+};
+
+export type QueryScheduleListArgs = {
+  after?: InputMaybe<Scalars["String"]>;
+  before?: InputMaybe<Scalars["String"]>;
+  categoryId?: InputMaybe<Scalars["ID"]>;
+  first?: InputMaybe<Scalars["Int"]>;
+  last?: InputMaybe<Scalars["Int"]>;
+  orderBy?: InputMaybe<ScheduleOrderInput>;
+  yearMonth?: InputMaybe<Scalars["String"]>;
+};
+
 export type QueryShopOrderArgs = {
   id: Scalars["ID"];
 };
@@ -2855,9 +3003,39 @@ export type QueryStampArgs = {
   id: Scalars["ID"];
 };
 
+/** ギフトコインクーポン適用-Input */
+export type RedeemGiftCoinCouponInput = {
+  /** プロモーションコード */
+  promotionCode: Scalars["String"];
+};
+
+/** ギフトコインクーポン適用-Payload */
+export type RedeemGiftCoinCouponPayload = {
+  __typename?: "RedeemGiftCoinCouponPayload";
+  result: Scalars["Boolean"];
+};
+
+/** サブスククーポン適用-Input */
+export type RedeemSubscriptionCouponInput = {
+  /** プロモーションコード */
+  promotionCode: Scalars["String"];
+  /** サブスクID */
+  subscriptionId: Scalars["ID"];
+};
+
+/** サブスククーポン適用-Payload */
+export type RedeemSubscriptionCouponPayload = {
+  __typename?: "RedeemSubscriptionCouponPayload";
+  result: Scalars["Boolean"];
+};
+
 export type RegisterSubscriptionByCardInput = {
+  /** クレジットカードID */
   cardId: Scalars["ID"];
+  /** サブスクプランID */
   planId: Scalars["ID"];
+  /** プロモーションコード */
+  promotionCode?: InputMaybe<Scalars["String"]>;
 };
 
 export type RegisterSubscriptionByCarrierInput = {
@@ -2890,6 +3068,80 @@ export type RoleStatus = {
   __typename?: "RoleStatus";
   expireAt?: Maybe<Scalars["Datetime"]>;
   name: RoleName;
+};
+
+/** スケジュールオブジェクト */
+export type Schedule = Node & {
+  __typename?: "Schedule";
+  /** 本文 */
+  body: Scalars["String"];
+  /** カテゴリ */
+  category?: Maybe<ScheduleCategory>;
+  /** 作成日時 */
+  createdAt: Scalars["Datetime"];
+  /** 日付 */
+  date: Scalars["Datetime"];
+  /** ID */
+  id: Scalars["ID"];
+  /** 閲覧可能フラグ */
+  isViewable: Scalars["Boolean"];
+  /** 公開開始日時 */
+  startAt: Scalars["Datetime"];
+  /** 見出し */
+  subject: Scalars["String"];
+  /** 閲覧可能範囲設定 */
+  viewableScope: ContentsViewableScope;
+};
+
+/** スケジュールカテゴリ */
+export type ScheduleCategory = {
+  __typename?: "ScheduleCategory";
+  /** ID */
+  id: Scalars["ID"];
+  /** カテゴリ名 */
+  name: Scalars["String"];
+  /** スラッグ */
+  slug: Scalars["String"];
+};
+
+/** スケジュールコネクションオブジェクト */
+export type ScheduleConnection = {
+  __typename?: "ScheduleConnection";
+  /** エッジ */
+  edges: Array<ScheduleEdge>;
+  /** ページ情報 */
+  pageInfo: PageInfo;
+  /** 総件数 */
+  totalCount: Scalars["Int"];
+};
+
+export type ScheduleDateGroup = {
+  __typename?: "ScheduleDateGroup";
+  date: Scalars["Datetime"];
+  schedules?: Maybe<Array<Schedule>>;
+};
+
+/** スケジュールエッジオブジェクト */
+export type ScheduleEdge = Edge & {
+  __typename?: "ScheduleEdge";
+  /** カーソル */
+  cursor: Scalars["String"];
+  /** ノード */
+  node: Schedule;
+};
+
+/** スケジュールソート条件フィールド */
+export enum ScheduleOrderField {
+  /** 日付 */
+  Date = "DATE",
+}
+
+/** スケジュールソート条件入力オブジェクト */
+export type ScheduleOrderInput = {
+  /** ソート順 */
+  direction: OrderDirection;
+  /** ソート項目 */
+  field: ScheduleOrderField;
 };
 
 export type SharedFile = Node & {
@@ -3290,6 +3542,31 @@ export type SubscriptionCancelReason = {
   name: Scalars["String"];
 };
 
+/** サブスクリプション割引-Node */
+export type SubscriptionDiscount = Node & {
+  __typename?: "SubscriptionDiscount";
+  /** 割引数量 */
+  discountAmount: Scalars["String"];
+  /** 割引タイプ */
+  discountType: SubscriptionDiscountType;
+  /** 割引適用月数 */
+  durationInMonths: Scalars["Int"];
+  /** 終了日時 */
+  endAt: Scalars["Datetime"];
+  /** 割引ID */
+  id: Scalars["ID"];
+  /** 開始日時 */
+  startAt: Scalars["Datetime"];
+};
+
+/** 割引タイプ */
+export enum SubscriptionDiscountType {
+  /** 固定 */
+  Fixed = "FIXED",
+  /** 割合 */
+  Percentage = "PERCENTAGE",
+}
+
 /** サブスク支払履歴オブジェクト */
 export type SubscriptionPaymentHistory = Node & {
   __typename?: "SubscriptionPaymentHistory";
@@ -3297,6 +3574,8 @@ export type SubscriptionPaymentHistory = Node & {
   amount: Scalars["Int"];
   /** 支払履歴作成日時 */
   createdAt: Scalars["Datetime"];
+  /** 割引金額 */
+  discountAmount: Scalars["Int"];
   /** ID */
   id: Scalars["ID"];
   /** サブスク対象サイト */
@@ -3520,15 +3799,24 @@ export type UserSubscription = {
 
 export type UserSubscriptionByCard = UserSubscription & {
   __typename?: "UserSubscriptionByCard";
+  /** キャンセル日時 */
   cancelAt?: Maybe<Scalars["Datetime"]>;
   creditCard?: Maybe<CreditCard>;
+  /** 割引情報 */
+  discount?: Maybe<SubscriptionDiscount>;
+  /** ID */
   id: Scalars["ID"];
+  /** 次回支払い日 */
   nextPaymentDay: Scalars["Date"];
+  /** 次回支払い方法 */
   nextPaymentMethod?: Maybe<NextPaymentMethod>;
+  /** プラン */
   plan: SubscriptionPlan;
+  /** 開始日時 */
   startAt: Scalars["Datetime"];
   /** ステータス */
   status: Scalars["String"];
+  /** 一時停止日時 */
   suspendedAt?: Maybe<Scalars["Datetime"]>;
 };
 
