@@ -31,7 +31,7 @@ specifiers:
   js-cookie: ^3.0.1
   lint-staged: ^13.1.2
   next: 13.2.4
-  postcss-styled-syntax: ^0.3.1
+  postcss-styled-syntax: ^0.4.0
   prettier: ^2.8.4
   react: 18.2.0
   react-dom: 18.2.0
@@ -78,7 +78,7 @@ devDependencies:
   eslint-config-prettier: 8.6.0_eslint@8.34.0
   husky: 8.0.3
   lint-staged: 13.1.2
-  postcss-styled-syntax: 0.3.1_typescript@4.9.5
+  postcss-styled-syntax: 0.4.0_typescript@4.9.5
   prettier: 2.8.4
   stylelint: 15.1.0
   stylelint-config-recess-order: 4.0.0_stylelint@15.1.0
@@ -6245,8 +6245,8 @@ packages:
       postcss: 8.4.21
     dev: true
 
-  /postcss-styled-syntax/0.3.1_typescript@4.9.5:
-    resolution: {integrity: sha512-DmZ/IxBqBVRLWMPu2VPCGKc8AkV0dAqQ3VdxDlWckQVzMSxzZW3Y+5vqpSgTo2eQqa+6eBX85rdsrWyrAXhUoQ==}
+  /postcss-styled-syntax/0.4.0_typescript@4.9.5:
+    resolution: {integrity: sha512-LvG++K8LtIyX1Q1mNuZVQYmBo+SCwn90cEkMigo4/I0QwXrEiYt8nPeJ5rrI5Uuh+5w7hRfPyJKlvQdhVZBhUg==}
     peerDependencies:
       postcss: ^8.4.21
     dependencies:
