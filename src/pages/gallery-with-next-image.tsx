@@ -69,13 +69,6 @@ export default function PagesGalleryPageWithNextImage() {
                   sizes="(min-width: 720px) 50vw, 100vw"
                 />
               </GalleryImageWrap>
-
-              // // eslint-disable-next-line @next/next/no-img-element
-              // <GalleryImg
-              //   key={content.id}
-              //   src={contentFile.url}
-              //   alt={contentFile.alternativeContent}
-              // />
             );
           })}
         </GalleryContainer>
