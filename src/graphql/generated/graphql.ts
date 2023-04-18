@@ -4050,6 +4050,26 @@ export type BlogQuery = {
   } | null;
 };
 
+export type GalleryQueryVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type GalleryQuery = {
+  __typename?: "Query";
+  gallery?: {
+    __typename?: "Gallery";
+    id: string;
+    name: string;
+    description: string;
+    releaseDay: any;
+    contents?: Array<
+      { __typename?: "GalleryContent" } & {
+        " $fragmentRefs"?: { GalleryContentFragment: GalleryContentFragment };
+      }
+    > | null;
+  } | null;
+};
+
 export type GalleryGroupQueryVariables = Exact<{
   slug: Scalars["String"];
   first?: InputMaybe<Scalars["Int"]>;
@@ -4929,6 +4949,113 @@ export const BlogDocument = {
     },
   ],
 } as unknown as DocumentNode<BlogQuery, BlogQueryVariables>;
+export const GalleryDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "Gallery" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "gallery" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "id" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "contents" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "FragmentSpread",
+                        name: { kind: "Name", value: "GalleryContent" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "description" } },
+                { kind: "Field", name: { kind: "Name", value: "releaseDay" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "SharedFile" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "SharedFile" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "url" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "alternativeContent" },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GalleryContent" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "GalleryContent" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "contentFile" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "SharedFile" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GalleryQuery, GalleryQueryVariables>;
 export const GalleryGroupDocument = {
   kind: "Document",
   definitions: [

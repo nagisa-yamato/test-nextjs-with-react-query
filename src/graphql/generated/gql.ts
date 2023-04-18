@@ -31,6 +31,8 @@ const documents = {
     types.GalleryConnectionFragmentDoc,
   "\n  query Blog(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    blog(slug: $slug) {\n      id\n      posts(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: DESC, field: START_AT }\n      ) {\n        ...BlogPostConnection\n      }\n    }\n  }\n":
     types.BlogDocument,
+  "\n  query Gallery($id: ID!) {\n    gallery(id: $id) {\n      id\n      name\n      contents {\n        ...GalleryContent\n      }\n      description\n      releaseDay\n    }\n  }\n":
+    types.GalleryDocument,
   "\n  query GalleryGroup(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    galleryGroup(slug: $slug) {\n      id\n      galleries(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: DESC, field: START_AT }\n      ) {\n        ...GalleryConnection\n      }\n    }\n  }\n":
     types.GalleryGroupDocument,
 };
@@ -103,6 +105,12 @@ export function graphql(
 export function graphql(
   source: "\n  query Blog(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    blog(slug: $slug) {\n      id\n      posts(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: DESC, field: START_AT }\n      ) {\n        ...BlogPostConnection\n      }\n    }\n  }\n"
 ): (typeof documents)["\n  query Blog(\n    $slug: String!\n    $first: Int\n    $after: String\n    $last: Int\n    $before: String\n  ) {\n    blog(slug: $slug) {\n      id\n      posts(\n        first: $first\n        after: $after\n        last: $last\n        before: $before\n        orderBy: { direction: DESC, field: START_AT }\n      ) {\n        ...BlogPostConnection\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  query Gallery($id: ID!) {\n    gallery(id: $id) {\n      id\n      name\n      contents {\n        ...GalleryContent\n      }\n      description\n      releaseDay\n    }\n  }\n"
+): (typeof documents)["\n  query Gallery($id: ID!) {\n    gallery(id: $id) {\n      id\n      name\n      contents {\n        ...GalleryContent\n      }\n      description\n      releaseDay\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
