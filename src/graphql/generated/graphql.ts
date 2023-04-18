@@ -39,6 +39,10 @@ export type AcquireCoinInput = {
   productId: Scalars["ID"];
 };
 
+export type AddAuthProviderSnsInput = {
+  provider: SignUpSns;
+};
+
 /** ブログ記事コメント入力コメント */
 export type AddBlogPostCommentInput = {
   /** コメント内容 */
@@ -1316,6 +1320,11 @@ export type LayoutSectionTwitterTimelineDetail = {
   width: Scalars["Int"];
 };
 
+export type LinkAuthProviderEmailInput = {
+  email: Scalars["String"];
+  password: Scalars["String"];
+};
+
 /** 生配信オブジェクト */
 export type LiveBroadcast = Node & {
   __typename?: "LiveBroadcast";
@@ -2134,8 +2143,28 @@ export type MusicAlbumEdge = Edge & {
 /** 音楽アートワーク */
 export type MusicArtwork = {
   __typename?: "MusicArtwork";
-  /** URL */
+  /** プリセットURL */
+  presetUrl?: Maybe<MusicArtworkPresetUrl>;
+  /**
+   * URL
+   * @deprecated Use presetUrl instead.
+   */
   url: MusicArtworkUrl;
+};
+
+/** 音楽アートワークプリセットURL */
+export type MusicArtworkPresetUrl = {
+  __typename?: "MusicArtworkPresetUrl";
+  /** Max 1600px */
+  large: Scalars["String"];
+  /** Max 800px */
+  medium: Scalars["String"];
+  /** オリジナル */
+  original: Scalars["String"];
+  /** Max 400px */
+  small: Scalars["String"];
+  /** Max 150px */
+  thumbnail: Scalars["String"];
 };
 
 /**
@@ -2296,6 +2325,12 @@ export type Mutation = {
   __typename?: "Mutation";
   /** コイン購入 */
   acquireCoin: CoinAcquisitionHistory;
+  /**
+   * 既存ユーザーにプロパイダーのAuthプロパイダ追加
+   *    firebaseとのリンクはフロントエンドで行い、こちらのmutationではDBの保存のみ行う
+   *    ※password以外の追加で利用する
+   */
+  addAuthProviderSNS: Scalars["Boolean"];
   /** ブログ記事コメント作成 */
   addBlogPostComment: BlogPostComment;
   addCreditCard?: Maybe<CreditCard>;
@@ -2318,7 +2353,9 @@ export type Mutation = {
   createRTMToken?: Maybe<LiveBroadcastToken>;
   /** 視聴者用のトークン作成 */
   createSubscriberRTCToken?: Maybe<LiveBroadcastToken>;
+  /** Emailでユーザー登録 */
   createUserByEmail?: Maybe<User>;
+  /** SNSでユーザー登録 */
   createUserBySNS?: Maybe<User>;
   /** ブログ記事コメント削除 */
   deleteBlogPostComment: BlogPostComment;
@@ -2344,6 +2381,8 @@ export type Mutation = {
   inquire: Scalars["Boolean"];
   /** オフィシャル問い合わせ作成 */
   inquireOfficial: Scalars["Boolean"];
+  /** 既存ユーザーにEmailPasswordのAuthプロパイダ追加とFirebaseへリンク */
+  linkAuthProviderEmail: Scalars["Boolean"];
   /** くじデジタルコンテンツ取得 */
   lotteryPrizeDigitalContent?: Maybe<LotteryPrizeDigitalContentPayload>;
   /** 音楽再生イベント送信 */
@@ -2361,13 +2400,22 @@ export type Mutation = {
   /** サブスク登録(キャリア) */
   registerSubscriptionByCarrier?: Maybe<CarrierAuth>;
   removeCreditCard?: Maybe<CreditCard>;
+  /** 認証メール再送信 */
   resendVerifyMail?: Maybe<User>;
   /** 生配信コラボ申請送信 */
   submitLiveBroadcastCollaborationRequest?: Maybe<LiveBroadcastCollaborationRequestStatus>;
+  /** 連携を削除 */
+  unlinkAuthProvider: Scalars["Boolean"];
   updateDisplayName?: Maybe<Member>;
-  /** @deprecated updateUserを使用 */
+  /**
+   * Emailを更新
+   * @deprecated updateUserを使用
+   */
   updateEmail?: Maybe<User>;
-  /** @deprecated updateUserを使用 */
+  /**
+   * FamIDを更新
+   * @deprecated updateUserを使用
+   */
   updateFamId?: Maybe<User>;
   updateIsSentMail?: Maybe<Member>;
   /** パスワード更新 */
@@ -2375,8 +2423,10 @@ export type Mutation = {
   updateProfileImage?: Maybe<Member>;
   /** ユーザー更新 */
   updateUser?: Maybe<User>;
+  /** ユーザー更新とメンバー作成 */
   updateUserAndCreateMember?: Maybe<User>;
   updateUserDetail?: Maybe<UserDetail>;
+  /** 認証メール送信 */
   verifyEmail?: Maybe<User>;
   /** ギャラリー閲覧 */
   viewGallery: Gallery;
@@ -2388,6 +2438,10 @@ export type Mutation = {
 
 export type MutationAcquireCoinArgs = {
   input: AcquireCoinInput;
+};
+
+export type MutationAddAuthProviderSnsArgs = {
+  input: AddAuthProviderSnsInput;
 };
 
 export type MutationAddBlogPostCommentArgs = {
@@ -2478,6 +2532,10 @@ export type MutationInquireOfficialArgs = {
   input: InquireOfficialInput;
 };
 
+export type MutationLinkAuthProviderEmailArgs = {
+  input: LinkAuthProviderEmailInput;
+};
+
 export type MutationLotteryPrizeDigitalContentArgs = {
   input: LotteryPrizeDigitalContentInput;
 };
@@ -2520,6 +2578,10 @@ export type MutationResendVerifyMailArgs = {
 
 export type MutationSubmitLiveBroadcastCollaborationRequestArgs = {
   broadcastID: Scalars["ID"];
+};
+
+export type MutationUnlinkAuthProviderArgs = {
+  input: UnlinkAuthProviderInput;
 };
 
 export type MutationUpdateDisplayNameArgs = {
@@ -3678,6 +3740,10 @@ export enum TwitterTimelineColorTheme {
   Light = "LIGHT",
 }
 
+export type UnlinkAuthProviderInput = {
+  provider: SignUpMethod;
+};
+
 export type UpdateDisplayNameInput = {
   displayName: Scalars["String"];
 };
@@ -3735,7 +3801,9 @@ export type User = Node & {
   paidCoinStatuses?: Maybe<Array<PaidCoinStatus>>;
   /** 支払履歴リスト */
   paymentHistories: PaymentHistoryConnection;
+  /** @deprecated signUpMethodListを使用 */
   signUpMethod: SignUpMethod;
+  signUpMethodList?: Maybe<Array<SignUpMethod>>;
   subscriptions?: Maybe<Array<Maybe<UserSubscriptionByCardOrCarrier>>>;
   /** 合計コイン残高 */
   totalCoinBalance: Scalars["Int"];
@@ -3802,10 +3870,19 @@ export type UserSubscriptionByCard = UserSubscription & {
   /** キャンセル日時 */
   cancelAt?: Maybe<Scalars["Datetime"]>;
   creditCard?: Maybe<CreditCard>;
-  /** 割引情報 */
+  /**
+   * 割引情報
+   *
+   * @deprecated(reason: "discountsに移行")
+   * @deprecated discountsに移行
+   */
   discount?: Maybe<SubscriptionDiscount>;
+  /** 割引情報リスト */
+  discounts?: Maybe<Array<SubscriptionDiscount>>;
   /** ID */
   id: Scalars["ID"];
+  /** クーポン適用可能フラグ */
+  isAvailableForCouponRedemption: Scalars["Boolean"];
   /** 次回支払い日 */
   nextPaymentDay: Scalars["Date"];
   /** 次回支払い方法 */
@@ -3826,15 +3903,27 @@ export type UserSubscriptionByCardOrCarrier =
 
 export type UserSubscriptionByCarrier = UserSubscription & {
   __typename?: "UserSubscriptionByCarrier";
+  /** キャンセル日時 */
   cancelAt?: Maybe<Scalars["Datetime"]>;
+  /** キャリア会社 */
   carrierCompany: CarrierCompany;
+  /** 割引情報リスト */
+  discounts?: Maybe<Array<SubscriptionDiscount>>;
+  /** ID */
   id: Scalars["ID"];
+  /** クーポン適用可能フラグ */
+  isAvailableForCouponRedemption: Scalars["Boolean"];
+  /** 次回支払い日 */
   nextPaymentDay: Scalars["Date"];
+  /** 次回支払い方法 */
   nextPaymentMethod?: Maybe<NextPaymentMethod>;
+  /** プラン */
   plan: SubscriptionPlan;
+  /** 開始日時 */
   startAt: Scalars["Datetime"];
   /** ステータス */
   status: Scalars["String"];
+  /** 一時停止日時 */
   suspendedAt?: Maybe<Scalars["Datetime"]>;
 };
 
