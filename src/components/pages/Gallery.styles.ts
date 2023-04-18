@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styled from "styled-components";
 
 export const OuterContainer = styled.div`
@@ -15,5 +16,14 @@ export const GalleryContainer = styled.div`
 
 export const GalleryImg = styled.img`
   width: 100%;
-  height: auto;
+`;
+
+export const GalleryImageWrap = styled.div`
+  position: relative;
+  width: 100%;
+  height: 500px;
+`;
+
+export const StyledNextImage = styled(Image)`
+  object-fit: contain;
 `;

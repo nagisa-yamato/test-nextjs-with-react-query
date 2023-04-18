@@ -1,7 +1,8 @@
 import {
   GalleryContainer,
-  GalleryImg,
+  GalleryImageWrap,
   OuterContainer,
+  StyledNextImage,
 } from "@/components/pages/Gallery.styles";
 import { COOKIE_NAME_ACCESS_TOKEN } from "@/constants";
 import { SharedFileFragment } from "@/graphql/fragments/common";
@@ -35,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   };
 };
 
-export default function PagesGalleryPage() {
+export default function PagesGalleryPageWithNextImage() {
   const { data } = useQuery({
     ...galleryKeys.withVariables(DEFAULT_VARIABLES),
     queryFn: ({ signal }) =>
@@ -49,7 +50,7 @@ export default function PagesGalleryPage() {
 
   return (
     <>
-      <h1>gallery-page</h1>
+      <h1>gallery-with-next-image</h1>
       <OuterContainer>
         <GalleryContainer>
           {galleryContents?.map((content) => {
@@ -59,12 +60,22 @@ export default function PagesGalleryPage() {
               content.contentFile
             );
             return (
-              // eslint-disable-next-line @next/next/no-img-element
-              <GalleryImg
-                key={content.id}
-                src={contentFile.url}
-                alt={contentFile.alternativeContent}
-              />
+              <GalleryImageWrap key={content.id}>
+                <StyledNextImage
+                  src={contentFile.url}
+                  alt={contentFile.alternativeContent}
+                  fill
+                  // https://web.dev/learn/design/responsive-images/#sizes
+                  sizes="(min-width: 720px) 50vw, 100vw"
+                />
+              </GalleryImageWrap>
+
+              // // eslint-disable-next-line @next/next/no-img-element
+              // <GalleryImg
+              //   key={content.id}
+              //   src={contentFile.url}
+              //   alt={contentFile.alternativeContent}
+              // />
             );
           })}
         </GalleryContainer>

@@ -24,12 +24,10 @@ const AppHeader = () => {
             <Link href="/blog">blog</Link>
           </li>{" "}
           <li>
-            <Link href="/gallery-page">gallery-page</Link>
+            <Link href="/gallery">gallery</Link>
           </li>
           <li>
-            <Link href="/gallery-page-with-next-image">
-              gallery-page-with-next-image
-            </Link>
+            <Link href="/gallery-with-next-image">gallery-with-next-image</Link>
           </li>
           <li>
             {isLoggedIn ? (
