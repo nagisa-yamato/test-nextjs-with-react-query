@@ -18,12 +18,8 @@ export const GalleryImg = styled.img`
   width: 100%;
 `;
 
-export const GalleryImageWrap = styled.div`
-  position: relative;
-  width: 100%;
-  height: 500px;
-`;
-
 export const StyledNextImage = styled(Image)`
+  width: 100%;
+  height: auto;
   object-fit: contain;
 `;

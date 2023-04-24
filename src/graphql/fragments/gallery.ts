@@ -1,10 +1,24 @@
 import { graphql } from "@/graphql/generated";
 
+export const GalleryImagePresetUrlFragment = graphql(`
+  fragment GalleryImagePresetUrl on GalleryImagePresetUrl {
+    thumbnail
+    small
+    medium
+    large
+    xLarge
+    original
+  }
+`);
+
 export const GalleryContentFragment = graphql(`
   fragment GalleryContent on GalleryContent {
     id
     contentFile {
       ...SharedFile
+    }
+    imagePresetUrl {
+      ...GalleryImagePresetUrl
     }
   }
 `);

@@ -9,6 +9,9 @@ export const Article = styled.article`
   justify-content: space-between;
 `;
 
-export const StyledImage = styled(Image)`
+export const StyledNextImage = styled(Image)`
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
 `;

@@ -837,17 +837,27 @@ export type Gallery = Node & {
   comments: GalleryCommentConnection;
   /** コンテンツ */
   contents?: Maybe<Array<GalleryContent>>;
-  /** @deprecated contentsの使用を推奨 */
+  /**
+   * コンテンツURL
+   * @deprecated contentsの使用を推奨
+   */
   contentsURLs: Array<Scalars["String"]>;
+  /** 説明文 */
   description: Scalars["String"];
+  /** ID */
   id: Scalars["ID"];
   /** コメント可否フラグ */
   isCommentable: Scalars["Boolean"];
   /** 閲覧可能フラグ */
   isViewable: Scalars["Boolean"];
+  /** 名称 */
   name: Scalars["String"];
+  /** リリース日 */
   releaseDay: Scalars["Date"];
-  /** @deprecated サムネイルURLは個別に設定せず、先頭のcontentsをサムネイルとして使用 */
+  /**
+   * サムネイルURL
+   * @deprecated サムネイルURLは個別に設定せず、先頭のcontentsをサムネイルとして使用
+   */
   thumbnailURL: Scalars["String"];
   /** 閲覧可能範囲設定 */
   viewableScope: ContentsViewableScope;
@@ -922,9 +932,13 @@ export type GalleryContent = {
   __typename?: "GalleryContent";
   /** コンテンツファイル */
   contentFile: SharedFile;
+  /** ID */
   id: Scalars["ID"];
+  /** 画像プリセットURL */
+  imagePresetUrl?: Maybe<GalleryImagePresetUrl>;
   /** 閲覧可能フラグ */
   isViewable: Scalars["Boolean"];
+  /** 順番 */
   seq: Scalars["Int"];
 };
 
@@ -956,6 +970,23 @@ export type GalleryGroupGalleriesArgs = {
   first?: InputMaybe<Scalars["Int"]>;
   last?: InputMaybe<Scalars["Int"]>;
   orderBy?: InputMaybe<GalleryOrderInput>;
+};
+
+/** ギャラリー画像プリセットURL */
+export type GalleryImagePresetUrl = {
+  __typename?: "GalleryImagePresetUrl";
+  /** Max 1920px */
+  large: Scalars["String"];
+  /** Max 768px */
+  medium: Scalars["String"];
+  /** オリジナル */
+  original: Scalars["String"];
+  /** Max 480px */
+  small: Scalars["String"];
+  /** Max 150px */
+  thumbnail: Scalars["String"];
+  /** Max 2048px */
+  xLarge: Scalars["String"];
 };
 
 export enum GalleryOrderField {
@@ -1897,6 +1928,8 @@ export type MainVisual = {
   fileType: MainVisualFileType;
   /** ファイルリスト */
   files: Array<MainVisualFile>;
+  /** アスペクトフィットモード */
+  isAspectFitMode: Scalars["Boolean"];
 };
 
 /** メインビジュアルファイル */
@@ -2155,16 +2188,18 @@ export type MusicArtwork = {
 /** 音楽アートワークプリセットURL */
 export type MusicArtworkPresetUrl = {
   __typename?: "MusicArtworkPresetUrl";
-  /** Max 1600px */
+  /** Max 1920px */
   large: Scalars["String"];
-  /** Max 800px */
+  /** Max 768px */
   medium: Scalars["String"];
   /** オリジナル */
   original: Scalars["String"];
-  /** Max 400px */
+  /** Max 480px */
   small: Scalars["String"];
   /** Max 150px */
   thumbnail: Scalars["String"];
+  /** Max 2048px */
+  xLarge: Scalars["String"];
 };
 
 /**
@@ -3710,6 +3745,10 @@ export type SubscriptionPlanMembershipCardBackgroundColorDesign = {
   numberColor: Scalars["String"];
   /** 会員番号表示位置 */
   numberPosition: NumberPosition;
+  /** ユーザー名文字色コード */
+  usernameColor: Scalars["String"];
+  /** ユーザー名表示位置 */
+  usernamePosition: UsernamePosition;
 };
 
 /** 会員証デザイン(背景画像ver) */
@@ -3725,6 +3764,10 @@ export type SubscriptionPlanMembershipCardBackgroundImageDesign = {
   numberColor: Scalars["String"];
   /** 会員番号表示位置 */
   numberPosition: NumberPosition;
+  /** ユーザー名文字色コード */
+  usernameColor: Scalars["String"];
+  /** ユーザー名表示位置 */
+  usernamePosition: UsernamePosition;
 };
 
 /** 会員証デザイン */
@@ -3927,6 +3970,20 @@ export type UserSubscriptionByCarrier = UserSubscription & {
   suspendedAt?: Maybe<Scalars["Datetime"]>;
 };
 
+/** ユーザー名表示位置 */
+export enum UsernamePosition {
+  /** 非表示 */
+  Hidden = "HIDDEN",
+  /** 左下 */
+  LowerLeft = "LOWER_LEFT",
+  /** 右下 */
+  LowerRight = "LOWER_RIGHT",
+  /** 左上 */
+  UpperLeft = "UPPER_LEFT",
+  /** 右上 */
+  UpperRight = "UPPER_RIGHT",
+}
+
 export type VefifyEmailInput = {
   token: Scalars["String"];
 };
@@ -3993,12 +4050,29 @@ export type SharedFileFragment = {
   alternativeContent: string;
 } & { " $fragmentName"?: "SharedFileFragment" };
 
+export type GalleryImagePresetUrlFragment = {
+  __typename?: "GalleryImagePresetUrl";
+  thumbnail: string;
+  small: string;
+  medium: string;
+  large: string;
+  xLarge: string;
+  original: string;
+} & { " $fragmentName"?: "GalleryImagePresetUrlFragment" };
+
 export type GalleryContentFragment = {
   __typename?: "GalleryContent";
   id: string;
   contentFile: { __typename?: "SharedFile" } & {
     " $fragmentRefs"?: { SharedFileFragment: SharedFileFragment };
   };
+  imagePresetUrl?:
+    | ({ __typename?: "GalleryImagePresetUrl" } & {
+        " $fragmentRefs"?: {
+          GalleryImagePresetUrlFragment: GalleryImagePresetUrlFragment;
+        };
+      })
+    | null;
 } & { " $fragmentName"?: "GalleryContentFragment" };
 
 export type GalleryFragment = {
@@ -4384,6 +4458,30 @@ export const BlogPostConnectionFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<BlogPostConnectionFragment, unknown>;
+export const GalleryImagePresetUrlFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GalleryImagePresetUrl" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "GalleryImagePresetUrl" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "thumbnail" } },
+          { kind: "Field", name: { kind: "Name", value: "small" } },
+          { kind: "Field", name: { kind: "Name", value: "medium" } },
+          { kind: "Field", name: { kind: "Name", value: "large" } },
+          { kind: "Field", name: { kind: "Name", value: "xLarge" } },
+          { kind: "Field", name: { kind: "Name", value: "original" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GalleryImagePresetUrlFragment, unknown>;
 export const GalleryContentFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -4411,6 +4509,19 @@ export const GalleryContentFragmentDoc = {
               ],
             },
           },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "imagePresetUrl" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GalleryImagePresetUrl" },
+                },
+              ],
+            },
+          },
         ],
       },
     },
@@ -4430,6 +4541,25 @@ export const GalleryContentFragmentDoc = {
             kind: "Field",
             name: { kind: "Name", value: "alternativeContent" },
           },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GalleryImagePresetUrl" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "GalleryImagePresetUrl" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "thumbnail" } },
+          { kind: "Field", name: { kind: "Name", value: "small" } },
+          { kind: "Field", name: { kind: "Name", value: "medium" } },
+          { kind: "Field", name: { kind: "Name", value: "large" } },
+          { kind: "Field", name: { kind: "Name", value: "xLarge" } },
+          { kind: "Field", name: { kind: "Name", value: "original" } },
         ],
       },
     },
@@ -4489,6 +4619,25 @@ export const GalleryFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GalleryImagePresetUrl" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "GalleryImagePresetUrl" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "thumbnail" } },
+          { kind: "Field", name: { kind: "Name", value: "small" } },
+          { kind: "Field", name: { kind: "Name", value: "medium" } },
+          { kind: "Field", name: { kind: "Name", value: "large" } },
+          { kind: "Field", name: { kind: "Name", value: "xLarge" } },
+          { kind: "Field", name: { kind: "Name", value: "original" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GalleryContent" },
       typeCondition: {
         kind: "NamedType",
@@ -4507,6 +4656,19 @@ export const GalleryFragmentDoc = {
                 {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "SharedFile" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "imagePresetUrl" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GalleryImagePresetUrl" },
                 },
               ],
             },
@@ -4590,6 +4752,25 @@ export const GalleryConnectionFragmentDoc = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GalleryImagePresetUrl" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "GalleryImagePresetUrl" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "thumbnail" } },
+          { kind: "Field", name: { kind: "Name", value: "small" } },
+          { kind: "Field", name: { kind: "Name", value: "medium" } },
+          { kind: "Field", name: { kind: "Name", value: "large" } },
+          { kind: "Field", name: { kind: "Name", value: "xLarge" } },
+          { kind: "Field", name: { kind: "Name", value: "original" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GalleryContent" },
       typeCondition: {
         kind: "NamedType",
@@ -4608,6 +4789,19 @@ export const GalleryConnectionFragmentDoc = {
                 {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "SharedFile" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "imagePresetUrl" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GalleryImagePresetUrl" },
                 },
               ],
             },
@@ -5029,6 +5223,25 @@ export const GalleryDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GalleryImagePresetUrl" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "GalleryImagePresetUrl" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "thumbnail" } },
+          { kind: "Field", name: { kind: "Name", value: "small" } },
+          { kind: "Field", name: { kind: "Name", value: "medium" } },
+          { kind: "Field", name: { kind: "Name", value: "large" } },
+          { kind: "Field", name: { kind: "Name", value: "xLarge" } },
+          { kind: "Field", name: { kind: "Name", value: "original" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GalleryContent" },
       typeCondition: {
         kind: "NamedType",
@@ -5047,6 +5260,19 @@ export const GalleryDocument = {
                 {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "SharedFile" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "imagePresetUrl" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GalleryImagePresetUrl" },
                 },
               ],
             },
@@ -5235,6 +5461,25 @@ export const GalleryGroupDocument = {
     },
     {
       kind: "FragmentDefinition",
+      name: { kind: "Name", value: "GalleryImagePresetUrl" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "GalleryImagePresetUrl" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "thumbnail" } },
+          { kind: "Field", name: { kind: "Name", value: "small" } },
+          { kind: "Field", name: { kind: "Name", value: "medium" } },
+          { kind: "Field", name: { kind: "Name", value: "large" } },
+          { kind: "Field", name: { kind: "Name", value: "xLarge" } },
+          { kind: "Field", name: { kind: "Name", value: "original" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
       name: { kind: "Name", value: "GalleryContent" },
       typeCondition: {
         kind: "NamedType",
@@ -5253,6 +5498,19 @@ export const GalleryGroupDocument = {
                 {
                   kind: "FragmentSpread",
                   name: { kind: "Name", value: "SharedFile" },
+                },
+              ],
+            },
+          },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "imagePresetUrl" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "GalleryImagePresetUrl" },
                 },
               ],
             },

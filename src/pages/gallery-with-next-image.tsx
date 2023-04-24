@@ -1,12 +1,14 @@
 import {
   GalleryContainer,
-  GalleryImageWrap,
   OuterContainer,
   StyledNextImage,
 } from "@/components/pages/Gallery.styles";
 import { COOKIE_NAME_ACCESS_TOKEN } from "@/constants";
 import { SharedFileFragment } from "@/graphql/fragments/common";
-import { GalleryContentFragment } from "@/graphql/fragments/gallery";
+import {
+  GalleryContentFragment,
+  GalleryImagePresetUrlFragment,
+} from "@/graphql/fragments/gallery";
 import { useFragment } from "@/graphql/generated";
 import { GalleryQueryVariables } from "@/graphql/generated/graphql";
 import { fetchGallery, galleryKeys } from "@/graphql/queries/Gallery";
@@ -54,21 +56,28 @@ export default function PagesGalleryPageWithNextImage() {
       <OuterContainer>
         <GalleryContainer>
           {galleryContents?.map((content) => {
-            // eslint-disable-next-line react-hooks/rules-of-hooks
+            /* eslint-disable react-hooks/rules-of-hooks */
+            const imagePresetUrl = useFragment(
+              GalleryImagePresetUrlFragment,
+              content.imagePresetUrl
+            );
             const contentFile = useFragment(
               SharedFileFragment,
               content.contentFile
             );
+            /* eslint-enable */
+            const searchParams = new URL(imagePresetUrl?.xLarge ?? "")
+              .searchParams;
+            const width = searchParams.get("w");
+            const height = searchParams.get("h");
             return (
-              <GalleryImageWrap key={content.id}>
-                <StyledNextImage
-                  src={contentFile.url}
-                  alt={contentFile.alternativeContent}
-                  fill
-                  // https://web.dev/learn/design/responsive-images/#sizes
-                  sizes="(min-width: 720px) 50vw, 100vw"
-                />
-              </GalleryImageWrap>
+              <StyledNextImage
+                key={content.id}
+                src={imagePresetUrl?.xLarge ?? ""}
+                alt={contentFile.alternativeContent}
+                width={Number(width)}
+                height={Number(height)}
+              />
             );
           })}
         </GalleryContainer>

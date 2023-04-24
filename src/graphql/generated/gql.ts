@@ -23,7 +23,9 @@ const documents = {
     types.PageInfoFragmentDoc,
   "\n  fragment SharedFile on SharedFile {\n    id\n    url\n    alternativeContent\n  }\n":
     types.SharedFileFragmentDoc,
-  "\n  fragment GalleryContent on GalleryContent {\n    id\n    contentFile {\n      ...SharedFile\n    }\n  }\n":
+  "\n  fragment GalleryImagePresetUrl on GalleryImagePresetUrl {\n    thumbnail\n    small\n    medium\n    large\n    xLarge\n    original\n  }\n":
+    types.GalleryImagePresetUrlFragmentDoc,
+  "\n  fragment GalleryContent on GalleryContent {\n    id\n    contentFile {\n      ...SharedFile\n    }\n    imagePresetUrl {\n      ...GalleryImagePresetUrl\n    }\n  }\n":
     types.GalleryContentFragmentDoc,
   "\n  fragment Gallery on Gallery {\n    id\n    name\n    releaseDay\n    isViewable\n    contents {\n      ...GalleryContent\n    }\n  }\n":
     types.GalleryFragmentDoc,
@@ -85,8 +87,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "\n  fragment GalleryContent on GalleryContent {\n    id\n    contentFile {\n      ...SharedFile\n    }\n  }\n"
-): (typeof documents)["\n  fragment GalleryContent on GalleryContent {\n    id\n    contentFile {\n      ...SharedFile\n    }\n  }\n"];
+  source: "\n  fragment GalleryImagePresetUrl on GalleryImagePresetUrl {\n    thumbnail\n    small\n    medium\n    large\n    xLarge\n    original\n  }\n"
+): (typeof documents)["\n  fragment GalleryImagePresetUrl on GalleryImagePresetUrl {\n    thumbnail\n    small\n    medium\n    large\n    xLarge\n    original\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "\n  fragment GalleryContent on GalleryContent {\n    id\n    contentFile {\n      ...SharedFile\n    }\n    imagePresetUrl {\n      ...GalleryImagePresetUrl\n    }\n  }\n"
+): (typeof documents)["\n  fragment GalleryContent on GalleryContent {\n    id\n    contentFile {\n      ...SharedFile\n    }\n    imagePresetUrl {\n      ...GalleryImagePresetUrl\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
