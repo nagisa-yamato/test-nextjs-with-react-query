@@ -5,7 +5,10 @@ import {
 } from "@/components/pages/Gallery.styles";
 import { COOKIE_NAME_ACCESS_TOKEN } from "@/constants";
 import { SharedFileFragment } from "@/graphql/fragments/common";
-import { GalleryContentFragment } from "@/graphql/fragments/gallery";
+import {
+  GalleryContentFragment,
+  GalleryImagePresetUrlFragment,
+} from "@/graphql/fragments/gallery";
 import { useFragment } from "@/graphql/generated";
 import { GalleryQueryVariables } from "@/graphql/generated/graphql";
 import { fetchGallery, galleryKeys } from "@/graphql/queries/Gallery";
@@ -53,15 +56,20 @@ export default function PagesGalleryPage() {
       <OuterContainer>
         <GalleryContainer>
           {galleryContents?.map((content) => {
-            // eslint-disable-next-line react-hooks/rules-of-hooks
+            /* eslint-disable react-hooks/rules-of-hooks */
+            const imagePresetUrl = useFragment(
+              GalleryImagePresetUrlFragment,
+              content.imagePresetUrl
+            );
             const contentFile = useFragment(
               SharedFileFragment,
               content.contentFile
             );
+            /* eslint-enable */
             return (
               <GalleryImg
                 key={content.id}
-                src={contentFile.url}
+                src={imagePresetUrl?.xLarge}
                 alt={contentFile.alternativeContent}
                 loading="lazy"
               />
