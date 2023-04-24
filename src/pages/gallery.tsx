@@ -63,6 +63,7 @@ export default function PagesGalleryPage() {
                 key={content.id}
                 src={contentFile.url}
                 alt={contentFile.alternativeContent}
+                loading="lazy"
               />
             );
           })}
