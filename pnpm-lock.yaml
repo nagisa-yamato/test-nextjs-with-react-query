@@ -9,8 +9,8 @@ dependencies:
     specifier: 3.2.0
     version: 3.2.0(graphql@16.6.0)
   '@lukemorales/query-key-factory':
-    specifier: 1.3.1
-    version: 1.3.1(@tanstack/query-core@4.29.14)(@tanstack/react-query@4.29.14)
+    specifier: 1.3.2
+    version: 1.3.2(@tanstack/query-core@4.29.14)(@tanstack/react-query@4.29.14)
   '@tanstack/react-query':
     specifier: 4.29.14
     version: 4.29.14(react-dom@18.2.0)(react@18.2.0)
@@ -3178,8 +3178,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
-  /@lukemorales/query-key-factory@1.3.1(@tanstack/query-core@4.29.14)(@tanstack/react-query@4.29.14):
-    resolution: {integrity: sha512-7G6rKf36dVdCzLNBicTi7Oo2Bpb4nTk32QDw6GFcyX/52WTgpKHvFoQUMvxqSnClzukq30Fn9YNu1ON2VQ8i8A==}
+  /@lukemorales/query-key-factory@1.3.2(@tanstack/query-core@4.29.14)(@tanstack/react-query@4.29.14):
+    resolution: {integrity: sha512-SFOWcB5ec+RhlKjLjZxTAbOPF2uXNED6lqXiMu3TUt2twKzxE/QLhnYkdbxOBMK5Wwc2Ia+WP3yqCPRKWywnwQ==}
     engines: {node: '>=14'}
     peerDependencies:
       '@tanstack/query-core': '>= 4.0.0'
