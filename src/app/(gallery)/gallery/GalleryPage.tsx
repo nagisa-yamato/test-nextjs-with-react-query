@@ -1,8 +1,10 @@
+"use client";
+
 import {
   GalleryContainer,
   GalleryImg,
   OuterContainer,
-} from "@/components/pages/Gallery.styles";
+} from "@/app/(gallery)/Gallery.styles";
 import { COOKIE_NAME_ACCESS_TOKEN } from "@/constants";
 import { SharedFileFragment } from "@/graphql/fragments/common";
 import {
@@ -10,35 +12,15 @@ import {
   GalleryImagePresetUrlFragment,
 } from "@/graphql/fragments/gallery";
 import { useFragment } from "@/graphql/generated";
-import { GalleryQueryVariables } from "@/graphql/generated/graphql";
 import { fetchGallery, galleryKeys } from "@/graphql/queries/Gallery";
 import { cookiesApi } from "@/lib/js-cookie";
-import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
-import { GetServerSideProps } from "next";
+import { useQuery } from "@tanstack/react-query";
 
-const DEFAULT_VARIABLES = {
+export const DEFAULT_VARIABLES = {
   id: "Z2FsbGVyeSM1MDE=",
 } as const;
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const queryClient = new QueryClient();
-  const variables: GalleryQueryVariables = DEFAULT_VARIABLES;
-  await queryClient.prefetchQuery({
-    ...galleryKeys.withVariables(variables),
-    queryFn: ({ signal }) =>
-      fetchGallery({
-        variables,
-        token: req.cookies[COOKIE_NAME_ACCESS_TOKEN],
-        signal,
-      }),
-  });
-
-  return {
-    props: { dehydratedState: dehydrate(queryClient) },
-  };
-};
-
-export default function PagesGalleryPage() {
+export default function GalleryPage() {
   const { data } = useQuery({
     ...galleryKeys.withVariables(DEFAULT_VARIABLES),
     queryFn: ({ signal }) =>

@@ -1,16 +1,16 @@
-import type { AppProps } from "next/app";
+import AppHeader from "@/app/components/AppHeader/AppHeader";
+import { AppMain } from "@/app/components/AppMain/AppMain.styles";
+import GlobalStyle from "@/components/GlobalStyle.styles";
+import { AuthProvider } from "@/context/AuthProvider";
+import useCustomQueryClient from "@/hooks/useCustomQueryClient";
 import {
   DehydratedState,
   Hydrate,
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import type { AppProps } from "next/app";
 import Head from "next/head";
-import AppHeader from "@/components/AppHeader/AppHeader";
-import { AuthProvider } from "@/context/AuthProvider";
-import GlobalStyle from "@/components/GlobalStyle.styles";
-import { AppMain } from "@/components/AppMain/AppMain.styles";
-import useCustomQueryClient from "@/hooks/useCustomQueryClient";
 
 const App = ({
   Component,

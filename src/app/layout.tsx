@@ -1,5 +1,5 @@
-import AppHeader from "@/components/AppHeader/AppHeader";
-import { AppMain } from "@/components/AppMain/AppMain.styles";
+import AppHeader from "@/app/components/AppHeader/AppHeader";
+import { AppMain } from "@/app/components/AppMain/AppMain.styles";
 import { Metadata } from "next";
 import Providers from "./providers";
 

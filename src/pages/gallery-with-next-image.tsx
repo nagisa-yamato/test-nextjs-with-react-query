@@ -2,7 +2,7 @@ import {
   GalleryContainer,
   OuterContainer,
   StyledNextImage,
-} from "@/components/pages/Gallery.styles";
+} from "@/app/(gallery)/Gallery.styles";
 import { COOKIE_NAME_ACCESS_TOKEN } from "@/constants";
 import { SharedFileFragment } from "@/graphql/fragments/common";
 import {
