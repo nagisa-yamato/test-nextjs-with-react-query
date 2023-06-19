@@ -11,32 +11,41 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
+    };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
   /**
    * 年月日
    * ex) 2006-01-02
    */
-  Date: any;
+  Date: { input: any; output: any };
   /**
    * [RFC3339] 日時
    * ex) 2006-01-02T15:04:05Z07:00
    */
-  Datetime: any;
-  Upload: any;
+  Datetime: { input: any; output: any };
+  Upload: { input: any; output: any };
 };
 
 /** コイン購入入力オブジェクト */
 export type AcquireCoinInput = {
   /** カードID */
-  cardId: Scalars["ID"];
+  cardId: Scalars["ID"]["input"];
   /** コイン商品ID */
-  productId: Scalars["ID"];
+  productId: Scalars["ID"]["input"];
 };
 
 export type AddAuthProviderSnsInput = {
@@ -46,36 +55,36 @@ export type AddAuthProviderSnsInput = {
 /** ブログ記事コメント入力コメント */
 export type AddBlogPostCommentInput = {
   /** コメント内容 */
-  content: Scalars["String"];
+  content: Scalars["String"]["input"];
   /** ブログ記事ID */
-  postId: Scalars["ID"];
+  postId: Scalars["ID"]["input"];
 };
 
 export type AddCreditCardInput = {
-  expiration: Scalars["String"];
-  token: Scalars["String"];
+  expiration: Scalars["String"]["input"];
+  token: Scalars["String"]["input"];
 };
 
 /** ギャラリーコメント入力コメント */
 export type AddGalleryCommentInput = {
   /** コメント内容 */
-  content: Scalars["String"];
+  content: Scalars["String"]["input"];
   /** ギャラリーID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type AddMessageInput = {
   /** チャットメッセージ本文 */
-  content: Scalars["String"];
+  content: Scalars["String"]["input"];
   /** 生配信ID */
-  liveBroadcastId: Scalars["ID"];
+  liveBroadcastId: Scalars["ID"]["input"];
 };
 
 export type AddMovieCommentInput = {
   /** コメント内容 */
-  content: Scalars["String"];
+  content: Scalars["String"]["input"];
   /** 動画ID */
-  movieId: Scalars["ID"];
+  movieId: Scalars["ID"]["input"];
 };
 
 /** アルバムタイプ */
@@ -84,6 +93,58 @@ export enum AlbumType {
   Album = "ALBUM",
   /** シングル */
   Single = "SINGLE",
+}
+
+/** バナー-Node */
+export type Banner = Node & {
+  __typename?: "Banner";
+  /** ID */
+  id: Scalars["ID"]["output"];
+  /** 画像 */
+  image?: Maybe<BannerImage>;
+  /** リンク */
+  link?: Maybe<BannerLink>;
+};
+
+/** バナー画像 */
+export type BannerImage = {
+  __typename?: "BannerImage";
+  /** プリセットURL */
+  presetUrl?: Maybe<BannerImagePresetUrl>;
+};
+
+/** バナー画像プリセットURL */
+export type BannerImagePresetUrl = {
+  __typename?: "BannerImagePresetUrl";
+  /** Max 1920px */
+  large: Scalars["String"]["output"];
+  /** Max 768px */
+  medium: Scalars["String"]["output"];
+  /** オリジナル */
+  original: Scalars["String"]["output"];
+  /** Max 480px */
+  small: Scalars["String"]["output"];
+  /** Max 150px */
+  thumbnail: Scalars["String"]["output"];
+  /** Max 2048px */
+  xLarge: Scalars["String"]["output"];
+};
+
+/** バナーリンク */
+export type BannerLink = {
+  __typename?: "BannerLink";
+  /** リンクタイプ */
+  type: BannerLinkType;
+  /** リンク先URL */
+  url: Scalars["String"]["output"];
+};
+
+/** バナーリンクタイプ */
+export enum BannerLinkType {
+  /** 外部リンク */
+  External = "EXTERNAL",
+  /** 内部ページリンク */
+  Page = "PAGE",
 }
 
 /** バナーサイズ */
@@ -99,42 +160,42 @@ export type Blog = Node & {
   /** ブログカテゴリリスト取得 */
   categories: Array<BlogCategory>;
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** ステータス */
-  isAvailable: Scalars["Boolean"];
+  isAvailable: Scalars["Boolean"]["output"];
   /** ブログ名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** ブログ記事リスト取得 */
   posts: BlogPostConnection;
   /** スラッグ */
-  slug: Scalars["String"];
+  slug: Scalars["String"]["output"];
 };
 
 /** ブログオブジェクト */
 export type BlogPostsArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  categoryID?: InputMaybe<Scalars["ID"]>;
-  endDate?: InputMaybe<Scalars["Date"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  categoryID?: InputMaybe<Scalars["ID"]["input"]>;
+  endDate?: InputMaybe<Scalars["Date"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<BlogPostOrderInput>;
-  startDate?: InputMaybe<Scalars["Date"]>;
+  startDate?: InputMaybe<Scalars["Date"]["input"]>;
 };
 
 /** ブログカテゴリオブジェクト */
 export type BlogCategory = {
   __typename?: "BlogCategory";
   /** ブログカテゴリ記事数取得 */
-  count: Scalars["Int"];
+  count: Scalars["Int"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** デフォルト */
-  isDefault: Scalars["Boolean"];
+  isDefault: Scalars["Boolean"]["output"];
   /** カテゴリ名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** スラッグ */
-  slug: Scalars["String"];
+  slug: Scalars["String"]["output"];
 };
 
 /** ブログ記事オブジェクト */
@@ -145,19 +206,19 @@ export type BlogPost = Node & {
   /** ブログ記事コメントリスト取得 */
   comments: BlogPostCommentConnection;
   /** 記事コンテンツ */
-  content: Scalars["String"];
+  content: Scalars["String"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** ステータス */
-  isAvailable: Scalars["Boolean"];
+  isAvailable: Scalars["Boolean"]["output"];
   /** コメント可否フラグ */
-  isCommentable: Scalars["Boolean"];
+  isCommentable: Scalars["Boolean"]["output"];
   /** 閲覧可能フラグ */
-  isViewable: Scalars["Boolean"];
+  isViewable: Scalars["Boolean"]["output"];
   /** 公開日時 */
-  startAt: Scalars["Datetime"];
+  startAt: Scalars["Datetime"]["output"];
   /** 記事タイトル */
-  subject: Scalars["String"];
+  subject: Scalars["String"]["output"];
   /** サムネイル */
   thumbnailFile?: Maybe<SharedFile>;
   /** 閲覧可能範囲設定 */
@@ -166,10 +227,10 @@ export type BlogPost = Node & {
 
 /** ブログ記事オブジェクト */
 export type BlogPostCommentsArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<BlogPostCommentOrderInput>;
 };
 
@@ -179,11 +240,11 @@ export type BlogPostComment = Node & {
   /** コメント主 */
   commenter?: Maybe<Member>;
   /** コメント内容 */
-  content: Scalars["String"];
+  content: Scalars["String"]["output"];
   /** 作成日時 */
-  createdAt: Scalars["Datetime"];
+  createdAt: Scalars["Datetime"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
 };
 
 /** ブログ記事コメントコネクションオブジェクト */
@@ -194,14 +255,14 @@ export type BlogPostCommentConnection = {
   /** ページ情報 */
   pageInfo: PageInfo;
   /** 合計コメント数 */
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** ブログ記事コメントエッジオブジェクト */
 export type BlogPostCommentEdge = Edge & {
   __typename?: "BlogPostCommentEdge";
   /** カーソル */
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   /** ノード */
   node: BlogPostComment;
 };
@@ -228,14 +289,14 @@ export type BlogPostConnection = {
   /** ページ情報 */
   pageInfo: PageInfo;
   /** 総件数 */
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** ブログ記事エッジオブジェクト */
 export type BlogPostEdge = Edge & {
   __typename?: "BlogPostEdge";
   /** カーソル */
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   /** ノード */
   node: BlogPost;
 };
@@ -259,7 +320,7 @@ export type BlogPostOrderInput = {
 /** サブスク解約 - Input */
 export type CancelSubscriptionInput = {
   /** プランID */
-  planId: Scalars["ID"];
+  planId: Scalars["ID"]["input"];
   /** レポート */
   report?: InputMaybe<CancelSubscriptionReportInput>;
 };
@@ -267,16 +328,16 @@ export type CancelSubscriptionInput = {
 /** サブスク解約レポート - Input */
 export type CancelSubscriptionReportInput = {
   /** 解約理由詳細 解約理由がその他の場合に保存される */
-  description?: InputMaybe<Scalars["String"]>;
+  description?: InputMaybe<Scalars["String"]["input"]>;
   /** 解約理由ID */
-  reasonIds: Array<Scalars["ID"]>;
+  reasonIds: Array<Scalars["ID"]["input"]>;
 };
 
 /** 当選したデジタルコンテンツくじ */
 export type CapturedDigitalContentLottery = {
   __typename?: "CapturedDigitalContentLottery";
   /** 獲得したデジタルコンテンツ数 */
-  capturedDigitalContentCount: Scalars["Int"];
+  capturedDigitalContentCount: Scalars["Int"]["output"];
   /** くじ */
   lottery: Lottery;
 };
@@ -285,15 +346,15 @@ export type CardPayment = PaymentMethod & {
   __typename?: "CardPayment";
   creditCard: CreditCard;
   /** @deprecated creditCardの使用を推奨 */
-  maskedNo: Scalars["String"];
-  paymentAt: Scalars["Datetime"];
+  maskedNo: Scalars["String"]["output"];
+  paymentAt: Scalars["Datetime"]["output"];
 };
 
 export type CarrierAuth = {
   __typename?: "CarrierAuth";
-  accessId: Scalars["String"];
-  startUrl: Scalars["String"];
-  token: Scalars["String"];
+  accessId: Scalars["String"]["output"];
+  startUrl: Scalars["String"]["output"];
+  token: Scalars["String"]["output"];
 };
 
 export enum CarrierCompany {
@@ -305,62 +366,79 @@ export enum CarrierCompany {
 export type CarrierPayment = PaymentMethod & {
   __typename?: "CarrierPayment";
   carrierCompany: CarrierCompany;
-  paymentAt: Scalars["Datetime"];
+  paymentAt: Scalars["Datetime"]["output"];
 };
 
 export type ChangeSubscriptionPaymentMethodToCardInput = {
-  cardId: Scalars["ID"];
-  planId: Scalars["ID"];
+  cardId: Scalars["ID"]["input"];
+  planId: Scalars["ID"]["input"];
 };
 
 export type ChangeSubscriptionPaymentMethodToCarrierInput = {
   carrierCompany: CarrierCompany;
   /** 失敗リダイレクトパス */
-  failurePath?: InputMaybe<Scalars["String"]>;
+  failurePath?: InputMaybe<Scalars["String"]["input"]>;
   /** 失敗URL（deprecated: failureRedirectPathを使用） */
-  failureReturnURL?: InputMaybe<Scalars["String"]>;
-  planId: Scalars["ID"];
+  failureReturnURL?: InputMaybe<Scalars["String"]["input"]>;
+  planId: Scalars["ID"]["input"];
   /** 成功リダイレクトパス */
-  successPath?: InputMaybe<Scalars["String"]>;
+  successPath?: InputMaybe<Scalars["String"]["input"]>;
   /** 成功URL（deprecated: successRedirectPathを使用） */
-  successReturnURL?: InputMaybe<Scalars["String"]>;
+  successReturnURL?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 /** コイン獲得履歴 */
 export type CoinAcquisitionHistory = Node & {
   __typename?: "CoinAcquisitionHistory";
   /** コインボーナス獲得枚数 */
-  bonusAmount: Scalars["Int"];
+  bonusAmount: Scalars["Int"]["output"];
   /** コイン獲得枚数 */
-  coinAmount: Scalars["Int"];
+  coinAmount: Scalars["Int"]["output"];
   /** 獲得日時 */
-  createdAt: Scalars["Datetime"];
+  createdAt: Scalars["Datetime"]["output"];
   /** 有効期限 */
-  expireAt: Scalars["Datetime"];
+  expireAt: Scalars["Datetime"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 支払金額 */
-  price: Scalars["Int"];
+  price: Scalars["Int"]["output"];
 };
 
 /** コイン獲得履歴エッジオブジェクト */
 export type CoinAcquisitionHistoryEdge = Edge & {
   __typename?: "CoinAcquisitionHistoryEdge";
   /** カーソル */
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   /** ノード */
   node: CoinAcquisitionHistory;
+};
+
+/** コイン獲得履歴(有効期限nullable) */
+export type CoinAcquisitionHistoryV2 = Node & {
+  __typename?: "CoinAcquisitionHistoryV2";
+  /** コインボーナス獲得枚数 */
+  bonusAmount: Scalars["Int"]["output"];
+  /** コイン獲得枚数 */
+  coinAmount: Scalars["Int"]["output"];
+  /** 獲得日時 */
+  createdAt: Scalars["Datetime"]["output"];
+  /** 有効期限 */
+  expireAt?: Maybe<Scalars["Datetime"]["output"]>;
+  /** ID */
+  id: Scalars["ID"]["output"];
+  /** 支払金額 */
+  price: Scalars["Int"]["output"];
 };
 
 /** コイン消費履歴 */
 export type CoinConsumptionHistory = Node & {
   __typename?: "CoinConsumptionHistory";
   /** コイン消費枚数 */
-  amount: Scalars["Int"];
+  amount: Scalars["Int"]["output"];
   /** 消費日時 */
-  createdAt: Scalars["Datetime"];
+  createdAt: Scalars["Datetime"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 支払い対象 */
   product: CoinConsumptionProduct;
   /** コイン消費サイト */
@@ -371,7 +449,7 @@ export type CoinConsumptionHistory = Node & {
 export type CoinConsumptionHistoryEdge = Edge & {
   __typename?: "CoinConsumptionHistoryEdge";
   /** カーソル */
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   /** ノード */
   node: CoinConsumptionHistory;
 };
@@ -381,6 +459,9 @@ export enum CoinConsumptionProduct {
   /** スタンプ */
   Stamp = "STAMP",
 }
+
+/** コイン履歴 */
+export type CoinHistory = CoinAcquisitionHistoryV2 | CoinConsumptionHistory;
 
 /** コイン履歴コネクションオブジェクト */
 export type CoinHistoryConnection = {
@@ -427,13 +508,28 @@ export type CoinOrderInput = {
 export type CoinProduct = Node & {
   __typename?: "CoinProduct";
   /** ボーナス枚数 */
-  bonusAmount: Scalars["Int"];
+  bonusAmount: Scalars["Int"]["output"];
   /** コイン枚数 */
-  coinAmount: Scalars["Int"];
+  coinAmount: Scalars["Int"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 価格 */
-  price: Scalars["Int"];
+  price: Scalars["Int"]["output"];
+};
+
+/** コイン購入履歴 */
+export type CoinPurchaseHistory = Node & {
+  __typename?: "CoinPurchaseHistory";
+  /** コイン購入枚数 */
+  coinAmount: Scalars["Int"]["output"];
+  /** 購入日時 */
+  createdAt: Scalars["Datetime"]["output"];
+  /** コイン有効期限 */
+  expireAt?: Maybe<Scalars["Datetime"]["output"]>;
+  /** ID */
+  id: Scalars["ID"]["output"];
+  /** 支払い金額 */
+  price: Scalars["Int"]["output"];
 };
 
 /** コンテンツ閲覧可能範囲設定 */
@@ -449,9 +545,9 @@ export type ContentsViewableScope = {
 export type CookieValue = {
   __typename?: "CookieValue";
   /** name */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** value */
-  value: Scalars["String"];
+  value: Scalars["String"]["output"];
 };
 
 /** クーポン-Node */
@@ -462,7 +558,7 @@ export type Coupon = Node & {
   /** ギフトコインアクション */
   giftCoinAction?: Maybe<CouponGiftCoinAction>;
   /** クーポンID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** サブスクリプションアクション */
   subscriptionAction?: Maybe<CouponSubscriptionAction>;
 };
@@ -487,9 +583,9 @@ export enum CouponDiscountType {
 export type CouponGiftCoinAction = {
   __typename?: "CouponGiftCoinAction";
   /** 数量 */
-  amount: Scalars["Int"];
+  amount: Scalars["Int"]["output"];
   /** アクションID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
 };
 
 /** クーポンプロモーション-Node */
@@ -498,35 +594,35 @@ export type CouponPromotion = Node & {
   /** クーポンリスト */
   coupons?: Maybe<Array<Coupon>>;
   /** プロモーションID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
 };
 
 /** クーポンサブスクリプションアクション */
 export type CouponSubscriptionAction = {
   __typename?: "CouponSubscriptionAction";
   /** 割引数量 */
-  discountAmount: Scalars["String"];
+  discountAmount: Scalars["String"]["output"];
   /** 割引タイプ */
   discountType: CouponDiscountType;
   /** 割引適用月数 */
-  durationInMonths: Scalars["Int"];
+  durationInMonths: Scalars["Int"]["output"];
   /** アクションID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** サブスクプランID */
-  subscriptionPlanId: Scalars["ID"];
+  subscriptionPlanId: Scalars["ID"]["output"];
 };
 
 export type CreateMemberInput = {
-  displayName: Scalars["String"];
-  isSentMail: Scalars["Boolean"];
-  profileImage?: InputMaybe<Scalars["Upload"]>;
+  displayName: Scalars["String"]["input"];
+  isSentMail: Scalars["Boolean"]["input"];
+  profileImage?: InputMaybe<Scalars["Upload"]["input"]>;
 };
 
 export type CreateUserByEmailInput = {
-  email: Scalars["String"];
-  famId?: InputMaybe<Scalars["String"]>;
-  password: Scalars["String"];
-  verifyURL: Scalars["String"];
+  email: Scalars["String"]["input"];
+  famId?: InputMaybe<Scalars["String"]["input"]>;
+  password: Scalars["String"]["input"];
+  verifyURL: Scalars["String"]["input"];
 };
 
 export type CreateUserBySnsInput = {
@@ -535,9 +631,9 @@ export type CreateUserBySnsInput = {
 
 export type CreditCard = Node & {
   __typename?: "CreditCard";
-  expiration: Scalars["String"];
-  id: Scalars["ID"];
-  maskedNo: Scalars["String"];
+  expiration: Scalars["String"]["output"];
+  id: Scalars["ID"]["output"];
+  maskedNo: Scalars["String"]["output"];
   paymentSchedule?: Maybe<PaymentSchedule>;
 };
 
@@ -556,54 +652,56 @@ export enum DeprecatedMovieCategory {
 export type Design = {
   __typename?: "Design";
   /** 背景カラー */
-  backgroundColor: Scalars["String"];
+  backgroundColor: Scalars["String"]["output"];
   /** 背景画像の表示方法 */
   backgroundImageDisplayType: ImageDisplayType;
   /** 背景セカンダリカラー */
-  backgroundSecondaryColor: Scalars["String"];
+  backgroundSecondaryColor: Scalars["String"]["output"];
   /** サイトフォント欧文 */
   fontEuro?: Maybe<DesignFont>;
   /** サイトフォント和文 */
   fontJp?: Maybe<DesignFont>;
   /** PoweredBy非表示 */
-  hidePoweredBy: Scalars["Boolean"];
+  hidePoweredBy: Scalars["Boolean"]["output"];
+  /** 翻訳リンク非表示 */
+  hideTranslationLink: Scalars["Boolean"]["output"];
   /**
    * デザインレイアウトセクション
    * @deprecated siteスキーマに移動
    */
   layoutSections: Array<LayoutSection>;
   /** リンクカラー */
-  linkColor: Scalars["String"];
+  linkColor: Scalars["String"]["output"];
   /** ロゴフォント */
   logoFont?: Maybe<DesignFont>;
   /** ロゴフォントカラー */
-  logoFontColor: Scalars["String"];
+  logoFontColor: Scalars["String"]["output"];
   /** PCサイズ以上ロゴファイル */
   logoPcFile?: Maybe<SharedFile>;
   /** タブレットサイズ以下ロゴファイルID */
   logoTabletSpFile?: Maybe<SharedFile>;
   /** ロゴテキスト */
-  logoText: Scalars["String"];
+  logoText: Scalars["String"]["output"];
   /** メインビジュアル */
   mainVisual?: Maybe<MainVisual>;
   /** Overwrite CSS */
-  overwriteCSS: Scalars["String"];
+  overwriteCSS: Scalars["String"]["output"];
   /** サイトID */
-  siteId: Scalars["ID"];
+  siteId: Scalars["ID"]["output"];
   /** テンプレート */
   template: DesignTemplate;
   /** テンプレートID */
-  templateId: Scalars["Int"];
+  templateId: Scalars["Int"]["output"];
   /** 文字カラー1 */
-  textColor: Scalars["String"];
+  textColor: Scalars["String"]["output"];
   /** 文字カラー2 */
-  textSecondaryColor: Scalars["String"];
+  textSecondaryColor: Scalars["String"]["output"];
   /** テーマカラー */
-  themeColor: Scalars["String"];
+  themeColor: Scalars["String"]["output"];
   /** テーマセカンダリーカラー */
-  themeSecondaryColor: Scalars["String"];
+  themeSecondaryColor: Scalars["String"]["output"];
   /** トップページ背景カラー */
-  topBackgroundColor: Scalars["String"];
+  topBackgroundColor: Scalars["String"]["output"];
   /** トップページ背景画像 */
   topBackgroundImageFile?: Maybe<SharedFile>;
 };
@@ -613,52 +711,56 @@ export type DesignAutoCarouselBannerGroup = Node & {
   __typename?: "DesignAutoCarouselBannerGroup";
   /** バナー複数取得 */
   banners: Array<Maybe<DesignBanner>>;
+  /** バナーサイズ(縦) */
+  heightRatio?: Maybe<Scalars["Float"]["output"]>;
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** バナーグループ名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
+  /** バナーサイズ(横) */
+  widthRatio?: Maybe<Scalars["Float"]["output"]>;
 };
 
 /** デザインバナーオブジェクト */
 export type DesignBanner = Node & {
   __typename?: "DesignBanner";
   /** バナーグループID */
-  bannerGroupId: Scalars["ID"];
+  bannerGroupId: Scalars["ID"]["output"];
   /** ファイル */
   file?: Maybe<SharedFile>;
   /** ファイルID */
-  fileId: Scalars["ID"];
+  fileId: Scalars["ID"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 公開フラグ */
-  isAvailable: Scalars["Boolean"];
+  isAvailable: Scalars["Boolean"]["output"];
   /** ページリンクフラグ */
-  isPageLink: Scalars["Boolean"];
+  isPageLink: Scalars["Boolean"]["output"];
   /** 別タブを開くフラグ */
-  isTargetBlank: Scalars["Boolean"];
+  isTargetBlank: Scalars["Boolean"]["output"];
   /** リンクURL */
-  linkURL: Scalars["String"];
+  linkURL: Scalars["String"]["output"];
   /** 標準 */
-  seq: Scalars["Int"];
+  seq: Scalars["Int"]["output"];
   /** 公開日時 */
-  startAt: Scalars["Datetime"];
+  startAt: Scalars["Datetime"]["output"];
 };
 
 /** デザインバナーグループオブジェクト */
 export type DesignBannerGroup = Node & {
   __typename?: "DesignBannerGroup";
   /** バナータイプ(0:スライドショー,1:バナー) */
-  bannerType: Scalars["Int"];
+  bannerType: Scalars["Int"]["output"];
   /** バナー複数取得 */
   banners: Array<Maybe<DesignBanner>>;
-  /** バナーサイズ(縦) バナーのみ */
-  heightRatio?: Maybe<Scalars["Float"]>;
+  /** バナーサイズ(縦) */
+  heightRatio?: Maybe<Scalars["Float"]["output"]>;
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** バナーグループ名 */
-  name: Scalars["String"];
-  /** バナーサイズ(幅) バナーのみ */
-  widthRatio?: Maybe<Scalars["Float"]>;
+  name: Scalars["String"]["output"];
+  /** バナーサイズ(横) */
+  widthRatio?: Maybe<Scalars["Float"]["output"]>;
 };
 
 export type DesignBannerGroupV2 =
@@ -669,24 +771,24 @@ export type DesignBannerGroupV2 =
 export type DesignFont = {
   __typename?: "DesignFont";
   /** フォント */
-  font: Scalars["String"];
+  font: Scalars["String"]["output"];
   /** フォントID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** デフォルト */
-  isDefault: Scalars["Boolean"];
+  isDefault: Scalars["Boolean"]["output"];
   /** フォント名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** フォントタイプ(0:欧文, 1:和文) */
-  type: Scalars["Int"];
+  type: Scalars["Int"]["output"];
 };
 
 /** デザインリンク */
 export type DesignLink = {
   __typename?: "DesignLink";
   /** ページリンクフラグ */
-  isPageLink: Scalars["Boolean"];
+  isPageLink: Scalars["Boolean"]["output"];
   /** URL/スラッグ */
-  url: Scalars["String"];
+  url: Scalars["String"]["output"];
 };
 
 /** 手動切替バナーグループオブジェクト */
@@ -694,37 +796,37 @@ export type DesignManualCarouselBannerGroup = Node & {
   __typename?: "DesignManualCarouselBannerGroup";
   /** バナー複数取得 */
   banners: Array<Maybe<DesignBanner>>;
-  /** バナーサイズ(縦) バナーのみ */
-  heightRatio?: Maybe<Scalars["Float"]>;
+  /** バナーサイズ(縦) */
+  heightRatio?: Maybe<Scalars["Float"]["output"]>;
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** バナーグループ名 */
-  name: Scalars["String"];
-  /** バナーサイズ(幅) バナーのみ */
-  widthRatio?: Maybe<Scalars["Float"]>;
+  name: Scalars["String"]["output"];
+  /** バナーサイズ(横) */
+  widthRatio?: Maybe<Scalars["Float"]["output"]>;
 };
 
 /** デザインメニュー */
 export type DesignMenu = {
   __typename?: "DesignMenu";
   /** ブログID */
-  blogId?: Maybe<Scalars["ID"]>;
+  blogId?: Maybe<Scalars["ID"]["output"]>;
   /** 表示名 */
-  displayName: Scalars["String"];
+  displayName: Scalars["String"]["output"];
   /** 表示タイプ (1:常に表示, 2:未ログイン時に表示, 3:ログイン時に表示) */
-  displayType: Scalars["Int"];
+  displayType: Scalars["Int"]["output"];
   /** 写真管理ID */
-  galleryGroupId?: Maybe<Scalars["ID"]>;
+  galleryGroupId?: Maybe<Scalars["ID"]["output"]>;
   /** メニューID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** ページリンクフラグ */
-  isPageLink: Scalars["Boolean"];
+  isPageLink: Scalars["Boolean"]["output"];
   /** メニュー名 */
-  menuName: Scalars["String"];
+  menuName: Scalars["String"]["output"];
   /** メニュータイプ */
   menuType: MenuType;
   /** URL/スラッグ */
-  url: Scalars["String"];
+  url: Scalars["String"]["output"];
 };
 
 /** デザインテンプレート */
@@ -733,15 +835,15 @@ export type DesignTemplate = {
   /** ファイル */
   file?: Maybe<SharedFile>;
   /** テンプレートID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** テンプレート名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
 };
 
 /** くじ引き-Input */
 export type DrawLotteryInput = {
   /** くじID */
-  lotteryId: Scalars["ID"];
+  lotteryId: Scalars["ID"]["input"];
   /**
    * 支払いカード情報
    *
@@ -749,32 +851,32 @@ export type DrawLotteryInput = {
    */
   paymentCard?: InputMaybe<PaymentCardInput>;
   /** 抽選券ID */
-  ticketID: Scalars["ID"];
+  ticketID: Scalars["ID"]["input"];
 };
 
 /** くじ引き-Payload */
 export type DrawLotteryPayload = {
   __typename?: "DrawLotteryPayload";
   /** 抽選券購入ID */
-  ticketPurchaseId: Scalars["ID"];
+  ticketPurchaseId: Scalars["ID"]["output"];
 };
 
 export type Edge = {
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   node?: Maybe<Node>;
 };
 
 export type ExchangeLotteryPrizeQuantityInput = {
   /** 賞品ID */
-  prizeId: Scalars["ID"];
+  prizeId: Scalars["ID"]["input"];
   /** 数量 */
-  quantity: Scalars["Int"];
+  quantity: Scalars["Int"]["input"];
 };
 
 /** 賞品引換え-Input */
 export type ExchangeLotteryPrizesInput = {
   /** くじID */
-  lotteryId: Scalars["ID"];
+  lotteryId: Scalars["ID"]["input"];
   /**
    * 支払いカード情報
    *
@@ -795,7 +897,7 @@ export type ExchangeLotteryPrizesInput = {
 export type ExchangeLotteryPrizesPayload = {
   __typename?: "ExchangeLotteryPrizesPayload";
   /** 引換ID */
-  exchangeId: Scalars["ID"];
+  exchangeId: Scalars["ID"]["output"];
 };
 
 /** 引換可能くじ */
@@ -804,22 +906,22 @@ export type ExchangeableLottery = {
   /** くじ */
   lottery: Lottery;
   /** 賞品数量 */
-  prizeQuantity: Scalars["Int"];
+  prizeQuantity: Scalars["Int"]["output"];
 };
 
 /** 機能 */
 export type Feature = {
   __typename?: "Feature";
   /** 説明文 */
-  description: Scalars["String"];
+  description: Scalars["String"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 有効ステータス */
-  isAvailable: Scalars["Boolean"];
+  isAvailable: Scalars["Boolean"]["output"];
   /** 機能名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** スラッグ */
-  slug: Scalars["String"];
+  slug: Scalars["String"]["output"];
 };
 
 export enum FeatureSlug {
@@ -841,33 +943,33 @@ export type Gallery = Node & {
    * コンテンツURL
    * @deprecated contentsの使用を推奨
    */
-  contentsURLs: Array<Scalars["String"]>;
+  contentsURLs: Array<Scalars["String"]["output"]>;
   /** 説明文 */
-  description: Scalars["String"];
+  description: Scalars["String"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** コメント可否フラグ */
-  isCommentable: Scalars["Boolean"];
+  isCommentable: Scalars["Boolean"]["output"];
   /** 閲覧可能フラグ */
-  isViewable: Scalars["Boolean"];
+  isViewable: Scalars["Boolean"]["output"];
   /** 名称 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** リリース日 */
-  releaseDay: Scalars["Date"];
+  releaseDay: Scalars["Date"]["output"];
   /**
    * サムネイルURL
    * @deprecated サムネイルURLは個別に設定せず、先頭のcontentsをサムネイルとして使用
    */
-  thumbnailURL: Scalars["String"];
+  thumbnailURL: Scalars["String"]["output"];
   /** 閲覧可能範囲設定 */
   viewableScope: ContentsViewableScope;
 };
 
 export type GalleryCommentsArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<GalleryCommentOrderInput>;
 };
 
@@ -877,11 +979,11 @@ export type GalleryComment = Node & {
   /** コメント投稿者 */
   commenter?: Maybe<Member>;
   /** コメント内容 */
-  content: Scalars["String"];
+  content: Scalars["String"]["output"];
   /** 作成日時 */
-  createdAt: Scalars["Datetime"];
+  createdAt: Scalars["Datetime"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
 };
 
 /** ギャラリーコメントコネクションオブジェクト */
@@ -892,14 +994,14 @@ export type GalleryCommentConnection = {
   /** ページ情報 */
   pageInfo: PageInfo;
   /** 合計コメント数 */
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** ギャラリーコメントエッジオブジェクト */
 export type GalleryCommentEdge = Edge & {
   __typename?: "GalleryCommentEdge";
   /** カーソル */
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   /** ノード */
   node: GalleryComment;
 };
@@ -925,7 +1027,7 @@ export type GalleryConnection = {
   /** ページ情報 */
   pageInfo: PageInfo;
   /** 総件数 */
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 export type GalleryContent = {
@@ -933,18 +1035,18 @@ export type GalleryContent = {
   /** コンテンツファイル */
   contentFile: SharedFile;
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 画像プリセットURL */
   imagePresetUrl?: Maybe<GalleryImagePresetUrl>;
   /** 閲覧可能フラグ */
-  isViewable: Scalars["Boolean"];
+  isViewable: Scalars["Boolean"]["output"];
   /** 順番 */
-  seq: Scalars["Int"];
+  seq: Scalars["Int"]["output"];
 };
 
 export type GalleryEdge = Edge & {
   __typename?: "GalleryEdge";
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   node: Gallery;
 };
 
@@ -954,21 +1056,21 @@ export type GalleryGroup = Node & {
   /** ギャラリーリスト取得 */
   galleries: GalleryConnection;
   /** 写真管理ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 公開ステータス */
-  isAvailable: Scalars["Boolean"];
+  isAvailable: Scalars["Boolean"]["output"];
   /** 写真管理名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** スラッグ名 */
-  slug: Scalars["String"];
+  slug: Scalars["String"]["output"];
 };
 
 /** 写真管理オブジェクト */
 export type GalleryGroupGalleriesArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<GalleryOrderInput>;
 };
 
@@ -976,17 +1078,17 @@ export type GalleryGroupGalleriesArgs = {
 export type GalleryImagePresetUrl = {
   __typename?: "GalleryImagePresetUrl";
   /** Max 1920px */
-  large: Scalars["String"];
+  large: Scalars["String"]["output"];
   /** Max 768px */
-  medium: Scalars["String"];
+  medium: Scalars["String"]["output"];
   /** オリジナル */
-  original: Scalars["String"];
+  original: Scalars["String"]["output"];
   /** Max 480px */
-  small: Scalars["String"];
+  small: Scalars["String"]["output"];
   /** Max 150px */
-  thumbnail: Scalars["String"];
+  thumbnail: Scalars["String"]["output"];
   /** Max 2048px */
-  xLarge: Scalars["String"];
+  xLarge: Scalars["String"]["output"];
 };
 
 export enum GalleryOrderField {
@@ -1015,58 +1117,58 @@ export enum ImageDisplayType {
 
 export type InquireInput = {
   /** 問い合わせ内容 */
-  content: Scalars["String"];
+  content: Scalars["String"]["input"];
   /** 添付ファイル */
-  file?: InputMaybe<Scalars["Upload"]>;
+  file?: InputMaybe<Scalars["Upload"]["input"]>;
   /** メールアドレス */
-  inquirerEmail: Scalars["String"];
+  inquirerEmail: Scalars["String"]["input"];
   /** 名前 */
-  inquirerName: Scalars["String"];
+  inquirerName: Scalars["String"]["input"];
   /** 問い合わせ種別ID */
-  typeId: Scalars["ID"];
+  typeId: Scalars["ID"]["input"];
 };
 
 export type InquireOfficialInput = {
   /** 会社名 */
-  companyName?: InputMaybe<Scalars["String"]>;
+  companyName?: InputMaybe<Scalars["String"]["input"]>;
   /** 問い合わせ内容 */
-  content: Scalars["String"];
+  content: Scalars["String"]["input"];
   /** 添付ファイル */
-  file?: InputMaybe<Scalars["Upload"]>;
+  file?: InputMaybe<Scalars["Upload"]["input"]>;
   /** メールアドレス */
-  inquirerEmail: Scalars["String"];
+  inquirerEmail: Scalars["String"]["input"];
   /** 名前 */
-  inquirerName: Scalars["String"];
+  inquirerName: Scalars["String"]["input"];
   /** ご利用予定の方のお名前 */
-  userName?: InputMaybe<Scalars["String"]>;
+  userName?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 /** 問い合わせオブジェクト */
 export type Inquiry = Node & {
   __typename?: "Inquiry";
   /** 問い合わせ内容 */
-  content: Scalars["String"];
+  content: Scalars["String"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 問い合わせ日時 */
-  inquiredAt: Scalars["Datetime"];
+  inquiredAt: Scalars["Datetime"]["output"];
   /** メールアドレス */
-  inquirerEmail: Scalars["String"];
+  inquirerEmail: Scalars["String"]["output"];
   /** 名前 */
-  inquirerName: Scalars["String"];
+  inquirerName: Scalars["String"]["output"];
 };
 
 /** 問い合わせ種別 */
 export type InquiryType = Node & {
   __typename?: "InquiryType";
   /** ヘルプ欄 */
-  helps?: Maybe<Array<Scalars["String"]>>;
+  helps?: Maybe<Array<Scalars["String"]["output"]>>;
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 問い合わせ種別名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** FAMサポート宛フラグ */
-  toFAMSupport: Scalars["Boolean"];
+  toFAMSupport: Scalars["Boolean"]["output"];
 };
 
 /** レイアウトボタンスタイル */
@@ -1088,13 +1190,13 @@ export type LayoutSection = Node & {
   /** 詳細 */
   detail: LayoutSectionDetail;
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 公開フラグ */
-  isAvailable: Scalars["Boolean"];
+  isAvailable: Scalars["Boolean"]["output"];
   /** セクションタイプ名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** 表示順 */
-  seq: Scalars["Int"];
+  seq: Scalars["Int"]["output"];
 };
 
 /** レイアウトバナーグループ詳細 */
@@ -1108,7 +1210,7 @@ export type LayoutSectionBannerGroupDetail = {
   /** バナーグループオブジェクト */
   bannerGroupV2: DesignBannerGroupV2;
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
 };
 
 /** ブログセクション詳細 */
@@ -1117,39 +1219,39 @@ export type LayoutSectionBlogDetail = {
   /** ブログ */
   blog: Blog;
   /** 表示件数 */
-  displayLimit: Scalars["Int"];
+  displayLimit: Scalars["Int"]["output"];
   /** 表示ブログ記事リスト */
   displayPosts?: Maybe<Array<BlogPost>>;
   /** ファイル */
   file?: Maybe<SharedFile>;
   /** 見出しテキスト */
-  headerText: Scalars["String"];
+  headerText: Scalars["String"]["output"];
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
 };
 
 /** レイアウトセクションボタン */
 export type LayoutSectionButton = {
   __typename?: "LayoutSectionButton";
   /** ボタンカラーコード (NULL:テーマカラー) */
-  buttonColor?: Maybe<Scalars["String"]>;
+  buttonColor?: Maybe<Scalars["String"]["output"]>;
   /** ボタンスタイル */
   buttonStyle: LayoutButtonStyle;
   /** ボタンテキスト */
-  buttonText: Scalars["String"];
+  buttonText: Scalars["String"]["output"];
   /** ボタンURL */
-  buttonURL: Scalars["String"];
+  buttonURL: Scalars["String"]["output"];
   /** ページリンクフラグ */
-  isPageLink: Scalars["Boolean"];
+  isPageLink: Scalars["Boolean"]["output"];
 };
 
 /** カスタムHTML詳細 */
 export type LayoutSectionCustomHtmlDetail = {
   __typename?: "LayoutSectionCustomHTMLDetail";
   /** HTML */
-  html: Scalars["String"];
+  html: Scalars["String"]["output"];
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
 };
 
 export type LayoutSectionDetail =
@@ -1174,7 +1276,7 @@ export type LayoutSectionImageDetail = {
   /** PC用ファイル */
   pcFile?: Maybe<SharedFile>;
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
   /** タブレットSP用ファイル */
   tabletSpFile?: Maybe<SharedFile>;
 };
@@ -1189,7 +1291,7 @@ export type LayoutSectionImageMovieAndTextDetail = {
   /** ファイルの表示位置 */
   filePosition: LayoutHorizontalPosition;
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
   /** テキスト */
   text: LayoutSectionText;
 };
@@ -1202,11 +1304,11 @@ export type LayoutSectionImageMovieUpperTextDetail = {
   /** ファイル */
   file?: Maybe<SharedFile>;
   /** オーバーレイの色コード */
-  fileOverlayColor: Scalars["String"];
+  fileOverlayColor: Scalars["String"]["output"];
   /** オーバーレイの不透明度 */
-  fileOverlayOpacity: Scalars["Int"];
+  fileOverlayOpacity: Scalars["Int"]["output"];
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
   /** テキスト */
   text: LayoutSectionText;
 };
@@ -1215,13 +1317,13 @@ export type LayoutSectionImageMovieUpperTextDetail = {
 export type LayoutSectionMemberRegistrationButtonDetail = {
   __typename?: "LayoutSectionMemberRegistrationButtonDetail";
   /** コンテンツテキスト */
-  contentText: Scalars["String"];
+  contentText: Scalars["String"]["output"];
   /** ファイル */
   file?: Maybe<SharedFile>;
   /** 見出しテキスト */
-  headerText: Scalars["String"];
+  headerText: Scalars["String"]["output"];
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
 };
 
 export enum LayoutSectionMusicContentType {
@@ -1238,15 +1340,15 @@ export type LayoutSectionMusicDetail = {
   /** コンテンツタイプ */
   contentType: LayoutSectionMusicContentType;
   /** 表示件数 */
-  displayLimit: Scalars["Int"];
+  displayLimit: Scalars["Int"]["output"];
   /** ファイル */
   file?: Maybe<SharedFile>;
   /** 見出しテキスト */
-  headerText: Scalars["String"];
+  headerText: Scalars["String"]["output"];
   /** プレイリスト一覧 */
   playlists?: Maybe<Array<MusicPlaylist>>;
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
 };
 
 /** お知らせセクション詳細 */
@@ -1255,30 +1357,30 @@ export type LayoutSectionNewsDetail = {
   /** カテゴリ */
   category?: Maybe<NewsCategory>;
   /** 表示件数 */
-  displayLimit: Scalars["Int"];
+  displayLimit: Scalars["Int"]["output"];
   /** ファイル */
   file?: Maybe<SharedFile>;
   /** 見出しテキスト */
-  headerText: Scalars["String"];
+  headerText: Scalars["String"]["output"];
   /** お知らせリスト取得 */
   news?: Maybe<Array<News>>;
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
 };
 
 /** 投稿ギャラリーセクション詳細 */
 export type LayoutSectionPostedGalleryDetail = {
   __typename?: "LayoutSectionPostedGalleryDetail";
   /** 表示件数 */
-  displayLimit: Scalars["Int"];
+  displayLimit: Scalars["Int"]["output"];
   /** ファイル */
   file?: Maybe<SharedFile>;
   /** 写真管理リスト取得 */
   galleryGroup: GalleryGroup;
   /** 見出しテキスト */
-  headerText: Scalars["String"];
+  headerText: Scalars["String"]["output"];
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
 };
 
 /** 投稿動画セクション詳細 */
@@ -1287,15 +1389,15 @@ export type LayoutSectionPostedMovieDetail = {
   /** 動画カテゴリ */
   category?: Maybe<MovieCategory>;
   /** 表示件数 */
-  displayLimit: Scalars["Int"];
+  displayLimit: Scalars["Int"]["output"];
   /** ファイル */
   file?: Maybe<SharedFile>;
   /** 見出しテキスト */
-  headerText: Scalars["String"];
+  headerText: Scalars["String"]["output"];
   /** 動画リスト取得 */
   movies: Array<Movie>;
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
 };
 
 /** スケジュールセクション詳細 */
@@ -1303,15 +1405,15 @@ export type LayoutSectionScheduleDetail = {
   __typename?: "LayoutSectionScheduleDetail";
   category?: Maybe<ScheduleCategory>;
   /** 表示件数 */
-  displayLimit: Scalars["Int"];
+  displayLimit: Scalars["Int"]["output"];
   /** ファイル */
   file?: Maybe<SharedFile>;
   /** 見出しテキスト */
-  headerText: Scalars["String"];
+  headerText: Scalars["String"]["output"];
   /** スケジュールリスト */
   schedules?: Maybe<Array<ScheduleDateGroup>>;
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
 };
 
 /** レイアウトセクションテキスト */
@@ -1320,9 +1422,13 @@ export type LayoutSectionText = {
   /** ファイル */
   file?: Maybe<SharedFile>;
   /** テキスト内容 */
-  textContent: Scalars["String"];
+  textContent: Scalars["String"]["output"];
+  /** コンテンツテキストカラー */
+  textContentColor?: Maybe<Scalars["String"]["output"]>;
   /** テキスト見出し */
-  textHeader: Scalars["String"];
+  textHeader: Scalars["String"]["output"];
+  /** 見出しテキストカラー */
+  textHeaderColor?: Maybe<Scalars["String"]["output"]>;
   /** テキストの水平方向の揃え位置 */
   textPosition: LayoutHorizontalPosition;
 };
@@ -1333,7 +1439,7 @@ export type LayoutSectionTextButtonDetail = {
   /** ボタン */
   button: LayoutSectionButton;
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
   /** テキスト */
   text: LayoutSectionText;
 };
@@ -1344,16 +1450,16 @@ export type LayoutSectionTwitterTimelineDetail = {
   /** カラーテーマ */
   colorTheme: TwitterTimelineColorTheme;
   /** height */
-  height: Scalars["Int"];
+  height: Scalars["Int"]["output"];
   /** セクションID */
-  sectionId: Scalars["ID"];
+  sectionId: Scalars["ID"]["output"];
   /** width */
-  width: Scalars["Int"];
+  width: Scalars["Int"]["output"];
 };
 
 export type LinkAuthProviderEmailInput = {
-  email: Scalars["String"];
-  password: Scalars["String"];
+  email: Scalars["String"]["input"];
+  password: Scalars["String"]["input"];
 };
 
 /** 生配信オブジェクト */
@@ -1362,21 +1468,21 @@ export type LiveBroadcast = Node & {
   /** アーカイブチャット */
   archiveChats?: Maybe<Array<LiveBroadcastChat>>;
   /** 投げ銭可能フラグ */
-  canTip: Scalars["Boolean"];
+  canTip: Scalars["Boolean"]["output"];
   /** Agora: channel_name */
-  channelName: Scalars["String"];
+  channelName: Scalars["String"]["output"];
   /** コラボ申請ステータス */
   collaborationRequestStatus?: Maybe<LiveBroadcastCollaborationRequestStatus>;
   /** 概要欄 */
-  description?: Maybe<Scalars["String"]>;
+  description?: Maybe<Scalars["String"]["output"]>;
   /** 終了日時 */
-  endedAt?: Maybe<Scalars["Datetime"]>;
+  endedAt?: Maybe<Scalars["Datetime"]["output"]>;
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 閲覧可能フラグ */
-  isViewable: Scalars["Boolean"];
+  isViewable: Scalars["Boolean"]["output"];
   /** タイトル */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** プレゼントオブジェクト */
   presents?: Maybe<Array<LiveBroadcastPresent>>;
   /** 料金ステータス */
@@ -1384,9 +1490,9 @@ export type LiveBroadcast = Node & {
   /** ランキング */
   ranking?: Maybe<Array<LiveBroadcastRank>>;
   /** 開始予定日時 */
-  scheduleAt: Scalars["Datetime"];
+  scheduleAt: Scalars["Datetime"]["output"];
   /** 開始日時 */
-  startedAt?: Maybe<Scalars["Datetime"]>;
+  startedAt?: Maybe<Scalars["Datetime"]["output"]>;
   /** サムネイル */
   thumbnailFile?: Maybe<SharedFile>;
   /** 閲覧可能範囲設定 */
@@ -1395,8 +1501,8 @@ export type LiveBroadcast = Node & {
 
 /** 生配信オブジェクト */
 export type LiveBroadcastArchiveChatsArgs = {
-  duration: Scalars["Int"];
-  limit: Scalars["Int"];
+  duration: Scalars["Int"]["input"];
+  limit: Scalars["Int"]["input"];
 };
 
 export type LiveBroadcastChat =
@@ -1407,17 +1513,17 @@ export type LiveBroadcastChat =
 export type LiveBroadcastCoinPresent = LiveBroadcastPresentInfo & {
   __typename?: "LiveBroadcastCoinPresent";
   /** 消費コイン下限 */
-  coinLower: Scalars["Int"];
+  coinLower: Scalars["Int"]["output"];
   /** 消費コイン上限 */
-  coinUpper?: Maybe<Scalars["Int"]>;
+  coinUpper?: Maybe<Scalars["Int"]["output"]>;
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 配送フラグ */
-  isDelivery: Scalars["Boolean"];
+  isDelivery: Scalars["Boolean"]["output"];
   /** プレゼント名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** ランダム抽選数 */
-  randomCount?: Maybe<Scalars["Int"]>;
+  randomCount?: Maybe<Scalars["Int"]["output"]>;
 };
 
 /** 生配信コラボ申請ステータス */
@@ -1438,14 +1544,14 @@ export type LiveBroadcastConnection = {
   /** ページ情報 */
   pageInfo: PageInfo;
   /** 総件数 */
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** 生配信エッジオブジェクト */
 export type LiveBroadcastEdge = Edge & {
   __typename?: "LiveBroadcastEdge";
   /** カーソル */
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   /** ノード */
   node: LiveBroadcast;
 };
@@ -1454,11 +1560,11 @@ export type LiveBroadcastEdge = Edge & {
 export type LiveBroadcastMessage = {
   __typename?: "LiveBroadcastMessage";
   /** チャット本文 */
-  content: Scalars["String"];
+  content: Scalars["String"]["output"];
   /** 表示名 */
-  displayName: Scalars["String"];
+  displayName: Scalars["String"]["output"];
   /** 再生時間(ミリ秒) */
-  duration: Scalars["Int"];
+  duration: Scalars["Int"]["output"];
 };
 
 /** 生配信ソート項目 */
@@ -1479,13 +1585,13 @@ export type LiveBroadcastOrderInput = {
 export type LiveBroadcastPremiumPresent = LiveBroadcastPresentInfo & {
   __typename?: "LiveBroadcastPremiumPresent";
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 配送フラグ */
-  isDelivery: Scalars["Boolean"];
+  isDelivery: Scalars["Boolean"]["output"];
   /** プレゼント名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** ランダム抽選数 */
-  randomCount?: Maybe<Scalars["Int"]>;
+  randomCount?: Maybe<Scalars["Int"]["output"]>;
 };
 
 /** 生配信プレゼント */
@@ -1497,26 +1603,26 @@ export type LiveBroadcastPresent =
 /** 生配信プレゼントインターフェース */
 export type LiveBroadcastPresentInfo = {
   /** ID */
-  id?: Maybe<Scalars["ID"]>;
+  id?: Maybe<Scalars["ID"]["output"]>;
   /** 配送フラグ */
-  isDelivery: Scalars["Boolean"];
+  isDelivery: Scalars["Boolean"]["output"];
   /** プレゼント名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
 };
 
 /** 生配信スタンププレゼント履歴オブジェクト */
 export type LiveBroadcastPresentedStamp = {
   __typename?: "LiveBroadcastPresentedStamp";
   /** 表示名 */
-  displayName: Scalars["String"];
+  displayName: Scalars["String"]["output"];
   /** 再生時間(ミリ秒) */
-  duration: Scalars["Int"];
+  duration: Scalars["Int"]["output"];
   /** プロフィール画像URL */
-  profileURL: Scalars["String"];
+  profileURL: Scalars["String"]["output"];
   /** スタンプ画像URL */
-  stampImageURL: Scalars["String"];
+  stampImageURL: Scalars["String"]["output"];
   /** スタンプ名 */
-  stampName: Scalars["String"];
+  stampName: Scalars["String"]["output"];
 };
 
 /** 生配信料金ステータス */
@@ -1533,34 +1639,34 @@ export enum LiveBroadcastPriceStatus {
 export type LiveBroadcastRank = {
   __typename?: "LiveBroadcastRank";
   /** 消費コイン */
-  amount: Scalars["Int"];
+  amount: Scalars["Int"]["output"];
   member: Member;
   /** 順位 */
-  rank: Scalars["Int"];
+  rank: Scalars["Int"]["output"];
 };
 
 /** ランキング条件プレゼントオブジェクト */
 export type LiveBroadcastRankingPresent = LiveBroadcastPresentInfo & {
   __typename?: "LiveBroadcastRankingPresent";
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 配送フラグ */
-  isDelivery: Scalars["Boolean"];
+  isDelivery: Scalars["Boolean"]["output"];
   /** プレゼント名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** 下位ランキング */
-  rankingLower: Scalars["Int"];
+  rankingLower: Scalars["Int"]["output"];
   /** 上位ランキング */
-  rankingUpper: Scalars["Int"];
+  rankingUpper: Scalars["Int"]["output"];
 };
 
 /** 生配信用トークンオブジェクト */
 export type LiveBroadcastToken = {
   __typename?: "LiveBroadcastToken";
   /** トークン */
-  token: Scalars["String"];
+  token: Scalars["String"]["output"];
   /** Agora ユーザーID */
-  uid: Scalars["String"];
+  uid: Scalars["String"]["output"];
 };
 
 /** ロゴ表示位置 */
@@ -1583,21 +1689,21 @@ export type Lottery = Node & {
   /** 利用可能範囲 */
   availability: LotteryContentAvailability;
   /** 本文 */
-  body: Scalars["String"];
+  body: Scalars["String"]["output"];
   /** 下部本文 */
-  bottomBody: Scalars["String"];
+  bottomBody: Scalars["String"]["output"];
   /** デジタルコンテンツダウンロード期限 */
-  digitalContentDownloadDeadline?: Maybe<Scalars["Datetime"]>;
+  digitalContentDownloadDeadline?: Maybe<Scalars["Datetime"]["output"]>;
   /** 公開終了日時 */
-  endAt?: Maybe<Scalars["Datetime"]>;
+  endAt?: Maybe<Scalars["Datetime"]["output"]>;
   /** 発送目安 */
-  estimatedShipping?: Maybe<Scalars["String"]>;
+  estimatedShipping?: Maybe<Scalars["String"]["output"]>;
   /** 引換締切日時 */
-  exchangeDeadline?: Maybe<Scalars["Datetime"]>;
+  exchangeDeadline?: Maybe<Scalars["Datetime"]["output"]>;
   /** 引換開始日時 */
-  exchangeStartAt?: Maybe<Scalars["Datetime"]>;
+  exchangeStartAt?: Maybe<Scalars["Datetime"]["output"]>;
   /** くじID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 画像 */
   image?: Maybe<LotteryImage>;
   /**
@@ -1605,15 +1711,15 @@ export type Lottery = Node & {
    *
    * デジタルコンテンツを獲得していなくても期間中であればTrueになる
    */
-  isAvailableForDigitalContentDownload: Scalars["Boolean"];
+  isAvailableForDigitalContentDownload: Scalars["Boolean"]["output"];
   /** くじ抽選期間フラグ */
-  isAvailableForDraw: Scalars["Boolean"];
+  isAvailableForDraw: Scalars["Boolean"]["output"];
   /** 引換受付可能フラグ */
-  isExchangeable: Scalars["Boolean"];
+  isExchangeable: Scalars["Boolean"]["output"];
   /** 名称 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** 抽選残数 */
-  remainingAmount: Scalars["Int"];
+  remainingAmount: Scalars["Int"]["output"];
   /**
    * シーンLottie
    *
@@ -1621,24 +1727,24 @@ export type Lottery = Node & {
    */
   sceneLottie?: Maybe<LotterySceneLottie>;
   /** 配送料 */
-  shippingFee?: Maybe<Scalars["Int"]>;
+  shippingFee?: Maybe<Scalars["Int"]["output"]>;
   /** 公開開始日時 */
-  startAt?: Maybe<Scalars["Datetime"]>;
+  startAt?: Maybe<Scalars["Datetime"]["output"]>;
   /** 獲得済みデジタルコンテンツ数 */
-  viewerCapturedDigitalContentCount?: Maybe<Scalars["Int"]>;
+  viewerCapturedDigitalContentCount?: Maybe<Scalars["Int"]["output"]>;
   /** 引換可能賞品数量 */
-  viewerExchangeablePrizeQuantity?: Maybe<Scalars["Int"]>;
+  viewerExchangeablePrizeQuantity?: Maybe<Scalars["Int"]["output"]>;
 };
 
 /** くじお知らせ-Node */
 export type LotteryAnnouncement = Node & {
   __typename?: "LotteryAnnouncement";
   /** 本文 */
-  body: Scalars["String"];
+  body: Scalars["String"]["output"];
   /** くじお知らせID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** タイトル */
-  title?: Maybe<Scalars["String"]>;
+  title?: Maybe<Scalars["String"]["output"]>;
 };
 
 /** くじ-Connection */
@@ -1646,18 +1752,18 @@ export type LotteryConnection = {
   __typename?: "LotteryConnection";
   edges?: Maybe<Array<LotteryEdge>>;
   pageInfo: PageInfo;
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** くじコンテンツ利用可能範囲 */
 export type LotteryContentAvailability = {
   __typename?: "LotteryContentAvailability";
   /** サブスクプランIDリスト */
-  subscriptionPlanIds?: Maybe<Array<Scalars["ID"]>>;
+  subscriptionPlanIds?: Maybe<Array<Scalars["ID"]["output"]>>;
   /** ユーザーグループ */
   userGroup: LotteryContentAvailabilityUserGroup;
   /** 閲覧者の適用可能フラグ */
-  viewerSuitable: Scalars["Boolean"];
+  viewerSuitable: Scalars["Boolean"]["output"];
 };
 
 /** くじコンテンツ利用可能ユーザーグループ */
@@ -1674,15 +1780,15 @@ export enum LotteryContentAvailabilityUserGroup {
 export type LotteryDrawingResult = Node & {
   __typename?: "LotteryDrawingResult";
   /** 抽選日時 */
-  drewAt: Scalars["Datetime"];
+  drewAt: Scalars["Datetime"]["output"];
   /** 抽選結果ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** くじID */
-  lotteryId: Scalars["ID"];
+  lotteryId: Scalars["ID"]["output"];
   /** 賞品 */
   prize: LotteryPrize;
   /** 順序(N回目) */
-  seq: Scalars["Int"];
+  seq: Scalars["Int"]["output"];
 };
 
 /** くじ抽選結果-Connection */
@@ -1690,20 +1796,20 @@ export type LotteryDrawingResultConnection = {
   __typename?: "LotteryDrawingResultConnection";
   edges?: Maybe<Array<LotteryDrawingResultEdge>>;
   pageInfo: PageInfo;
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** くじ抽選結果-Edge */
 export type LotteryDrawingResultEdge = Edge & {
   __typename?: "LotteryDrawingResultEdge";
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   node?: Maybe<LotteryDrawingResult>;
 };
 
 /** くじ-Edge */
 export type LotteryEdge = Edge & {
   __typename?: "LotteryEdge";
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   node?: Maybe<Lottery>;
 };
 
@@ -1711,7 +1817,7 @@ export type LotteryEdge = Edge & {
 export type LotteryExchange = Node & {
   __typename?: "LotteryExchange";
   /** 引換ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** くじ */
   lottery: Lottery;
   /** Shop注文 */
@@ -1723,13 +1829,13 @@ export type LotteryExchangeConnection = {
   __typename?: "LotteryExchangeConnection";
   edges?: Maybe<Array<LotteryExchangeEdge>>;
   pageInfo: PageInfo;
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** くじ賞品引換-Edge */
 export type LotteryExchangeEdge = Edge & {
   __typename?: "LotteryExchangeEdge";
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   node?: Maybe<LotteryExchange>;
 };
 
@@ -1748,33 +1854,33 @@ export type LotteryImage = {
 export type LotteryImageUrl = {
   __typename?: "LotteryImageURL";
   /** デフォルト */
-  default: Scalars["String"];
+  default: Scalars["String"]["output"];
 };
 
 /** くじLottie */
 export type LotteryLottie = {
   __typename?: "LotteryLottie";
   /** URL */
-  url: Scalars["String"];
+  url: Scalars["String"]["output"];
 };
 
 /** くじ賞品-Node */
 export type LotteryPrize = Node & {
   __typename?: "LotteryPrize";
   /** 賞品ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** デジタルフラグ */
-  isDigital: Scalars["Boolean"];
+  isDigital: Scalars["Boolean"]["output"];
   /** レアリティID */
-  rarityId: Scalars["ID"];
+  rarityId: Scalars["ID"]["output"];
   /** Shopバリエーション */
   shopVariant: LotteryShopVariant;
   /** Shopバリエーション画像 */
   shopVariantImage?: Maybe<ShopProductImage>;
   /** 獲得済み数量 */
-  viewerCapturedQuantity?: Maybe<Scalars["Int"]>;
+  viewerCapturedQuantity?: Maybe<Scalars["Int"]["output"]>;
   /** 引換可能数量 */
-  viewerExchangeableQuantity?: Maybe<Scalars["Int"]>;
+  viewerExchangeableQuantity?: Maybe<Scalars["Int"]["output"]>;
 };
 
 /** くじ賞品-Connection */
@@ -1782,32 +1888,32 @@ export type LotteryPrizeConnection = {
   __typename?: "LotteryPrizeConnection";
   edges?: Maybe<Array<LotteryPrizeEdge>>;
   pageInfo: PageInfo;
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** くじデジタルコンテンツ取得-Input */
 export type LotteryPrizeDigitalContentInput = {
   /** 賞品ID */
-  prizeId: Scalars["ID"];
+  prizeId: Scalars["ID"]["input"];
 };
 
 /** くじデジタルコンテンツ取得-Payload */
 export type LotteryPrizeDigitalContentPayload = {
   __typename?: "LotteryPrizeDigitalContentPayload";
   /** MIMEタイプ */
-  mimeType: Scalars["String"];
+  mimeType: Scalars["String"]["output"];
   /** 賞品ID */
-  prizeId: Scalars["ID"];
+  prizeId: Scalars["ID"]["output"];
   /** 署名済みクエリ */
-  signedQuery: Scalars["String"];
+  signedQuery: Scalars["String"]["output"];
   /** URL */
-  url: Scalars["String"];
+  url: Scalars["String"]["output"];
 };
 
 /** くじ賞品-Edge */
 export type LotteryPrizeEdge = Edge & {
   __typename?: "LotteryPrizeEdge";
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   node?: Maybe<LotteryPrize>;
 };
 
@@ -1815,11 +1921,11 @@ export type LotteryPrizeEdge = Edge & {
 export type LotteryRarity = Node & {
   __typename?: "LotteryRarity";
   /** レアリティID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** ラベル */
-  label: Scalars["String"];
+  label: Scalars["String"]["output"];
   /** 賞品数量 */
-  prizeQuantity: Scalars["Int"];
+  prizeQuantity: Scalars["Int"]["output"];
   /** Shop製品 */
   shopProduct: LotteryShopProduct;
 };
@@ -1829,13 +1935,13 @@ export type LotteryRarityConnection = {
   __typename?: "LotteryRarityConnection";
   edges?: Maybe<Array<LotteryRarityEdge>>;
   pageInfo: PageInfo;
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** くじレアリティ-Edge */
 export type LotteryRarityEdge = Edge & {
   __typename?: "LotteryRarityEdge";
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   node?: Maybe<LotteryRarity>;
 };
 
@@ -1850,17 +1956,30 @@ export type LotterySceneLottie = {
   standby?: Maybe<LotteryLottie>;
 };
 
+/** くじ配送料支払い履歴 */
+export type LotteryShippingPaymentHistory = {
+  __typename?: "LotteryShippingPaymentHistory";
+  /** 注文ID */
+  id: Scalars["ID"]["output"];
+  /** くじ */
+  lottery: Lottery;
+  /** 支払い日 */
+  paidAt: Scalars["Datetime"]["output"];
+  /** 合計配送料 */
+  totalShippingFee: Scalars["Int"]["output"];
+};
+
 /** くじShop注文 */
 export type LotteryShopOrder = {
   __typename?: "LotteryShopOrder";
   /** 注文ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** アイテム数量 */
-  itemQuantity: Scalars["Int"];
+  itemQuantity: Scalars["Int"]["output"];
   /** オープンロジ出庫 */
   openLogiShipment?: Maybe<ShopOrderOpenLogiShipment>;
   /** 注文日時 */
-  orderedAt: Scalars["Datetime"];
+  orderedAt: Scalars["Datetime"]["output"];
 };
 
 /** くじShop注文-Input */
@@ -1873,37 +1992,37 @@ export type LotteryShopOrderInput = {
 export type LotteryShopProduct = {
   __typename?: "LotteryShopProduct";
   /** 説明文 */
-  description?: Maybe<Scalars["String"]>;
+  description?: Maybe<Scalars["String"]["output"]>;
   /** Shop製品ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 名称 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
 };
 
 /** くじShopバリエーション */
 export type LotteryShopVariant = {
   __typename?: "LotteryShopVariant";
   /** ShopバリエーションID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 名称 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
 };
 
 /** 抽選券-Node */
 export type LotteryTicket = Node & {
   __typename?: "LotteryTicket";
   /** 公開終了日時 */
-  endAt?: Maybe<Scalars["Datetime"]>;
+  endAt?: Maybe<Scalars["Datetime"]["output"]>;
   /** 抽選回数 */
-  frequency: Scalars["Int"];
+  frequency: Scalars["Int"]["output"];
   /** 抽選券ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 名称 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** 金額 */
-  price: Scalars["Int"];
+  price: Scalars["Int"]["output"];
   /** 公開開始日時 */
-  startAt?: Maybe<Scalars["Datetime"]>;
+  startAt?: Maybe<Scalars["Datetime"]["output"]>;
 };
 
 /** 抽選券-Connection */
@@ -1911,14 +2030,27 @@ export type LotteryTicketConnection = {
   __typename?: "LotteryTicketConnection";
   edges?: Maybe<Array<LotteryTicketEdge>>;
   pageInfo: PageInfo;
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** 抽選券-Edge */
 export type LotteryTicketEdge = Edge & {
   __typename?: "LotteryTicketEdge";
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   node?: Maybe<LotteryTicket>;
+};
+
+/** くじチケット購入履歴-Node */
+export type LotteryTicketPurchaseHistory = Node & {
+  __typename?: "LotteryTicketPurchaseHistory";
+  /** 購入ID */
+  id: Scalars["ID"]["output"];
+  /** くじ */
+  lottery: Lottery;
+  /** 購入日時 */
+  purchasedAt: Scalars["Datetime"]["output"];
+  /** 抽選券 */
+  ticket: LotteryTicket;
 };
 
 /** メインビジュアル */
@@ -1929,14 +2061,14 @@ export type MainVisual = {
   /** ファイルリスト */
   files: Array<MainVisualFile>;
   /** アスペクトフィットモード */
-  isAspectFitMode: Scalars["Boolean"];
+  isAspectFitMode: Scalars["Boolean"]["output"];
 };
 
 /** メインビジュアルファイル */
 export type MainVisualFile = {
   __typename?: "MainVisualFile";
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** PC用ファイル */
   pcFile?: Maybe<SharedFile>;
   /** タブレットSP用ファイル */
@@ -1953,25 +2085,25 @@ export enum MainVisualFileType {
 
 export type Member = {
   __typename?: "Member";
-  displayName: Scalars["String"];
+  displayName: Scalars["String"]["output"];
   /** 管理者フラグ */
-  hasAdminRole: Scalars["Boolean"];
-  hasPremiumRole: Scalars["Boolean"];
-  id: Scalars["ID"];
-  isSentMail: Scalars["Boolean"];
+  hasAdminRole: Scalars["Boolean"]["output"];
+  hasPremiumRole: Scalars["Boolean"]["output"];
+  id: Scalars["ID"]["output"];
+  isSentMail: Scalars["Boolean"]["output"];
   /** 生配信消費コイン数 */
-  liveBroadcastCoinConsumptionAmount: Scalars["Int"];
-  membershipNumber?: Maybe<Scalars["String"]>;
+  liveBroadcastCoinConsumptionAmount: Scalars["Int"]["output"];
+  membershipNumber?: Maybe<Scalars["String"]["output"]>;
   /** @deprecated site.membershipCard.prefix と member.membershipNumber の結合で会員番号を表示 */
-  number?: Maybe<Scalars["String"]>;
-  profileURL?: Maybe<Scalars["String"]>;
+  number?: Maybe<Scalars["String"]["output"]>;
+  profileURL?: Maybe<Scalars["String"]["output"]>;
   roleStatuses?: Maybe<Array<RoleStatus>>;
   site?: Maybe<Site>;
   subscriptions?: Maybe<Array<Maybe<UserSubscriptionByCardOrCarrier>>>;
 };
 
 export type MemberLiveBroadcastCoinConsumptionAmountArgs = {
-  liveBroadcastID: Scalars["ID"];
+  liveBroadcastID: Scalars["ID"]["input"];
 };
 
 /** メニュータイプ */
@@ -2002,23 +2134,56 @@ export enum MenuType {
   UserRegister = "USER_REGISTER",
 }
 
+/** 月間コイン獲得消費履歴 */
+export type MonthlyCoinHistories = {
+  __typename?: "MonthlyCoinHistories";
+  /** コイン獲得 */
+  coinAcquisition?: Maybe<Array<SortableCoinHistory>>;
+  /** コイン消費 */
+  coinConsumption?: Maybe<Array<SortableCoinHistory>>;
+  /** 対象月 */
+  month: Scalars["Int"]["output"];
+  /** 対象年 */
+  year: Scalars["Int"]["output"];
+};
+
+/** 月支払い履歴 */
+export type MonthlyPaymentHistories = {
+  __typename?: "MonthlyPaymentHistories";
+  /** コイン購入 */
+  coinPurchase?: Maybe<Array<SortablePaymentHistory>>;
+  /** くじ配送料支払い */
+  lotteryShippingPayment?: Maybe<Array<SortablePaymentHistory>>;
+  /** くじチケット購入 */
+  lotteryTicketPurchase?: Maybe<Array<SortablePaymentHistory>>;
+  /** 対象月 */
+  month: Scalars["Int"]["output"];
+  /** サブスク月額支払い */
+  subscriptionPayment?: Maybe<Array<SortablePaymentHistory>>;
+  /** 対象年 */
+  year: Scalars["Int"]["output"];
+};
+
 export type Movie = Node & {
   __typename?: "Movie";
-  archiveURL: Scalars["String"];
+  /** アーカイブURL (ABR) */
+  abrArchiveURL?: Maybe<Scalars["String"]["output"]>;
+  /** アーカイブURL */
+  archiveURL: Scalars["String"]["output"];
   /** 動画カテゴリ */
   category?: Maybe<MovieCategory>;
   /** 動画コメントリスト */
   comments: MovieCommentConnection;
-  description?: Maybe<Scalars["String"]>;
-  id: Scalars["ID"];
+  description?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
   /** コメント可否フラグ */
-  isCommentable: Scalars["Boolean"];
+  isCommentable: Scalars["Boolean"]["output"];
   /** 閲覧可能フラグ */
-  isViewable: Scalars["Boolean"];
+  isViewable: Scalars["Boolean"]["output"];
   /** 生配信詳細 */
   liveBroadcast?: Maybe<LiveBroadcast>;
-  name: Scalars["String"];
-  releaseDay: Scalars["Date"];
+  name: Scalars["String"]["output"];
+  releaseDay: Scalars["Date"]["output"];
   /**
    * アーカイブ動画ファイル 署名付きCookie
    * @deprecated signedQueryを使用
@@ -2032,39 +2197,39 @@ export type Movie = Node & {
    *
    * `/hls/m3u8?sourceUrl={url}?{signedQuery}`
    */
-  signedQuery: Scalars["String"];
+  signedQuery: Scalars["String"]["output"];
   /** サムネイル */
   thumbnailFile?: Maybe<SharedFile>;
   /** @deprecated thumbnailFileの使用を推奨 */
-  thumbnailURL: Scalars["String"];
+  thumbnailURL: Scalars["String"]["output"];
   /** 閲覧可能範囲設定 */
   viewableScope: ContentsViewableScope;
 };
 
 export type MovieCommentsArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<MovieCommentOrderInput>;
 };
 
 export type MovieCategory = Node & {
   __typename?: "MovieCategory";
-  id: Scalars["ID"];
-  name: Scalars["String"];
-  slug: Scalars["String"];
+  id: Scalars["ID"]["output"];
+  name: Scalars["String"]["output"];
+  slug: Scalars["String"]["output"];
 };
 
 export type MovieComment = Node & {
   __typename?: "MovieComment";
   commenter?: Maybe<Member>;
   /** コメント内容 */
-  content: Scalars["String"];
+  content: Scalars["String"]["output"];
   /** 作成日時 */
-  createdAt: Scalars["Datetime"];
+  createdAt: Scalars["Datetime"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
 };
 
 /** 動画コメントコネクションオブジェクト */
@@ -2075,14 +2240,14 @@ export type MovieCommentConnection = {
   /** ページ情報 */
   pageInfo: PageInfo;
   /** 合計コメント数 */
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** 動画コメントエッジオブジェクト */
 export type MovieCommentEdge = Edge & {
   __typename?: "MovieCommentEdge";
   /** カーソル */
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   /** ノード */
   node: MovieComment;
 };
@@ -2108,12 +2273,12 @@ export type MovieConnection = {
   /** ページ情報 */
   pageInfo: PageInfo;
   /** 総件数 */
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 export type MovieEdge = Edge & {
   __typename?: "MovieEdge";
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   node: Movie;
 };
 
@@ -2131,25 +2296,25 @@ export type MovieOrderInput = {
 export type MusicAlbum = Node & {
   __typename?: "MusicAlbum";
   /** アーティスト名 */
-  artistName?: Maybe<Scalars["String"]>;
+  artistName?: Maybe<Scalars["String"]["output"]>;
   /** アートワーク */
   artwork?: Maybe<MusicArtwork>;
   /** 利用可能範囲 */
   availability: MusicContentAvailability;
   /** コピーライト */
-  copyright?: Maybe<Scalars["String"]>;
+  copyright?: Maybe<Scalars["String"]["output"]>;
   /** アルバムID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** シングルフラグ */
-  isSingle: Scalars["Boolean"];
+  isSingle: Scalars["Boolean"]["output"];
   /** アルバム名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** リリース日 */
-  releaseDate: Scalars["Date"];
+  releaseDate: Scalars["Date"]["output"];
   /** 公開開始日時 */
-  startAt?: Maybe<Scalars["Datetime"]>;
+  startAt?: Maybe<Scalars["Datetime"]["output"]>;
   /** トラック数 */
-  trackCount: Scalars["Int"];
+  trackCount: Scalars["Int"]["output"];
   /**
    * トラックリスト
    *
@@ -2163,13 +2328,13 @@ export type MusicAlbumConnection = {
   __typename?: "MusicAlbumConnection";
   edges?: Maybe<Array<MusicAlbumEdge>>;
   pageInfo: PageInfo;
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** 音楽アルバム-Edge */
 export type MusicAlbumEdge = Edge & {
   __typename?: "MusicAlbumEdge";
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   node?: Maybe<MusicAlbum>;
 };
 
@@ -2189,17 +2354,17 @@ export type MusicArtwork = {
 export type MusicArtworkPresetUrl = {
   __typename?: "MusicArtworkPresetUrl";
   /** Max 1920px */
-  large: Scalars["String"];
+  large: Scalars["String"]["output"];
   /** Max 768px */
-  medium: Scalars["String"];
+  medium: Scalars["String"]["output"];
   /** オリジナル */
-  original: Scalars["String"];
+  original: Scalars["String"]["output"];
   /** Max 480px */
-  small: Scalars["String"];
+  small: Scalars["String"]["output"];
   /** Max 150px */
-  thumbnail: Scalars["String"];
+  thumbnail: Scalars["String"]["output"];
   /** Max 2048px */
-  xLarge: Scalars["String"];
+  xLarge: Scalars["String"]["output"];
 };
 
 /**
@@ -2210,18 +2375,18 @@ export type MusicArtworkPresetUrl = {
 export type MusicArtworkUrl = {
   __typename?: "MusicArtworkURL";
   /** デフォルト */
-  default: Scalars["String"];
+  default: Scalars["String"]["output"];
 };
 
 /** 音楽コンテンツ利用可能範囲 */
 export type MusicContentAvailability = {
   __typename?: "MusicContentAvailability";
   /** サブスクプランIDリスト */
-  subscriptionPlanIds?: Maybe<Array<Scalars["ID"]>>;
+  subscriptionPlanIds?: Maybe<Array<Scalars["ID"]["output"]>>;
   /** ユーザーグループ */
   userGroup: MusicContentAvailabilityUserGroup;
   /** 閲覧者の適用可能フラグ */
-  viewerSuitable: Scalars["Boolean"];
+  viewerSuitable: Scalars["Boolean"]["output"];
 };
 
 /** 音楽コンテンツ利用可能ユーザーグループ */
@@ -2237,21 +2402,21 @@ export enum MusicContentAvailabilityUserGroup {
 /** 音楽再生イベント-Input */
 export type MusicPlayEventInput = {
   /** プレイリストID */
-  playlistId?: InputMaybe<Scalars["ID"]>;
+  playlistId?: InputMaybe<Scalars["ID"]["input"]>;
   /** トラックID */
-  trackId: Scalars["ID"];
+  trackId: Scalars["ID"]["input"];
 };
 
 /** 音楽再生イベント-Payload */
 export type MusicPlayEventPayload = {
   __typename?: "MusicPlayEventPayload";
-  result: Scalars["Boolean"];
+  result: Scalars["Boolean"]["output"];
 };
 
 /** 音楽プレイバック-Input */
 export type MusicPlaybackInput = {
   /** トラックID */
-  trackId: Scalars["ID"];
+  trackId: Scalars["ID"]["input"];
 };
 
 /**
@@ -2265,11 +2430,11 @@ export type MusicPlaybackInput = {
 export type MusicPlaybackPayload = {
   __typename?: "MusicPlaybackPayload";
   /** 署名済みクエリ */
-  signedQuery: Scalars["String"];
+  signedQuery: Scalars["String"]["output"];
   /** トラックID */
-  trackId: Scalars["ID"];
+  trackId: Scalars["ID"]["output"];
   /** URL */
-  url: Scalars["String"];
+  url: Scalars["String"]["output"];
 };
 
 /** 音楽プレイリスト-Node */
@@ -2280,17 +2445,17 @@ export type MusicPlaylist = Node & {
   /** 利用可能範囲 */
   availability: MusicContentAvailability;
   /** 説明 */
-  description?: Maybe<Scalars["String"]>;
+  description?: Maybe<Scalars["String"]["output"]>;
   /** プレイリストID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** プレイリスト名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** リリース日 */
-  releaseDate: Scalars["Date"];
+  releaseDate: Scalars["Date"]["output"];
   /** 公開開始日時 */
-  startAt?: Maybe<Scalars["Datetime"]>;
+  startAt?: Maybe<Scalars["Datetime"]["output"]>;
   /** トラック数 */
-  trackCount: Scalars["Int"];
+  trackCount: Scalars["Int"]["output"];
   /**
    * トラックリスト
    *
@@ -2304,13 +2469,13 @@ export type MusicPlaylistConnection = {
   __typename?: "MusicPlaylistConnection";
   edges?: Maybe<Array<MusicPlaylistEdge>>;
   pageInfo: PageInfo;
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** 音楽プレイリスト-Edge */
 export type MusicPlaylistEdge = Edge & {
   __typename?: "MusicPlaylistEdge";
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   node?: Maybe<MusicPlaylist>;
 };
 
@@ -2318,27 +2483,27 @@ export type MusicPlaylistEdge = Edge & {
 export type MusicTrack = Node & {
   __typename?: "MusicTrack";
   /** アルバムID */
-  albumId: Scalars["ID"];
+  albumId: Scalars["ID"]["output"];
   /** アーティスト名 */
-  artistName?: Maybe<Scalars["String"]>;
+  artistName?: Maybe<Scalars["String"]["output"]>;
   /** アートワーク */
   artwork?: Maybe<MusicArtwork>;
   /** 利用可能範囲 */
   availability: MusicContentAvailability;
   /** コピーライト */
-  copyright?: Maybe<Scalars["String"]>;
+  copyright?: Maybe<Scalars["String"]["output"]>;
   /** 再生時間(ms) */
-  durationMS?: Maybe<Scalars["Int"]>;
+  durationMS?: Maybe<Scalars["Int"]["output"]>;
   /** トラックID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 歌詞 */
-  lyrics?: Maybe<Scalars["String"]>;
+  lyrics?: Maybe<Scalars["String"]["output"]>;
   /** トラック名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** 公開開始日時 */
-  startAt?: Maybe<Scalars["Datetime"]>;
+  startAt?: Maybe<Scalars["Datetime"]["output"]>;
   /** トラック番号 */
-  trackNumber: Scalars["Int"];
+  trackNumber: Scalars["Int"]["output"];
 };
 
 /** 音楽トラック-Connection */
@@ -2346,13 +2511,13 @@ export type MusicTrackConnection = {
   __typename?: "MusicTrackConnection";
   edges?: Maybe<Array<MusicTrackEdge>>;
   pageInfo: PageInfo;
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 /** 音楽トラック-Edge */
 export type MusicTrackEdge = Edge & {
   __typename?: "MusicTrackEdge";
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   node?: Maybe<MusicTrack>;
 };
 
@@ -2365,7 +2530,7 @@ export type Mutation = {
    *    firebaseとのリンクはフロントエンドで行い、こちらのmutationではDBの保存のみ行う
    *    ※password以外の追加で利用する
    */
-  addAuthProviderSNS: Scalars["Boolean"];
+  addAuthProviderSNS: Scalars["Boolean"]["output"];
   /** ブログ記事コメント作成 */
   addBlogPostComment: BlogPostComment;
   addCreditCard?: Maybe<CreditCard>;
@@ -2413,11 +2578,11 @@ export type Mutation = {
    */
   exchangeLotteryPrizes?: Maybe<ExchangeLotteryPrizesPayload>;
   /** サイト問い合わせ作成 */
-  inquire: Scalars["Boolean"];
+  inquire: Scalars["Boolean"]["output"];
   /** オフィシャル問い合わせ作成 */
-  inquireOfficial: Scalars["Boolean"];
+  inquireOfficial: Scalars["Boolean"]["output"];
   /** 既存ユーザーにEmailPasswordのAuthプロパイダ追加とFirebaseへリンク */
-  linkAuthProviderEmail: Scalars["Boolean"];
+  linkAuthProviderEmail: Scalars["Boolean"]["output"];
   /** くじデジタルコンテンツ取得 */
   lotteryPrizeDigitalContent?: Maybe<LotteryPrizeDigitalContentPayload>;
   /** 音楽再生イベント送信 */
@@ -2440,7 +2605,7 @@ export type Mutation = {
   /** 生配信コラボ申請送信 */
   submitLiveBroadcastCollaborationRequest?: Maybe<LiveBroadcastCollaborationRequestStatus>;
   /** 連携を削除 */
-  unlinkAuthProvider: Scalars["Boolean"];
+  unlinkAuthProvider: Scalars["Boolean"]["output"];
   updateDisplayName?: Maybe<Member>;
   /**
    * Emailを更新
@@ -2500,7 +2665,7 @@ export type MutationAddMovieCommentArgs = {
 };
 
 export type MutationCancelLiveBroadcastCollaborationRequestArgs = {
-  broadcastID: Scalars["ID"];
+  broadcastID: Scalars["ID"]["input"];
 };
 
 export type MutationCancelSubscriptionArgs = {
@@ -2520,11 +2685,11 @@ export type MutationCreateMemberArgs = {
 };
 
 export type MutationCreateRtmTokenArgs = {
-  uid: Scalars["String"];
+  uid: Scalars["String"]["input"];
 };
 
 export type MutationCreateSubscriberRtcTokenArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type MutationCreateUserByEmailArgs = {
@@ -2536,11 +2701,11 @@ export type MutationCreateUserBySnsArgs = {
 };
 
 export type MutationDeleteBlogPostCommentArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type MutationDeleteGalleryCommentArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type MutationDeleteMemberArgs = {
@@ -2548,7 +2713,7 @@ export type MutationDeleteMemberArgs = {
 };
 
 export type MutationDeleteMovieCommentArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type MutationDrawLotteryArgs = {
@@ -2612,7 +2777,7 @@ export type MutationResendVerifyMailArgs = {
 };
 
 export type MutationSubmitLiveBroadcastCollaborationRequestArgs = {
-  broadcastID: Scalars["ID"];
+  broadcastID: Scalars["ID"]["input"];
 };
 
 export type MutationUnlinkAuthProviderArgs = {
@@ -2636,7 +2801,7 @@ export type MutationUpdateIsSentMailArgs = {
 };
 
 export type MutationUpdatePasswordArgs = {
-  password: Scalars["String"];
+  password: Scalars["String"]["input"];
 };
 
 export type MutationUpdateProfileImageArgs = {
@@ -2661,31 +2826,31 @@ export type MutationVerifyEmailArgs = {
 };
 
 export type MutationViewGalleryArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type MutationViewLiveBroadcastArgs = {
-  broadcastID: Scalars["ID"];
+  broadcastID: Scalars["ID"]["input"];
 };
 
 export type MutationViewMovieArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type News = Node & {
   __typename?: "News";
   /** 認証フォーム情報 */
   authForm?: Maybe<NewsAuthForm>;
-  body?: Maybe<Scalars["String"]>;
+  body?: Maybe<Scalars["String"]["output"]>;
   /** カテゴリ */
   category?: Maybe<NewsCategory>;
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 無料フラグ */
-  isFree: Scalars["Boolean"];
+  isFree: Scalars["Boolean"]["output"];
   /** 閲覧可能フラグ */
-  isViewable: Scalars["Boolean"];
-  releaseDay: Scalars["Date"];
-  subject: Scalars["String"];
+  isViewable: Scalars["Boolean"]["output"];
+  releaseDay: Scalars["Date"]["output"];
+  subject: Scalars["String"]["output"];
   /** 閲覧可能範囲設定 */
   viewableScope: ContentsViewableScope;
 };
@@ -2694,31 +2859,31 @@ export type News = Node & {
 export type NewsAuthForm = {
   __typename?: "NewsAuthForm";
   /** スマホ用遷移先URL */
-  spURL?: Maybe<Scalars["String"]>;
+  spURL?: Maybe<Scalars["String"]["output"]>;
   /** 隠しタグ */
   tags?: Maybe<Array<NewsAuthFormTag>>;
   /** 遷移先URL */
-  url: Scalars["String"];
+  url: Scalars["String"]["output"];
 };
 
 /** お知らせ認証フォームタグ */
 export type NewsAuthFormTag = {
   __typename?: "NewsAuthFormTag";
   /** タグ名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** タグ値 */
-  value: Scalars["String"];
+  value: Scalars["String"]["output"];
 };
 
 /** お知らせカテゴリ */
 export type NewsCategory = {
   __typename?: "NewsCategory";
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** カテゴリ名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** スラッグ */
-  slug: Scalars["String"];
+  slug: Scalars["String"]["output"];
 };
 
 export type NewsConnection = {
@@ -2728,12 +2893,12 @@ export type NewsConnection = {
   /** ページ情報 */
   pageInfo: PageInfo;
   /** 総件数 */
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 export type NewsEdge = Edge & {
   __typename?: "NewsEdge";
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   node: News;
 };
 
@@ -2750,7 +2915,7 @@ export type NewsOrderInput = {
 export type NextPaymentMethod = CardPayment | CarrierPayment;
 
 export type Node = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
 };
 
 /** 会員番号表示位置 */
@@ -2768,36 +2933,48 @@ export enum OrderDirection {
   Desc = "DESC",
 }
 
+/** OverwriteContent型は各サイトで上書き可能なコンテンツを表現します。 */
+export type OverwriteContent = {
+  __typename?: "OverwriteContent";
+  /**
+   * コンテンツ
+   * HTMLなどのコンテンツがこのフィールドで返却されます。
+   */
+  content: Scalars["String"]["output"];
+  /** コンテンツのキー */
+  key: Scalars["String"]["output"];
+};
+
 export type PageInfo = {
   __typename?: "PageInfo";
-  endCursor?: Maybe<Scalars["String"]>;
-  hasNextPage: Scalars["Boolean"];
-  hasPreviousPage: Scalars["Boolean"];
-  startCursor?: Maybe<Scalars["String"]>;
+  endCursor?: Maybe<Scalars["String"]["output"]>;
+  hasNextPage: Scalars["Boolean"]["output"];
+  hasPreviousPage: Scalars["Boolean"]["output"];
+  startCursor?: Maybe<Scalars["String"]["output"]>;
 };
 
 /** 有料コインステータスオブジェクト */
 export type PaidCoinStatus = Node & {
   __typename?: "PaidCoinStatus";
   /** コイン残枚数 */
-  balance: Scalars["Int"];
+  balance: Scalars["Int"]["output"];
   /** 有効期限 */
-  expireAt: Scalars["Datetime"];
+  expireAt: Scalars["Datetime"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
 };
 
 /** 支払いカード情報 */
 export type PaymentCard = {
   __typename?: "PaymentCard";
   /** カードID */
-  cardId: Scalars["ID"];
+  cardId: Scalars["ID"]["output"];
 };
 
 /** 支払いカード情報-Input */
 export type PaymentCardInput = {
   /** カードID */
-  cardId: Scalars["ID"];
+  cardId: Scalars["ID"]["input"];
 };
 
 export enum PaymentGroup {
@@ -2806,6 +2983,13 @@ export enum PaymentGroup {
   /** キャリア */
   Carrier = "CARRIER",
 }
+
+/** 支払い履歴 */
+export type PaymentHistory =
+  | CoinPurchaseHistory
+  | LotteryShippingPaymentHistory
+  | LotteryTicketPurchaseHistory
+  | SubscriptionPaymentHistory;
 
 /** 支払履歴コネクションオブジェクト */
 export type PaymentHistoryConnection = {
@@ -2836,22 +3020,22 @@ export type PaymentHistoryOrderInput = {
 };
 
 export type PaymentMethod = {
-  paymentAt: Scalars["Datetime"];
+  paymentAt: Scalars["Datetime"]["output"];
 };
 
 export type PaymentSchedule = {
   __typename?: "PaymentSchedule";
-  endDay?: Maybe<Scalars["Date"]>;
-  firstStartDay: Scalars["Date"];
-  lastStartDay: Scalars["Date"];
+  endDay?: Maybe<Scalars["Date"]["output"]>;
+  firstStartDay: Scalars["Date"]["output"];
+  lastStartDay: Scalars["Date"]["output"];
 };
 
 /** スタンプ購入入力オブジェクト */
 export type PurchaseStampInput = {
   /** 生配信ID */
-  liveBroadcastId: Scalars["ID"];
+  liveBroadcastId: Scalars["ID"]["input"];
   /** スタンプID */
-  stampId: Scalars["ID"];
+  stampId: Scalars["ID"]["input"];
 };
 
 export type Query = {
@@ -2902,6 +3086,10 @@ export type Query = {
   lotteryTickets?: Maybe<LotteryTicketConnection>;
   /** サイト会員情報 */
   member: Member;
+  /** 月間コイン獲得消費履歴取得 */
+  monthlyCoinHistories: MonthlyCoinHistories;
+  /** 月支払い履歴取得 */
+  monthlyPaymentHistories: MonthlyPaymentHistories;
   /** Get a movie by id */
   movie?: Maybe<Movie>;
   /** 音楽アルバムを取得 */
@@ -2927,6 +3115,8 @@ export type Query = {
   scheduleDateGroupList?: Maybe<Array<ScheduleDateGroup>>;
   /** スケジュールリスト取得 */
   scheduleList: ScheduleConnection;
+  /** スクリーンバナーリスト取得 */
+  screenBanners?: Maybe<Array<Banner>>;
   /** Shop注文情報を取得 */
   shopOrder?: Maybe<ShopOrder>;
   /** get site by domain(ex. https://www.fam.com/{domain}, https://www.{domain}) */
@@ -2940,220 +3130,230 @@ export type Query = {
 };
 
 export type QueryBlogArgs = {
-  slug: Scalars["String"];
+  slug: Scalars["String"]["input"];
 };
 
 export type QueryBlogPostArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryCapturedDigitalContentLotteriesArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 export type QueryCouponGiftCoinActionByPromotionCodeArgs = {
-  promotionCode: Scalars["String"];
+  promotionCode: Scalars["String"]["input"];
 };
 
 export type QueryCouponPromotionByPromotionCodeArgs = {
-  promotionCode: Scalars["String"];
+  promotionCode: Scalars["String"]["input"];
 };
 
 export type QueryCouponSubscriptionActionByPromotionCodeArgs = {
-  promotionCode: Scalars["String"];
-  subscriptionPlanId: Scalars["ID"];
+  promotionCode: Scalars["String"]["input"];
+  subscriptionPlanId: Scalars["ID"]["input"];
 };
 
 export type QueryExchangeableLotteriesArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 export type QueryGalleryArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryGalleryGroupArgs = {
-  slug: Scalars["String"];
+  slug: Scalars["String"]["input"];
 };
 
 export type QueryLiveBroadcastArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryLotteriesArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 export type QueryLotteryArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryLotteryDrawingResultsArgs = {
-  ticketPurchaseId: Scalars["ID"];
+  ticketPurchaseId: Scalars["ID"]["input"];
 };
 
 export type QueryLotteryExchangeArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryLotteryExchangesArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
   shopOrder: LotteryShopOrderInput;
 };
 
 export type QueryLotteryPrizeArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryLotteryPrizesArgs = {
-  lotteryId: Scalars["ID"];
-  rarityId?: InputMaybe<Scalars["ID"]>;
+  lotteryId: Scalars["ID"]["input"];
+  rarityId?: InputMaybe<Scalars["ID"]["input"]>;
 };
 
 export type QueryLotteryRaritiesArgs = {
-  lotteryId: Scalars["ID"];
+  lotteryId: Scalars["ID"]["input"];
 };
 
 export type QueryLotteryRarityArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryLotteryTicketArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryLotteryTicketsArgs = {
-  lotteryId: Scalars["ID"];
+  lotteryId: Scalars["ID"]["input"];
+};
+
+export type QueryMonthlyCoinHistoriesArgs = {
+  month: Scalars["Int"]["input"];
+  year: Scalars["Int"]["input"];
+};
+
+export type QueryMonthlyPaymentHistoriesArgs = {
+  month: Scalars["Int"]["input"];
+  year: Scalars["Int"]["input"];
 };
 
 export type QueryMovieArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryMusicAlbumArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryMusicAlbumsArgs = {
-  after?: InputMaybe<Scalars["String"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
   albumType?: InputMaybe<AlbumType>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 export type QueryMusicPlaylistArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryMusicPlaylistsArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 export type QueryMusicTrackArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryNewsArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryScheduleArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryScheduleDateGroupListArgs = {
-  categoryId?: InputMaybe<Scalars["ID"]>;
-  yearMonth: Scalars["String"];
+  categoryId?: InputMaybe<Scalars["ID"]["input"]>;
+  yearMonth: Scalars["String"]["input"];
 };
 
 export type QueryScheduleListArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  categoryId?: InputMaybe<Scalars["ID"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  categoryId?: InputMaybe<Scalars["ID"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<ScheduleOrderInput>;
-  yearMonth?: InputMaybe<Scalars["String"]>;
+  yearMonth?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type QueryScreenBannersArgs = {
+  screenKeyPrefix: Scalars["String"]["input"];
 };
 
 export type QueryShopOrderArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type QueryStampArgs = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 /** ギフトコインクーポン適用-Input */
 export type RedeemGiftCoinCouponInput = {
   /** プロモーションコード */
-  promotionCode: Scalars["String"];
+  promotionCode: Scalars["String"]["input"];
 };
 
 /** ギフトコインクーポン適用-Payload */
 export type RedeemGiftCoinCouponPayload = {
   __typename?: "RedeemGiftCoinCouponPayload";
-  result: Scalars["Boolean"];
+  result: Scalars["Boolean"]["output"];
 };
 
 /** サブスククーポン適用-Input */
 export type RedeemSubscriptionCouponInput = {
   /** プロモーションコード */
-  promotionCode: Scalars["String"];
+  promotionCode: Scalars["String"]["input"];
   /** サブスクID */
-  subscriptionId: Scalars["ID"];
+  subscriptionId: Scalars["ID"]["input"];
 };
 
 /** サブスククーポン適用-Payload */
 export type RedeemSubscriptionCouponPayload = {
   __typename?: "RedeemSubscriptionCouponPayload";
-  result: Scalars["Boolean"];
+  result: Scalars["Boolean"]["output"];
 };
 
 export type RegisterSubscriptionByCardInput = {
   /** クレジットカードID */
-  cardId: Scalars["ID"];
+  cardId: Scalars["ID"]["input"];
   /** サブスクプランID */
-  planId: Scalars["ID"];
+  planId: Scalars["ID"]["input"];
   /** プロモーションコード */
-  promotionCode?: InputMaybe<Scalars["String"]>;
+  promotionCode?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type RegisterSubscriptionByCarrierInput = {
   carrierCompany: CarrierCompany;
   /** 失敗リダイレクトパス */
-  failurePath?: InputMaybe<Scalars["String"]>;
-  /** 失敗URL（deprecated: failureRedirectPathを使用） */
-  failureReturnURL?: InputMaybe<Scalars["String"]>;
-  planId: Scalars["ID"];
+  failurePath?: InputMaybe<Scalars["String"]["input"]>;
+  planId: Scalars["ID"]["input"];
   /** 成功リダイレクトパス */
-  successPath?: InputMaybe<Scalars["String"]>;
-  /** 成功URL（deprecated: successRedirectPathを使用） */
-  successReturnURL?: InputMaybe<Scalars["String"]>;
+  successPath?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type RemoveCreditCardInput = {
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 };
 
 export type ResendVerifyMail = {
-  verifyURL: Scalars["String"];
+  verifyURL: Scalars["String"]["input"];
 };
 
 export enum RoleName {
@@ -3163,7 +3363,7 @@ export enum RoleName {
 
 export type RoleStatus = {
   __typename?: "RoleStatus";
-  expireAt?: Maybe<Scalars["Datetime"]>;
+  expireAt?: Maybe<Scalars["Datetime"]["output"]>;
   name: RoleName;
 };
 
@@ -3171,21 +3371,21 @@ export type RoleStatus = {
 export type Schedule = Node & {
   __typename?: "Schedule";
   /** 本文 */
-  body: Scalars["String"];
+  body: Scalars["String"]["output"];
   /** カテゴリ */
   category?: Maybe<ScheduleCategory>;
   /** 作成日時 */
-  createdAt: Scalars["Datetime"];
+  createdAt: Scalars["Datetime"]["output"];
   /** 日付 */
-  date: Scalars["Datetime"];
+  date: Scalars["Datetime"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 閲覧可能フラグ */
-  isViewable: Scalars["Boolean"];
+  isViewable: Scalars["Boolean"]["output"];
   /** 公開開始日時 */
-  startAt: Scalars["Datetime"];
+  startAt: Scalars["Datetime"]["output"];
   /** 見出し */
-  subject: Scalars["String"];
+  subject: Scalars["String"]["output"];
   /** 閲覧可能範囲設定 */
   viewableScope: ContentsViewableScope;
 };
@@ -3194,11 +3394,11 @@ export type Schedule = Node & {
 export type ScheduleCategory = {
   __typename?: "ScheduleCategory";
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** カテゴリ名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** スラッグ */
-  slug: Scalars["String"];
+  slug: Scalars["String"]["output"];
 };
 
 /** スケジュールコネクションオブジェクト */
@@ -3209,12 +3409,12 @@ export type ScheduleConnection = {
   /** ページ情報 */
   pageInfo: PageInfo;
   /** 総件数 */
-  totalCount: Scalars["Int"];
+  totalCount: Scalars["Int"]["output"];
 };
 
 export type ScheduleDateGroup = {
   __typename?: "ScheduleDateGroup";
-  date: Scalars["Datetime"];
+  date: Scalars["Datetime"]["output"];
   schedules?: Maybe<Array<Schedule>>;
 };
 
@@ -3222,7 +3422,7 @@ export type ScheduleDateGroup = {
 export type ScheduleEdge = Edge & {
   __typename?: "ScheduleEdge";
   /** カーソル */
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   /** ノード */
   node: Schedule;
 };
@@ -3244,15 +3444,15 @@ export type ScheduleOrderInput = {
 export type SharedFile = Node & {
   __typename?: "SharedFile";
   /** 代替テキスト */
-  alternativeContent: Scalars["String"];
+  alternativeContent: Scalars["String"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** ファイル名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** アップロード日時 */
-  uploadedAt: Scalars["Datetime"];
+  uploadedAt: Scalars["Datetime"]["output"];
   /** URL */
-  url: Scalars["String"];
+  url: Scalars["String"]["output"];
 };
 
 /**
@@ -3263,41 +3463,41 @@ export type SharedFile = Node & {
 export type ShopImageUrl = {
   __typename?: "ShopImageURL";
   /** デフォルト */
-  default: Scalars["String"];
+  default: Scalars["String"]["output"];
 };
 
 /** Shop注文 */
 export type ShopOrder = {
   __typename?: "ShopOrder";
   /** 注文ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** アイテムリスト */
   items: Array<ShopOrderItem>;
   /** オープンロジ出庫 */
   openLogiShipment?: Maybe<ShopOrderOpenLogiShipment>;
   /** 注文日時 */
-  orderedAt: Scalars["Datetime"];
+  orderedAt: Scalars["Datetime"]["output"];
   /** 支払い情報 */
   payment?: Maybe<ShopOrderPayment>;
   /** 配送情報 */
   shipping?: Maybe<ShopOrderShipping>;
   /** 小計金額 */
-  subtotalPrice: Scalars["Int"];
+  subtotalPrice: Scalars["Int"]["output"];
   /** 合計金額 */
-  totalPrice: Scalars["Int"];
+  totalPrice: Scalars["Int"]["output"];
   /** 合計配送料 */
-  totalShippingFee: Scalars["Int"];
+  totalShippingFee: Scalars["Int"]["output"];
 };
 
 /** Shop注文アイテム */
 export type ShopOrderItem = {
   __typename?: "ShopOrderItem";
   /** 注文アイテムID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 製品 */
   product: ShopOrderProduct;
   /** 数量 */
-  quantity: Scalars["Int"];
+  quantity: Scalars["Int"]["output"];
   /** 製品規格 */
   variant: ShopOrderVariant;
 };
@@ -3306,15 +3506,15 @@ export type ShopOrderItem = {
 export type ShopOrderOpenLogiShipment = {
   __typename?: "ShopOrderOpenLogiShipment";
   /** 発送予定日 */
-  assignedShippingDate?: Maybe<Scalars["Date"]>;
+  assignedShippingDate?: Maybe<Scalars["Date"]["output"]>;
   /** 配送会社 */
   deliveryCarrier?: Maybe<ShopOrderOpenLogiShipmentDeliveryCarrier>;
   /** 発送日時 */
-  shippedAt?: Maybe<Scalars["Datetime"]>;
+  shippedAt?: Maybe<Scalars["Datetime"]["output"]>;
   /** 伝票番号（追跡番号）略式 */
-  trackingCode?: Maybe<Scalars["String"]>;
+  trackingCode?: Maybe<Scalars["String"]["output"]>;
   /** 配送状況取得URL */
-  url?: Maybe<Scalars["String"]>;
+  url?: Maybe<Scalars["String"]["output"]>;
 };
 
 export enum ShopOrderOpenLogiShipmentDeliveryCarrier {
@@ -3328,7 +3528,7 @@ export enum ShopOrderOpenLogiShipmentDeliveryCarrier {
 export type ShopOrderPayment = {
   __typename?: "ShopOrderPayment";
   /** 支払い日時 */
-  paidAt: Scalars["Datetime"];
+  paidAt: Scalars["Datetime"]["output"];
   /** 支払いカード */
   paymentCard?: Maybe<PaymentCard>;
 };
@@ -3337,32 +3537,32 @@ export type ShopOrderPayment = {
 export type ShopOrderProduct = {
   __typename?: "ShopOrderProduct";
   /** 製品ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 名称 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
 };
 
 /** Shop注文配送 */
 export type ShopOrderShipping = {
   __typename?: "ShopOrderShipping";
   /** 番地 */
-  address1: Scalars["String"];
+  address1: Scalars["String"]["output"];
   /** 建物名・部屋番号 */
-  address2?: Maybe<Scalars["String"]>;
+  address2?: Maybe<Scalars["String"]["output"]>;
   /** 市区町村 */
-  city: Scalars["String"];
+  city: Scalars["String"]["output"];
   /** 国 */
-  country: Scalars["String"];
+  country: Scalars["String"]["output"];
   /** 名前 */
-  firstName: Scalars["String"];
+  firstName: Scalars["String"]["output"];
   /** 苗字 */
-  lastName: Scalars["String"];
+  lastName: Scalars["String"]["output"];
   /** 電話番号 */
-  phoneNumber: Scalars["String"];
+  phoneNumber: Scalars["String"]["output"];
   /** 郵便番号 */
-  postcode: Scalars["String"];
+  postcode: Scalars["String"]["output"];
   /** 都道府県 */
-  prefecture: Scalars["String"];
+  prefecture: Scalars["String"]["output"];
 };
 
 /** Shop注文配送ステータス */
@@ -3377,11 +3577,11 @@ export enum ShopOrderShippingStatus {
 export type ShopOrderVariant = {
   __typename?: "ShopOrderVariant";
   /** 製品規格ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 画像 */
   image?: Maybe<ShopProductImage>;
   /** 名称 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
 };
 
 /** Shop製品画像 */
@@ -3393,23 +3593,23 @@ export type ShopProductImage = {
 
 export type ShopShippingAddressInput = {
   /** 番地 */
-  address1: Scalars["String"];
+  address1: Scalars["String"]["input"];
   /** 建物名・部屋番号 */
-  address2?: InputMaybe<Scalars["String"]>;
+  address2?: InputMaybe<Scalars["String"]["input"]>;
   /** 市区町村 */
-  city: Scalars["String"];
+  city: Scalars["String"]["input"];
   /** 国 */
-  country: Scalars["String"];
+  country: Scalars["String"]["input"];
   /** 名前 */
-  firstName: Scalars["String"];
+  firstName: Scalars["String"]["input"];
   /** 苗字 */
-  lastName: Scalars["String"];
+  lastName: Scalars["String"]["input"];
   /** 電話番号 */
-  phoneNumber: Scalars["String"];
+  phoneNumber: Scalars["String"]["input"];
   /** 郵便番号 */
-  postcode: Scalars["String"];
+  postcode: Scalars["String"]["input"];
   /** 都道府県 */
-  prefecture: Scalars["String"];
+  prefecture: Scalars["String"]["input"];
 };
 
 export enum SignUpMethod {
@@ -3427,7 +3627,7 @@ export enum SignUpSns {
 export type SignedCookie = {
   __typename?: "SignedCookie";
   /** 有効日時 */
-  expireAt: Scalars["Datetime"];
+  expireAt: Scalars["Datetime"]["output"];
   /** Cookie設定値 */
   values: Array<CookieValue>;
 };
@@ -3435,13 +3635,13 @@ export type SignedCookie = {
 export type Site = Node & {
   __typename?: "Site";
   /** コピーライト */
-  copyright: Scalars["String"];
+  copyright: Scalars["String"]["output"];
   /** サイト概要 */
-  description: Scalars["String"];
+  description: Scalars["String"]["output"];
   /** デザイン */
   design: Design;
   /** サイトドメイン */
-  domain: Scalars["String"];
+  domain: Scalars["String"]["output"];
   /** ファビコン */
   faviconFile?: Maybe<SharedFile>;
   /**
@@ -3452,15 +3652,15 @@ export type Site = Node & {
   /** 写真管理リスト取得 */
   galleryGroups: Array<GalleryGroup>;
   /** GoogleアナリティクスID */
-  googleAnalyticsId: Scalars["String"];
+  googleAnalyticsId: Scalars["String"]["output"];
   /** アイコン画像 */
   iconImageFile?: Maybe<SharedFile>;
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** Instagram ID */
-  instagramId: Scalars["String"];
+  instagramId: Scalars["String"]["output"];
   /** 公開フラグ */
-  isAvailable: Scalars["Boolean"];
+  isAvailable: Scalars["Boolean"]["output"];
   /** デザインレイアウトセクション */
   layoutSections: Array<LayoutSection>;
   /**
@@ -3484,11 +3684,16 @@ export type Site = Node & {
   /** 動画リスト */
   movies: MovieConnection;
   /** サイト名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** Get news by a site */
   news: NewsConnection;
   /** お知らせカテゴリ */
   newsCategories?: Maybe<Array<NewsCategory>>;
+  /**
+   * サイトで上書き可能なコンテンツを取得します。
+   * keysには、terms, privacy_policy, commercial_law などコンテンツキーを指定します。
+   */
+  overwriteContents: Array<OverwriteContent>;
   /**
    * プロフィール
    * @deprecated `profiles`に移行
@@ -3502,52 +3707,56 @@ export type Site = Node & {
   stamps: StampConnection;
   subscriptionPlans?: Maybe<Array<Maybe<SubscriptionPlan>>>;
   /** TikTok ID */
-  tiktokId: Scalars["String"];
+  tiktokId: Scalars["String"]["output"];
   /** Twitter ID */
-  twitterId: Scalars["String"];
+  twitterId: Scalars["String"]["output"];
   /** YouTube URL */
-  youtubeURL: Scalars["String"];
+  youtubeURL: Scalars["String"]["output"];
 };
 
 export type SiteGalleriesArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<GalleryOrderInput>;
 };
 
 export type SiteLiveBroadcastsArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<LiveBroadcastOrderInput>;
 };
 
 export type SiteMoviesArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  categoryId?: InputMaybe<Scalars["ID"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  categoryId?: InputMaybe<Scalars["ID"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<MovieOrderInput>;
 };
 
 export type SiteNewsArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  categoryId?: InputMaybe<Scalars["ID"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  categoryId?: InputMaybe<Scalars["ID"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<NewsOrderInput>;
 };
 
+export type SiteOverwriteContentsArgs = {
+  keys?: InputMaybe<Array<Scalars["String"]["input"]>>;
+};
+
 export type SiteStampsArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 /** 会員証 */
@@ -3560,50 +3769,64 @@ export type SiteMembershipCard = {
   /** ロゴ表示位置 */
   logoPosition: LogoPosition;
   /** 会員番号文字色コード */
-  numberColor: Scalars["String"];
+  numberColor: Scalars["String"]["output"];
   /** 会員番号表示位置 */
   numberPosition: NumberPosition;
   /** 会員番号プレフィックス（上2文字） */
-  prefix: Scalars["String"];
+  prefix: Scalars["String"]["output"];
 };
 
 /** 会員証番号 */
 export type SiteMembershipNumber = {
   __typename?: "SiteMembershipNumber";
   /** 会員番号プレフィックス（上2文字） */
-  prefix: Scalars["String"];
+  prefix: Scalars["String"]["output"];
   /** 開始番号 */
-  start: Scalars["Int"];
+  start: Scalars["Int"]["output"];
 };
 
 /** サイトプロフィール */
 export type SiteProfile = {
   __typename?: "SiteProfile";
   /** サイトプロフィール別名 */
-  alias: Scalars["String"];
+  alias: Scalars["String"]["output"];
   /** サイトプロフィール概要 */
-  description: Scalars["String"];
+  description: Scalars["String"]["output"];
   /** サイトプロフィールID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** プロフィール画像 */
   imageFile?: Maybe<SharedFile>;
   /** サイトプロフィール名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
+};
+
+/** 並び替え可能コイン履歴 */
+export type SortableCoinHistory = {
+  __typename?: "SortableCoinHistory";
+  createdAt: Scalars["Datetime"]["output"];
+  item: CoinHistory;
+};
+
+/** 並び替え可能支払い履歴 */
+export type SortablePaymentHistory = {
+  __typename?: "SortablePaymentHistory";
+  createdAt: Scalars["Datetime"]["output"];
+  item: PaymentHistory;
 };
 
 /** スタンプオブジェクト */
 export type Stamp = Node & {
   __typename?: "Stamp";
   /** 必要コイン枚数 */
-  amount: Scalars["Int"];
+  amount: Scalars["Int"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** アイコン画像 */
   imageFile: SharedFile;
   /** スタンプ名 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** 表示順 */
-  seq: Scalars["Int"];
+  seq: Scalars["Int"]["output"];
 };
 
 /** スタンプコネクションオブジェクト */
@@ -3619,7 +3842,7 @@ export type StampConnection = {
 export type StampEdge = Edge & {
   __typename?: "StampEdge";
   /** カーソル */
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   /** ノード */
   node: Stamp;
 };
@@ -3634,26 +3857,26 @@ export enum StampOrderField {
 export type SubscriptionCancelReason = {
   __typename?: "SubscriptionCancelReason";
   /** 解約理由ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 解約理由 */
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
 };
 
 /** サブスクリプション割引-Node */
 export type SubscriptionDiscount = Node & {
   __typename?: "SubscriptionDiscount";
   /** 割引数量 */
-  discountAmount: Scalars["String"];
+  discountAmount: Scalars["String"]["output"];
   /** 割引タイプ */
   discountType: SubscriptionDiscountType;
   /** 割引適用月数 */
-  durationInMonths: Scalars["Int"];
+  durationInMonths: Scalars["Int"]["output"];
   /** 終了日時 */
-  endAt: Scalars["Datetime"];
+  endAt: Scalars["Datetime"]["output"];
   /** 割引ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 開始日時 */
-  startAt: Scalars["Datetime"];
+  startAt: Scalars["Datetime"]["output"];
 };
 
 /** 割引タイプ */
@@ -3668,13 +3891,15 @@ export enum SubscriptionDiscountType {
 export type SubscriptionPaymentHistory = Node & {
   __typename?: "SubscriptionPaymentHistory";
   /** 支払総額 */
-  amount: Scalars["Int"];
+  amount: Scalars["Int"]["output"];
   /** 支払履歴作成日時 */
-  createdAt: Scalars["Datetime"];
+  createdAt: Scalars["Datetime"]["output"];
   /** 割引金額 */
-  discountAmount: Scalars["Int"];
+  discountAmount: Scalars["Int"]["output"];
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
+  /** サブスクリプションプラン */
+  plan: SubscriptionPlan;
   /** サブスク対象サイト */
   site: Site;
 };
@@ -3683,7 +3908,7 @@ export type SubscriptionPaymentHistory = Node & {
 export type SubscriptionPaymentHistoryEdge = Edge & {
   __typename?: "SubscriptionPaymentHistoryEdge";
   /** カーソル */
-  cursor: Scalars["String"];
+  cursor: Scalars["String"]["output"];
   /** ノード */
   node: SubscriptionPaymentHistory;
 };
@@ -3699,7 +3924,7 @@ export enum SubscriptionPaymentTiming {
 export type SubscriptionPlan = {
   __typename?: "SubscriptionPlan";
   /** 月額料金 */
-  amount: Scalars["Int"];
+  amount: Scalars["Int"]["output"];
   /**
    * 利用可能機能
    * @deprecated 機能管理v2移行のためfeaturesに移行
@@ -3708,15 +3933,15 @@ export type SubscriptionPlan = {
   /** 利用可能支払いグループ */
   availablePaymentGroups: Array<PaymentGroup>;
   /** プラン詳細 */
-  description: Scalars["String"];
+  description: Scalars["String"]["output"];
   /** プラン機能一覧v2 */
   features: Array<Feature>;
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** 契約可能フラグ */
-  isAvailableForContract: Scalars["Boolean"];
+  isAvailableForContract: Scalars["Boolean"]["output"];
   /** 会員証デザイン */
   membershipCardDesign?: Maybe<SubscriptionPlanMembershipCardDesign>;
-  name: Scalars["String"];
+  name: Scalars["String"]["output"];
   /** 支払いタイミング */
   paymentTiming: SubscriptionPaymentTiming;
 };
@@ -3729,24 +3954,24 @@ export type SubscriptionPlanAvailableFunction = {
   /** 写真管理リスト */
   galleryGroups?: Maybe<Array<GalleryGroup>>;
   /** 動画表示名 */
-  movieDisplayName: Scalars["String"];
+  movieDisplayName: Scalars["String"]["output"];
 };
 
 /** 会員証デザイン(背景色ver) */
 export type SubscriptionPlanMembershipCardBackgroundColorDesign = {
   __typename?: "SubscriptionPlanMembershipCardBackgroundColorDesign";
   /** 背景色コード */
-  backgroundColor: Scalars["String"];
+  backgroundColor: Scalars["String"]["output"];
   /** ロゴ画像ファイル */
   logoImageFile?: Maybe<SharedFile>;
   /** ロゴ表示位置 */
   logoPosition: LogoPosition;
   /** 会員番号文字色コード */
-  numberColor: Scalars["String"];
+  numberColor: Scalars["String"]["output"];
   /** 会員番号表示位置 */
   numberPosition: NumberPosition;
   /** ユーザー名文字色コード */
-  usernameColor: Scalars["String"];
+  usernameColor: Scalars["String"]["output"];
   /** ユーザー名表示位置 */
   usernamePosition: UsernamePosition;
 };
@@ -3761,11 +3986,11 @@ export type SubscriptionPlanMembershipCardBackgroundImageDesign = {
   /** ロゴ表示位置 */
   logoPosition: LogoPosition;
   /** 会員番号文字色コード */
-  numberColor: Scalars["String"];
+  numberColor: Scalars["String"]["output"];
   /** 会員番号表示位置 */
   numberPosition: NumberPosition;
   /** ユーザー名文字色コード */
-  usernameColor: Scalars["String"];
+  usernameColor: Scalars["String"]["output"];
   /** ユーザー名表示位置 */
   usernamePosition: UsernamePosition;
 };
@@ -3788,44 +4013,44 @@ export type UnlinkAuthProviderInput = {
 };
 
 export type UpdateDisplayNameInput = {
-  displayName: Scalars["String"];
+  displayName: Scalars["String"]["input"];
 };
 
 export type UpdateEmailInput = {
-  email: Scalars["String"];
-  verifyURL: Scalars["String"];
+  email: Scalars["String"]["input"];
+  verifyURL: Scalars["String"]["input"];
 };
 
 export type UpdateFamIdInput = {
-  famId: Scalars["String"];
+  famId: Scalars["String"]["input"];
 };
 
 export type UpdateIsSentMailInput = {
-  isSentMail: Scalars["Boolean"];
+  isSentMail: Scalars["Boolean"]["input"];
 };
 
 export type UpdateProfileImageInput = {
-  file?: InputMaybe<Scalars["Upload"]>;
+  file?: InputMaybe<Scalars["Upload"]["input"]>;
 };
 
 export type UpdateUserDetailInput = {
-  birthday: Scalars["Date"];
-  block: Scalars["String"];
-  building?: InputMaybe<Scalars["String"]>;
-  country: Scalars["String"];
-  firstName: Scalars["String"];
+  birthday: Scalars["Date"]["input"];
+  block: Scalars["String"]["input"];
+  building?: InputMaybe<Scalars["String"]["input"]>;
+  country: Scalars["String"]["input"];
+  firstName: Scalars["String"]["input"];
   gender: Gender;
-  lastName: Scalars["String"];
-  municipality: Scalars["String"];
-  phoneNumber?: InputMaybe<Scalars["String"]>;
-  postCode: Scalars["String"];
-  prefecture: Scalars["String"];
+  lastName: Scalars["String"]["input"];
+  municipality: Scalars["String"]["input"];
+  phoneNumber?: InputMaybe<Scalars["String"]["input"]>;
+  postCode: Scalars["String"]["input"];
+  prefecture: Scalars["String"]["input"];
 };
 
 export type UpdateUserInput = {
-  email?: InputMaybe<Scalars["String"]>;
-  famId?: InputMaybe<Scalars["String"]>;
-  verifyURL?: InputMaybe<Scalars["String"]>;
+  email?: InputMaybe<Scalars["String"]["input"]>;
+  famId?: InputMaybe<Scalars["String"]["input"]>;
+  verifyURL?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type User = Node & {
@@ -3833,12 +4058,12 @@ export type User = Node & {
   /** コイン履歴 */
   coinHistories: CoinHistoryConnection;
   creditCards?: Maybe<Array<Maybe<CreditCard>>>;
-  customToken?: Maybe<Scalars["String"]>;
+  customToken?: Maybe<Scalars["String"]["output"]>;
   detail?: Maybe<UserDetail>;
-  email?: Maybe<Scalars["String"]>;
-  famId?: Maybe<Scalars["String"]>;
-  id: Scalars["ID"];
-  isVerifiedEmail: Scalars["Boolean"];
+  email?: Maybe<Scalars["String"]["output"]>;
+  famId?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
+  isVerifiedEmail: Scalars["Boolean"]["output"];
   members?: Maybe<Array<Maybe<Member>>>;
   /** 有料コインステータスリスト取得 */
   paidCoinStatuses?: Maybe<Array<PaidCoinStatus>>;
@@ -3849,69 +4074,68 @@ export type User = Node & {
   signUpMethodList?: Maybe<Array<SignUpMethod>>;
   subscriptions?: Maybe<Array<Maybe<UserSubscriptionByCardOrCarrier>>>;
   /** 合計コイン残高 */
-  totalCoinBalance: Scalars["Int"];
+  totalCoinBalance: Scalars["Int"]["output"];
 };
 
 export type UserCoinHistoriesArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<CoinHistoryOrderInput>;
 };
 
 export type UserMembersArgs = {
-  siteIds?: InputMaybe<Array<Scalars["ID"]>>;
+  siteIds?: InputMaybe<Array<Scalars["ID"]["input"]>>;
 };
 
 export type UserPaidCoinStatusesArgs = {
-  expireAtTo: Scalars["Datetime"];
+  expireAtTo: Scalars["Datetime"]["input"];
 };
 
 export type UserPaymentHistoriesArgs = {
-  after?: InputMaybe<Scalars["String"]>;
-  before?: InputMaybe<Scalars["String"]>;
-  first?: InputMaybe<Scalars["Int"]>;
-  last?: InputMaybe<Scalars["Int"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<PaymentHistoryOrderInput>;
 };
 
 export type UserSubscriptionsArgs = {
-  planIDs?: InputMaybe<Array<Scalars["ID"]>>;
+  planIDs?: InputMaybe<Array<Scalars["ID"]["input"]>>;
 };
 
 export type UserDetail = {
   __typename?: "UserDetail";
-  birthday: Scalars["Date"];
-  block: Scalars["String"];
-  building?: Maybe<Scalars["String"]>;
-  country: Scalars["String"];
-  firstName: Scalars["String"];
+  birthday: Scalars["Date"]["output"];
+  block: Scalars["String"]["output"];
+  building?: Maybe<Scalars["String"]["output"]>;
+  country: Scalars["String"]["output"];
+  firstName: Scalars["String"]["output"];
   gender: Gender;
-  lastName: Scalars["String"];
-  municipality: Scalars["String"];
-  /** 電話番号 */
-  phoneNumber?: Maybe<Scalars["String"]>;
-  postCode: Scalars["String"];
-  prefecture: Scalars["String"];
+  lastName: Scalars["String"]["output"];
+  municipality: Scalars["String"]["output"];
+  phoneNumber?: Maybe<Scalars["String"]["output"]>;
+  postCode: Scalars["String"]["output"];
+  prefecture: Scalars["String"]["output"];
 };
 
 export type UserSubscription = {
-  cancelAt?: Maybe<Scalars["Datetime"]>;
-  id: Scalars["ID"];
-  nextPaymentDay: Scalars["Date"];
+  cancelAt?: Maybe<Scalars["Datetime"]["output"]>;
+  id: Scalars["ID"]["output"];
+  nextPaymentDay: Scalars["Date"]["output"];
   nextPaymentMethod?: Maybe<NextPaymentMethod>;
   plan: SubscriptionPlan;
-  startAt: Scalars["Datetime"];
+  startAt: Scalars["Datetime"]["output"];
   /** ステータス */
-  status: Scalars["String"];
-  suspendedAt?: Maybe<Scalars["Datetime"]>;
+  status: Scalars["String"]["output"];
+  suspendedAt?: Maybe<Scalars["Datetime"]["output"]>;
 };
 
 export type UserSubscriptionByCard = UserSubscription & {
   __typename?: "UserSubscriptionByCard";
   /** キャンセル日時 */
-  cancelAt?: Maybe<Scalars["Datetime"]>;
+  cancelAt?: Maybe<Scalars["Datetime"]["output"]>;
   creditCard?: Maybe<CreditCard>;
   /**
    * 割引情報
@@ -3923,21 +4147,21 @@ export type UserSubscriptionByCard = UserSubscription & {
   /** 割引情報リスト */
   discounts?: Maybe<Array<SubscriptionDiscount>>;
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** クーポン適用可能フラグ */
-  isAvailableForCouponRedemption: Scalars["Boolean"];
+  isAvailableForCouponRedemption: Scalars["Boolean"]["output"];
   /** 次回支払い日 */
-  nextPaymentDay: Scalars["Date"];
+  nextPaymentDay: Scalars["Date"]["output"];
   /** 次回支払い方法 */
   nextPaymentMethod?: Maybe<NextPaymentMethod>;
   /** プラン */
   plan: SubscriptionPlan;
   /** 開始日時 */
-  startAt: Scalars["Datetime"];
+  startAt: Scalars["Datetime"]["output"];
   /** ステータス */
-  status: Scalars["String"];
+  status: Scalars["String"]["output"];
   /** 一時停止日時 */
-  suspendedAt?: Maybe<Scalars["Datetime"]>;
+  suspendedAt?: Maybe<Scalars["Datetime"]["output"]>;
 };
 
 export type UserSubscriptionByCardOrCarrier =
@@ -3947,27 +4171,27 @@ export type UserSubscriptionByCardOrCarrier =
 export type UserSubscriptionByCarrier = UserSubscription & {
   __typename?: "UserSubscriptionByCarrier";
   /** キャンセル日時 */
-  cancelAt?: Maybe<Scalars["Datetime"]>;
+  cancelAt?: Maybe<Scalars["Datetime"]["output"]>;
   /** キャリア会社 */
   carrierCompany: CarrierCompany;
   /** 割引情報リスト */
   discounts?: Maybe<Array<SubscriptionDiscount>>;
   /** ID */
-  id: Scalars["ID"];
+  id: Scalars["ID"]["output"];
   /** クーポン適用可能フラグ */
-  isAvailableForCouponRedemption: Scalars["Boolean"];
+  isAvailableForCouponRedemption: Scalars["Boolean"]["output"];
   /** 次回支払い日 */
-  nextPaymentDay: Scalars["Date"];
+  nextPaymentDay: Scalars["Date"]["output"];
   /** 次回支払い方法 */
   nextPaymentMethod?: Maybe<NextPaymentMethod>;
   /** プラン */
   plan: SubscriptionPlan;
   /** 開始日時 */
-  startAt: Scalars["Datetime"];
+  startAt: Scalars["Datetime"]["output"];
   /** ステータス */
-  status: Scalars["String"];
+  status: Scalars["String"]["output"];
   /** 一時停止日時 */
-  suspendedAt?: Maybe<Scalars["Datetime"]>;
+  suspendedAt?: Maybe<Scalars["Datetime"]["output"]>;
 };
 
 /** ユーザー名表示位置 */
@@ -3985,7 +4209,7 @@ export enum UsernamePosition {
 }
 
 export type VefifyEmailInput = {
-  token: Scalars["String"];
+  token: Scalars["String"]["input"];
 };
 
 /** コンテンツ閲覧可能範囲 */
@@ -4104,11 +4328,11 @@ export type GalleryConnectionFragment = {
 } & { " $fragmentName"?: "GalleryConnectionFragment" };
 
 export type BlogQueryVariables = Exact<{
-  slug: Scalars["String"];
-  first?: InputMaybe<Scalars["Int"]>;
-  after?: InputMaybe<Scalars["String"]>;
-  last?: InputMaybe<Scalars["Int"]>;
-  before?: InputMaybe<Scalars["String"]>;
+  slug: Scalars["String"]["input"];
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type BlogQuery = {
@@ -4125,7 +4349,7 @@ export type BlogQuery = {
 };
 
 export type GalleryQueryVariables = Exact<{
-  id: Scalars["ID"];
+  id: Scalars["ID"]["input"];
 }>;
 
 export type GalleryQuery = {
@@ -4145,11 +4369,11 @@ export type GalleryQuery = {
 };
 
 export type GalleryGroupQueryVariables = Exact<{
-  slug: Scalars["String"];
-  first?: InputMaybe<Scalars["Int"]>;
-  after?: InputMaybe<Scalars["String"]>;
-  last?: InputMaybe<Scalars["Int"]>;
-  before?: InputMaybe<Scalars["String"]>;
+  slug: Scalars["String"]["input"];
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type GalleryGroupQuery = {
