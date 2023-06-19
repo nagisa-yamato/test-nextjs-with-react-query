@@ -1,4 +1,7 @@
+import AppHeader from "@/components/AppHeader/AppHeader";
+import { AppMain } from "@/components/AppMain/AppMain.styles";
 import { Metadata } from "next";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Providers>
+          <AppHeader />
+          <AppMain>{children}</AppMain>
+        </Providers>
+      </body>
     </html>
   );
 }

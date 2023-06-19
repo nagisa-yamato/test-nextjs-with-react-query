@@ -1,3 +1,5 @@
+"use client";
+
 import {
   COOKIE_NAME_ACCESS_TOKEN,
   COOKIE_NAME_REFRESH_TOKEN,
@@ -5,7 +7,7 @@ import {
 import { auth } from "@/lib/firebase/config";
 import { cookiesApi } from "@/lib/js-cookie";
 import { User } from "firebase/auth";
-import { createContext, useState, useEffect, ReactNode } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext<{ user: User | null }>({ user: null });
 

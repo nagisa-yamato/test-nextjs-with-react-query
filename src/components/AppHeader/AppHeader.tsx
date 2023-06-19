@@ -1,8 +1,10 @@
+"use client";
+
 import useAuth from "@/hooks/useAuth";
 import { logout } from "@/lib/firebase/auth/helpers";
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Header, UL } from "./AppHeader.styles";
 
 const AppHeader = () => {
@@ -36,7 +38,7 @@ const AppHeader = () => {
                   await logout();
                   // https://stackoverflow.com/a/67635388
                   queryClient.removeQueries();
-                  await router.push("/");
+                  router.push("/");
                 }}
               >
                 logout
