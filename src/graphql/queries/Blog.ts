@@ -1,8 +1,8 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { RequestOptions } from "graphql-request";
+import { client, createAuthorizationHeader } from "../../lib/graphql-request";
 import { graphql } from "../generated";
 import { BlogQueryVariables } from "../generated/graphql";
-import { client, createAuthorizationHeader } from "../graphql-request";
 
 const BlogQueryDocument = graphql(`
   query Blog(

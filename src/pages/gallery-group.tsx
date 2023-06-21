@@ -1,25 +1,25 @@
-import {
-  fetchGalleryGroup,
-  galleryGroupKeys,
-} from "@/graphql/queries/GalleryGroup";
-import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
-import { GetServerSideProps } from "next";
-import { COOKIE_NAME_ACCESS_TOKEN, ITEMS_PER_PAGE } from "@/constants";
-import { cookiesApi } from "@/lib/js-cookie";
-import { useFragment } from "@/graphql/generated/fragment-masking";
-import {
-  GalleryConnectionFragment,
-  GalleryFragment,
-} from "@/graphql/fragments/gallery";
-import { useEffect, useMemo, useState } from "react";
-import { GalleryGroupQueryVariables } from "@/graphql/generated/graphql";
 import GalleryArticle from "@/components/GalleryArticle/GalleryArticle";
 import Pagination, {
   organizeQueryParamsToVariables,
 } from "@/components/Pagination/Pagination";
-import { GalleryWrap } from "../components/pages/GalleryGroup.styles";
+import { COOKIE_NAME_ACCESS_TOKEN, ITEMS_PER_PAGE } from "@/constants";
+import {
+  GalleryConnectionFragment,
+  GalleryFragment,
+} from "@/graphql/fragments/gallery";
+import { useFragment } from "@/graphql/generated/fragment-masking";
+import { GalleryGroupQueryVariables } from "@/graphql/generated/graphql";
+import {
+  fetchGalleryGroup,
+  galleryGroupKeys,
+} from "@/graphql/queries/GalleryGroup";
+import { cookiesApi } from "@/lib/js-cookie";
 import { isEmptyObject } from "@/utils/isEmptyObject";
+import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
+import { GalleryWrap } from "../components/pages/GalleryGroup.styles";
 const GALLERY_GROUP_SLUG = "blurry pictures of cats";
 const DEFAULT_VARIABLES = {
   slug: GALLERY_GROUP_SLUG,

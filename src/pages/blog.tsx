@@ -1,3 +1,4 @@
+import BlogArticle from "@/components/BlogArticle/BlogArticle";
 import Pagination, {
   organizeQueryParamsToVariables,
 } from "@/components/Pagination/Pagination";
@@ -8,15 +9,14 @@ import {
 } from "@/graphql/fragments/blog";
 import { useFragment } from "@/graphql/generated";
 import { BlogQueryVariables } from "@/graphql/generated/graphql";
-import { fetchBlog, blogKeys } from "@/graphql/queries/Blog";
-import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
-import { GetServerSideProps } from "next";
-import { useEffect, useMemo, useState } from "react";
-import BlogArticle from "@/components/BlogArticle/BlogArticle";
-import { BlogsWrap } from "../components/pages/Blog.styles";
-import { isEmptyObject } from "@/utils/isEmptyObject";
-import { useRouter } from "next/router";
+import { blogKeys, fetchBlog } from "@/graphql/queries/Blog";
 import { cookiesApi } from "@/lib/js-cookie";
+import { isEmptyObject } from "@/utils/isEmptyObject";
+import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
+import { BlogsWrap } from "../components/pages/Blog.styles";
 const BLOG_SLUG = "むっくり";
 const DEFAULT_VARIABLES = {
   slug: BLOG_SLUG,

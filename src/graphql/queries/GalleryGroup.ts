@@ -1,8 +1,8 @@
 import { graphql } from "@/graphql/generated";
-import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { GalleryGroupQueryVariables } from "@/graphql/generated/graphql";
-import { client, createAuthorizationHeader } from "../graphql-request";
+import { createQueryKeys } from "@lukemorales/query-key-factory";
 import { RequestOptions } from "graphql-request";
+import { client, createAuthorizationHeader } from "../../lib/graphql-request";
 
 const GalleryGroupQueryDocument = graphql(`
   query GalleryGroup(
