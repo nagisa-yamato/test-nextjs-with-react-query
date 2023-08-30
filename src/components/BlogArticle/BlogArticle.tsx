@@ -14,11 +14,11 @@ const BlogArticle = ({
   const blogPostFragment = useFragment(BlogPostFragment, blogPost);
   const blogCategoryFragment = useFragment(
     BlogCategoryFragment,
-    blogPostFragment.category
+    blogPostFragment.category,
   );
   const sharedFileFragment = useFragment(
     SharedFileFragment,
-    blogPostFragment.thumbnailFile
+    blogPostFragment.thumbnailFile,
   );
 
   return (

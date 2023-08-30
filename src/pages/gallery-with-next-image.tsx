@@ -59,11 +59,11 @@ export default function PagesGalleryPageWithNextImage() {
             /* eslint-disable react-hooks/rules-of-hooks */
             const imagePresetUrl = useFragment(
               GalleryImagePresetUrlFragment,
-              content.imagePresetUrl
+              content.imagePresetUrl,
             );
             const contentFile = useFragment(
               SharedFileFragment,
-              content.contentFile
+              content.contentFile,
             );
             /* eslint-enable */
             const searchParams = new URL(imagePresetUrl?.xLarge ?? "")

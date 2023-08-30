@@ -13,7 +13,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 };
 export type MakeEmpty<
   T extends { [key: string]: unknown },
-  K extends keyof T
+  K extends keyof T,
 > = { [_ in K]?: never };
 export type Incremental<T> =
   | T
@@ -63,6 +63,7 @@ export type AddBlogPostCommentInput = {
 export type AddCreditCardInput = {
   expiration: Scalars["String"]["input"];
   token: Scalars["String"]["input"];
+  useDefaultGMOPGAccount?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 /** ギャラリーコメント入力コメント */
@@ -637,6 +638,18 @@ export type CreditCard = Node & {
   paymentSchedule?: Maybe<PaymentSchedule>;
 };
 
+/**
+ * カーソルページネーションオプション
+ *
+ * https://www.apollographql.com/docs/react/pagination/cursor-based
+ */
+export type CursorPaginationOptionsInput = {
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  before?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  last?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
 /** 会員退会 - Input */
 export type DeleteMemberInput = {
   /** 退会理由レポート */
@@ -1107,6 +1120,13 @@ export enum Gender {
   Woman = "WOMAN",
 }
 
+/** GMO-PG Account */
+export type GmoPgAccount = {
+  __typename?: "GmoPgAccount";
+  /** Shop ID */
+  shopId: Scalars["String"]["output"];
+};
+
 /** 画像の表示方法 */
 export enum ImageDisplayType {
   /** 固定 */
@@ -1477,6 +1497,11 @@ export type LiveBroadcast = Node & {
   description?: Maybe<Scalars["String"]["output"]>;
   /** 終了日時 */
   endedAt?: Maybe<Scalars["Datetime"]["output"]>;
+  /**
+   * "
+   *     視聴者数非表示
+   */
+  hideViewerCount: Scalars["Boolean"]["output"];
   /** ID */
   id: Scalars["ID"]["output"];
   /** 閲覧可能フラグ */
@@ -1485,7 +1510,10 @@ export type LiveBroadcast = Node & {
   name: Scalars["String"]["output"];
   /** プレゼントオブジェクト */
   presents?: Maybe<Array<LiveBroadcastPresent>>;
-  /** 料金ステータス */
+  /**
+   * 料金ステータス
+   * @deprecated `viewableScope`を使用
+   */
   priceStatus: LiveBroadcastPriceStatus;
   /** ランキング */
   ranking?: Maybe<Array<LiveBroadcastRank>>;
@@ -2097,6 +2125,7 @@ export type Member = {
   /** @deprecated site.membershipCard.prefix と member.membershipNumber の結合で会員番号を表示 */
   number?: Maybe<Scalars["String"]["output"]>;
   profileURL?: Maybe<Scalars["String"]["output"]>;
+  /** @deprecated No longer supported */
   roleStatuses?: Maybe<Array<RoleStatus>>;
   site?: Maybe<Site>;
   subscriptions?: Maybe<Array<Maybe<UserSubscriptionByCardOrCarrier>>>;
@@ -2158,6 +2187,8 @@ export type MonthlyPaymentHistories = {
   lotteryTicketPurchase?: Maybe<Array<SortablePaymentHistory>>;
   /** 対象月 */
   month: Scalars["Int"]["output"];
+  /** Shop注文支払い */
+  shopOrderPayment?: Maybe<Array<SortablePaymentHistory>>;
   /** サブスク月額支払い */
   subscriptionPayment?: Maybe<Array<SortablePaymentHistory>>;
   /** 対象年 */
@@ -2602,6 +2633,38 @@ export type Mutation = {
   removeCreditCard?: Maybe<CreditCard>;
   /** 認証メール再送信 */
   resendVerifyMail?: Maybe<User>;
+  /**
+   * Shopカートアイテムリスト追加
+   *
+   * ※要ログイン
+   *
+   * 以下の `extensions.code` の場合、 `extensions.variant_ids` に製品規格IDリストがセットされます。 <br>
+   * - INCLUDES_OUT_OF_SALES_PERIOD <br>
+   * - INCLUDES_NO_AVAILABILITY <br>
+   * - INCLUDES_ALREADY_PURCHASED <br>
+   */
+  shopAddCartItems: ShopAddCartItemsPayload;
+  /**
+   * Shopカートチェックアウト完了
+   *
+   * ※要ログイン
+   *
+   * 以下の `extensions.code` の場合、 `extensions.variant_ids` に製品規格IDリストがセットされます。 <br>
+   * - INCLUDES_OUT_OF_SALES_PERIOD <br>
+   * - INCLUDES_NO_AVAILABILITY <br>
+   * - INCLUDES_ALREADY_PURCHASED <br>
+   */
+  shopCompleteCheckoutFromCart: ShopCompleteCheckoutFromCartPayload;
+  /** Shopコンプリート特典アイテムデジタルコンテンツ取得 */
+  shopDownloadCollectionCompletionRewardItemDigitalContent?: Maybe<ShopDownloadDigitalContentPayload>;
+  /** Shop製品規格デジタルコンテンツ取得 */
+  shopDownloadProductVariantDigitalContent?: Maybe<ShopDownloadDigitalContentPayload>;
+  /**
+   * Shopカートアイテムリスト削除
+   *
+   * ※要ログイン
+   */
+  shopRemoveCartItems: ShopRemoveCartItemsPayload;
   /** 生配信コラボ申請送信 */
   submitLiveBroadcastCollaborationRequest?: Maybe<LiveBroadcastCollaborationRequestStatus>;
   /** 連携を削除 */
@@ -2776,6 +2839,27 @@ export type MutationResendVerifyMailArgs = {
   input: ResendVerifyMail;
 };
 
+export type MutationShopAddCartItemsArgs = {
+  input: ShopAddCartItemsInput;
+};
+
+export type MutationShopCompleteCheckoutFromCartArgs = {
+  input: ShopCompleteCheckoutFromCartInput;
+};
+
+export type MutationShopDownloadCollectionCompletionRewardItemDigitalContentArgs =
+  {
+    input: ShopDownloadCollectionCompletionRewardItemDigitalContentInput;
+  };
+
+export type MutationShopDownloadProductVariantDigitalContentArgs = {
+  input: ShopDownloadProductVariantDigitalContentInput;
+};
+
+export type MutationShopRemoveCartItemsArgs = {
+  input: ShopRemoveCartItemsInput;
+};
+
 export type MutationSubmitLiveBroadcastCollaborationRequestArgs = {
   broadcastID: Scalars["ID"]["input"];
 };
@@ -2928,6 +3012,16 @@ export enum NumberPosition {
   Right = "RIGHT",
 }
 
+/**
+ * オフセットページネーションオプション
+ *
+ * https://www.apollographql.com/docs/react/pagination/offset-based
+ */
+export type OffsetPaginationOptionsInput = {
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
 export enum OrderDirection {
   Asc = "ASC",
   Desc = "DESC",
@@ -2952,6 +3046,21 @@ export type PageInfo = {
   hasPreviousPage: Scalars["Boolean"]["output"];
   startCursor?: Maybe<Scalars["String"]["output"]>;
 };
+
+/** ページネーションオプション */
+export type PaginationOptionsInput = {
+  cursorOptions?: InputMaybe<CursorPaginationOptionsInput>;
+  offsetOptions?: InputMaybe<OffsetPaginationOptionsInput>;
+  type: PaginationType;
+};
+
+/** ページネーション種別 */
+export enum PaginationType {
+  /** カーソルベース */
+  Cursor = "CURSOR",
+  /** オフセットベース */
+  Offset = "OFFSET",
+}
 
 /** 有料コインステータスオブジェクト */
 export type PaidCoinStatus = Node & {
@@ -2989,6 +3098,7 @@ export type PaymentHistory =
   | CoinPurchaseHistory
   | LotteryShippingPaymentHistory
   | LotteryTicketPurchaseHistory
+  | ShopOrderPaymentHistory
   | SubscriptionPaymentHistory;
 
 /** 支払履歴コネクションオブジェクト */
@@ -3030,6 +3140,15 @@ export type PaymentSchedule = {
   lastStartDay: Scalars["Date"]["output"];
 };
 
+/** 期間 */
+export type Period = {
+  __typename?: "Period";
+  /** 終了 */
+  endAt?: Maybe<Scalars["Datetime"]["output"]>;
+  /** 開始 */
+  startAt?: Maybe<Scalars["Datetime"]["output"]>;
+};
+
 /** スタンプ購入入力オブジェクト */
 export type PurchaseStampInput = {
   /** 生配信ID */
@@ -3053,6 +3172,8 @@ export type Query = {
   couponPromotionByPromotionCode?: Maybe<CouponPromotion>;
   /** クーポンサブスクリプションアクション取得 */
   couponSubscriptionActionByPromotionCode?: Maybe<CouponSubscriptionAction>;
+  /** Default GMO-PG account */
+  defaultGmoPgAccount: GmoPgAccount;
   /** 引換可能くじ一覧取得 */
   exchangeableLotteries: LotteryConnection;
   /** Get a gallery by id */
@@ -3117,8 +3238,46 @@ export type Query = {
   scheduleList: ScheduleConnection;
   /** スクリーンバナーリスト取得 */
   screenBanners?: Maybe<Array<Banner>>;
-  /** Shop注文情報を取得 */
+  /** Shop情報取得 */
+  shop?: Maybe<Shop>;
+  /**
+   * Shopカート取得
+   *
+   * ※要ログイン
+   */
+  shopCart?: Maybe<ShopCart>;
+  /** Shopコンプリート特典取得 */
+  shopCollectionCompletionReward?: Maybe<ShopCollectionCompletionReward>;
+  /** Shopコンプリート特典リスト取得 */
+  shopCollectionCompletionRewardList?: Maybe<
+    Array<ShopCollectionCompletionReward>
+  >;
+  /**
+   * Shop注文情報を取得
+   *
+   * ※要ログイン
+   */
   shopOrder?: Maybe<ShopOrder>;
+  /**
+   * Shop注文リストを取得
+   *
+   * ※要ログイン
+   */
+  shopOrders: ShopOrderConnection;
+  /** Shop製品を取得 */
+  shopProduct?: Maybe<ShopProduct>;
+  /** Shop製品リストを取得 */
+  shopProducts: ShopProductConnection;
+  /**
+   * Shop購入済み製品リストを取得
+   *
+   * ※購入済み製品規格に紐づく未削除の親製品のみ対象
+   *
+   * ※要ログイン
+   */
+  shopPurchasedProducts: ShopProductConnection;
+  /** Shop統計取得 */
+  shopStats?: Maybe<ShopStats>;
   /** get site by domain(ex. https://www.fam.com/{domain}, https://www.{domain}) */
   site?: Maybe<Site>;
   /** スタンプ詳細取得 */
@@ -3296,8 +3455,42 @@ export type QueryScreenBannersArgs = {
   screenKeyPrefix: Scalars["String"]["input"];
 };
 
+export type QueryShopCartArgs = {
+  shopId: Scalars["ID"]["input"];
+};
+
+export type QueryShopCollectionCompletionRewardArgs = {
+  productId: Scalars["ID"]["input"];
+};
+
+export type QueryShopCollectionCompletionRewardListArgs = {
+  productIds?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+};
+
 export type QueryShopOrderArgs = {
   id: Scalars["ID"]["input"];
+};
+
+export type QueryShopOrdersArgs = {
+  cursorPaginationOptions: CursorPaginationOptionsInput;
+  filterOptions?: InputMaybe<ShopOrderFilterOptionsInput>;
+  shopId: Scalars["ID"]["input"];
+};
+
+export type QueryShopProductArgs = {
+  id: Scalars["ID"]["input"];
+};
+
+export type QueryShopProductsArgs = {
+  filterOptions?: InputMaybe<ShopProductFilterOptionsInput>;
+  paginationOptions: PaginationOptionsInput;
+  shopId: Scalars["ID"]["input"];
+  sortKey?: InputMaybe<ShopProductSortKey>;
+};
+
+export type QueryShopPurchasedProductsArgs = {
+  paginationOptions: PaginationOptionsInput;
+  shopId: Scalars["ID"]["input"];
 };
 
 export type QueryStampArgs = {
@@ -3455,10 +3648,205 @@ export type SharedFile = Node & {
   url: Scalars["String"]["output"];
 };
 
+/** Shop */
+export type Shop = {
+  __typename?: "Shop";
+  /** ブランド */
+  brand?: Maybe<ShopBrand>;
+  /** 説明文 */
+  description?: Maybe<Scalars["String"]["output"]>;
+  /** ID */
+  id: Scalars["ID"]["output"];
+  /** 有効フラグ */
+  isAvailable: Scalars["Boolean"]["output"];
+  /** 名称 */
+  name: Scalars["String"]["output"];
+};
+
+/** Shopカートアイテムリスト追加-Input */
+export type ShopAddCartItemsInput = {
+  /** カートID */
+  cartId: Scalars["ID"]["input"];
+  /** アイテムリスト */
+  items: Array<ShopCartItemInput>;
+};
+
+/** Shopカートアイテムリスト追加-Payload */
+export type ShopAddCartItemsPayload = {
+  __typename?: "ShopAddCartItemsPayload";
+  /** カート */
+  cart?: Maybe<ShopCart>;
+};
+
+/** Shopブランド */
+export type ShopBrand = {
+  __typename?: "ShopBrand";
+  /** ロゴ */
+  logo?: Maybe<ShopMediaImage>;
+};
+
+/** Shopカート */
+export type ShopCart = Node & {
+  __typename?: "ShopCart";
+  /** ID */
+  id: Scalars["ID"]["output"];
+  /** アイテムリスト */
+  items?: Maybe<Array<ShopCartItem>>;
+};
+
+/** Shopカートアイテム */
+export type ShopCartItem = Node & {
+  __typename?: "ShopCartItem";
+  /** ID */
+  id: Scalars["ID"]["output"];
+  /** 製品規格 */
+  productVariant: ShopProductVariant;
+  /** 数量 */
+  quantity: Scalars["Int"]["output"];
+};
+
+/** Shopカートアイテム-Input */
+export type ShopCartItemInput = {
+  /** 数量 */
+  quantity: Scalars["Int"]["input"];
+  /** 製品規格ID */
+  variantId: Scalars["ID"]["input"];
+};
+
+/** Shopカートアイテム更新-Input */
+export type ShopCartItemUpdateInput = {
+  /** アイテムID */
+  itemId: Scalars["ID"]["input"];
+  /** 数量 */
+  quantity?: InputMaybe<Scalars["Int"]["input"]>;
+  /** 製品規格ID */
+  variantId?: InputMaybe<Scalars["ID"]["input"]>;
+};
+
+/** Shopチェックアウトアイテム-Input */
+export type ShopCheckoutItemInput = {
+  /** 数量 */
+  quantity: Scalars["Int"]["input"];
+  /** 製品規格ID */
+  variantId: Scalars["ID"]["input"];
+};
+
+/** Shopコンプリート特典 */
+export type ShopCollectionCompletionReward = Node & {
+  __typename?: "ShopCollectionCompletionReward";
+  /** ID */
+  id: Scalars["ID"]["output"];
+  /** 画像 */
+  image?: Maybe<ShopMediaImage>;
+  /** アイテムリスト */
+  items?: Maybe<Array<ShopCollectionCompletionRewardItem>>;
+  /** 名称 */
+  name: Scalars["String"]["output"];
+  /** 製品ID */
+  productId: Scalars["ID"]["output"];
+};
+
+/** Shopコンプリート特典アイテム */
+export type ShopCollectionCompletionRewardItem = Node & {
+  __typename?: "ShopCollectionCompletionRewardItem";
+  /** デジタルコンテンツ */
+  digitalContent: ShopMediaDigitalContent;
+  /** ID */
+  id: Scalars["ID"]["output"];
+};
+
+/** Shopカートチェックアウト完了-Input */
+export type ShopCompleteCheckoutFromCartInput = {
+  /** カートID */
+  cartId: Scalars["ID"]["input"];
+  /** アイテムリスト */
+  items: Array<ShopCheckoutItemInput>;
+  /**
+   * 支払いカード情報
+   *
+   * 決済方法が増えた場合を考慮してNullableとする
+   */
+  paymentCard?: InputMaybe<PaymentCardInput>;
+};
+
+/** Shopカートチェックアウト完了-Payload */
+export type ShopCompleteCheckoutFromCartPayload = {
+  __typename?: "ShopCompleteCheckoutFromCartPayload";
+  /** 注文 */
+  order?: Maybe<ShopOrder>;
+};
+
+/** Shopコンテンツ利用可能範囲 */
+export type ShopContentAvailability = {
+  __typename?: "ShopContentAvailability";
+  /** サブスクプランIDリスト */
+  subscriptionPlanIds?: Maybe<Array<Scalars["ID"]["output"]>>;
+  /** ユーザーグループ */
+  userGroup: ShopContentAvailabilityUserGroup;
+  /** 閲覧者の適用可能フラグ */
+  viewerSuitable: Scalars["Boolean"]["output"];
+};
+
+/** Shopコンテンツ利用可能範囲-Input */
+export type ShopContentAvailabilityInput = {
+  /** サブスクプランIDリスト */
+  subscriptionPlanIds?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+  /** ユーザーグループ */
+  userGroup: ShopContentAvailabilityUserGroup;
+};
+
+/** Shopコンテンツ利用可能ユーザーグループ */
+export enum ShopContentAvailabilityUserGroup {
+  /** 全員 */
+  Everyone = "EVERYONE",
+  /** 無料会員, 有料会員 */
+  Members = "MEMBERS",
+  /** 有料会員 */
+  PaidMembers = "PAID_MEMBERS",
+}
+
+/** Shopコンプリート特典アイテムデジタルコンテンツ取得-Input */
+export type ShopDownloadCollectionCompletionRewardItemDigitalContentInput = {
+  /** 特典アイテムID */
+  rewardItemId: Scalars["ID"]["input"];
+};
+
+/** Shopデジタルコンテンツ取得-Payload */
+export type ShopDownloadDigitalContentPayload = {
+  __typename?: "ShopDownloadDigitalContentPayload";
+  /** ダウンロードURL */
+  downloadUrl: ShopMediaDigitalContentUrl;
+  /** プレビューURL */
+  previewUrl?: Maybe<ShopMediaDigitalContentUrl>;
+};
+
+/** Shop製品規格デジタルコンテンツ取得-Input */
+export type ShopDownloadProductVariantDigitalContentInput = {
+  /** 製品規格ID */
+  variantId: Scalars["ID"]["input"];
+};
+
+/** Shop画像プリセットURL */
+export type ShopImagePresetUrl = {
+  __typename?: "ShopImagePresetUrl";
+  /** Max 1920px */
+  large: Scalars["String"]["output"];
+  /** Max 768px */
+  medium: Scalars["String"]["output"];
+  /** オリジナル */
+  original: Scalars["String"]["output"];
+  /** Max 480px */
+  small: Scalars["String"]["output"];
+  /** Max 150px */
+  thumbnail: Scalars["String"]["output"];
+  /** Max 2048px */
+  xLarge: Scalars["String"]["output"];
+};
+
 /**
  * Shop画像URL
  *
- * サイズバリエーション(small, medium, largeなど)を増やせるようにオブジェクト構造にしている。
+ * DEPRECATED: ShopImagePresetUrlを使用してください
  */
 export type ShopImageUrl = {
   __typename?: "ShopImageURL";
@@ -3466,8 +3854,39 @@ export type ShopImageUrl = {
   default: Scalars["String"]["output"];
 };
 
-/** Shop注文 */
-export type ShopOrder = {
+/** Shopメディアデジタルコンテンツ */
+export type ShopMediaDigitalContent = Node & {
+  __typename?: "ShopMediaDigitalContent";
+  /** ID */
+  id: Scalars["ID"]["output"];
+  /** MIMEタイプ */
+  mimeType?: Maybe<Scalars["String"]["output"]>;
+  /** オリジナルファイル名 */
+  originalFileName: Scalars["String"]["output"];
+};
+
+/** ShopメディアデジタルコンテンツURL */
+export type ShopMediaDigitalContentUrl = {
+  __typename?: "ShopMediaDigitalContentUrl";
+  /** 署名済みクエリ */
+  signedQuery: Scalars["String"]["output"];
+  /** URL */
+  url: Scalars["String"]["output"];
+};
+
+/** Shopメディア画像 */
+export type ShopMediaImage = Node & {
+  __typename?: "ShopMediaImage";
+  /** ID */
+  id: Scalars["ID"]["output"];
+  /** MIMEタイプ */
+  mimeType?: Maybe<Scalars["String"]["output"]>;
+  /** プリセットURL */
+  presetUrl?: Maybe<ShopImagePresetUrl>;
+};
+
+/** Shop注文-Node */
+export type ShopOrder = Node & {
   __typename?: "ShopOrder";
   /** 注文ID */
   id: Scalars["ID"]["output"];
@@ -3485,8 +3904,33 @@ export type ShopOrder = {
   subtotalPrice: Scalars["Int"]["output"];
   /** 合計金額 */
   totalPrice: Scalars["Int"]["output"];
+  /** 合計返金額 */
+  totalRefunded: Scalars["Int"]["output"];
   /** 合計配送料 */
   totalShippingFee: Scalars["Int"]["output"];
+  /** 合計税金額 */
+  totalTax: Scalars["Int"]["output"];
+};
+
+/** Shop注文-Connection */
+export type ShopOrderConnection = {
+  __typename?: "ShopOrderConnection";
+  edges?: Maybe<Array<ShopOrderEdge>>;
+  pageInfo: PageInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
+/** Shop注文-Edge */
+export type ShopOrderEdge = Edge & {
+  __typename?: "ShopOrderEdge";
+  cursor: Scalars["String"]["output"];
+  node?: Maybe<ShopOrder>;
+};
+
+/** Shop注文フィルターオプション */
+export type ShopOrderFilterOptionsInput = {
+  /** 注文年 */
+  orderYear?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 /** Shop注文アイテム */
@@ -3494,10 +3938,16 @@ export type ShopOrderItem = {
   __typename?: "ShopOrderItem";
   /** 注文アイテムID */
   id: Scalars["ID"]["output"];
+  /** 金額 */
+  price: Scalars["Int"]["output"];
   /** 製品 */
   product: ShopOrderProduct;
   /** 数量 */
   quantity: Scalars["Int"]["output"];
+  /** 返品日時 */
+  returnedAt?: Maybe<Scalars["Datetime"]["output"]>;
+  /** 税率 */
+  taxRate: Scalars["String"]["output"];
   /** 製品規格 */
   variant: ShopOrderVariant;
 };
@@ -3531,6 +3981,21 @@ export type ShopOrderPayment = {
   paidAt: Scalars["Datetime"]["output"];
   /** 支払いカード */
   paymentCard?: Maybe<PaymentCard>;
+  /** 返金日時 */
+  refundedAt?: Maybe<Scalars["Datetime"]["output"]>;
+};
+
+/** Shop注文支払い履歴 */
+export type ShopOrderPaymentHistory = {
+  __typename?: "ShopOrderPaymentHistory";
+  /** 注文ID */
+  orderId: Scalars["ID"]["output"];
+  /** 支払い日時 */
+  paidAt: Scalars["Datetime"]["output"];
+  /** Shop */
+  shop: Shop;
+  /** 合計金額 */
+  totalPrice: Scalars["Int"]["output"];
 };
 
 /** Shop注文製品 */
@@ -3584,13 +4049,119 @@ export type ShopOrderVariant = {
   name: Scalars["String"]["output"];
 };
 
+/** Shop製品-Node */
+export type ShopProduct = Node & {
+  __typename?: "ShopProduct";
+  /** 利用可能範囲 */
+  availability: ShopContentAvailability;
+  /** 説明文 */
+  description?: Maybe<Scalars["String"]["output"]>;
+  /** ID */
+  id: Scalars["ID"]["output"];
+  /** 画像リスト */
+  images?: Maybe<Array<ShopMediaImage>>;
+  /** 販売可能フラグ */
+  isAvailableForSale: Scalars["Boolean"]["output"];
+  /** 名称 */
+  name: Scalars["String"]["output"];
+  /** 製品タイプ */
+  productType: ShopProductType;
+  /** 公開期間 */
+  publicationPeriod?: Maybe<Period>;
+  /** 販売期間 */
+  salesPeriod?: Maybe<Period>;
+  /** 規格リスト */
+  variants?: Maybe<Array<ShopProductVariant>>;
+};
+
+/** Shop製品-Node */
+export type ShopProductImagesArgs = {
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+/** Shop製品-Connection */
+export type ShopProductConnection = {
+  __typename?: "ShopProductConnection";
+  edges?: Maybe<Array<ShopProductEdge>>;
+  pageInfo: PageInfo;
+  totalCount: Scalars["Int"]["output"];
+};
+
+/** Shop製品-Edge */
+export type ShopProductEdge = Edge & {
+  __typename?: "ShopProductEdge";
+  cursor: Scalars["String"]["output"];
+  node?: Maybe<ShopProduct>;
+};
+
+/** Shop製品フィルターオプション */
+export type ShopProductFilterOptionsInput = {
+  /** 限定公開を含む */
+  includeUnlisted?: InputMaybe<Scalars["Boolean"]["input"]>;
+  /** 製品タイプリスト */
+  productTypes?: InputMaybe<Array<ShopProductType>>;
+};
+
 /** Shop製品画像 */
 export type ShopProductImage = {
   __typename?: "ShopProductImage";
+  /** プリセットURL */
+  presetUrl?: Maybe<ShopImagePresetUrl>;
   /** URL */
   url: ShopImageUrl;
 };
 
+/** Shop製品ソートキー */
+export enum ShopProductSortKey {
+  /** 公開日時 */
+  PublicationStartAt = "PUBLICATION_START_AT",
+  /** おすすめ */
+  Recommendation = "RECOMMENDATION",
+}
+
+/** Shop製品タイプ */
+export enum ShopProductType {
+  /** セット */
+  Set = "SET",
+  /** 単品 */
+  SingleItem = "SINGLE_ITEM",
+}
+
+/** Shop製品規格 */
+export type ShopProductVariant = Node & {
+  __typename?: "ShopProductVariant";
+  /** デジタルコンテンツ */
+  digitalContent?: Maybe<ShopMediaDigitalContent>;
+  /** ID */
+  id: Scalars["ID"]["output"];
+  /** 画像 */
+  image?: Maybe<ShopMediaImage>;
+  /** 名称 */
+  name: Scalars["String"]["output"];
+  /** 金額 */
+  price: Scalars["Int"]["output"];
+  /** 製品 */
+  product?: Maybe<ShopProduct>;
+  /** 最終購入日時 */
+  viewerLastPurchasedAt?: Maybe<Scalars["Datetime"]["output"]>;
+};
+
+/** Shopカートアイテムリスト削除-Input */
+export type ShopRemoveCartItemsInput = {
+  /** カートID */
+  cartId: Scalars["ID"]["input"];
+  /** アイテムIDリスト */
+  itemIds: Array<Scalars["ID"]["input"]>;
+};
+
+/** Shopカートアイテムリスト削除-Payload */
+export type ShopRemoveCartItemsPayload = {
+  __typename?: "ShopRemoveCartItemsPayload";
+  /** カート */
+  cart?: Maybe<ShopCart>;
+};
+
+/** 配送先住所-Input */
 export type ShopShippingAddressInput = {
   /** 番地 */
   address1: Scalars["String"]["input"];
@@ -3610,6 +4181,45 @@ export type ShopShippingAddressInput = {
   postcode: Scalars["String"]["input"];
   /** 都道府県 */
   prefecture: Scalars["String"]["input"];
+};
+
+/** Shop統計 */
+export type ShopStats = {
+  __typename?: "ShopStats";
+  /** 製品数 */
+  productCount: Scalars["Int"]["output"];
+  /**
+   * 購入製品規格数
+   *
+   * ※未ログインの場合は null
+   */
+  purchasedVariantCount?: Maybe<Scalars["Int"]["output"]>;
+};
+
+/** Shop統計 */
+export type ShopStatsProductCountArgs = {
+  productType: ShopProductType;
+  shopId: Scalars["ID"]["input"];
+};
+
+/** Shop統計 */
+export type ShopStatsPurchasedVariantCountArgs = {
+  shopId: Scalars["ID"]["input"];
+};
+
+/** Shopカートアイテムリスト更新-Input */
+export type ShopUpdateCartItemsInput = {
+  /** カートID */
+  cartId: Scalars["ID"]["input"];
+  /** アイテムリスト */
+  items: Array<ShopCartItemUpdateInput>;
+};
+
+/** Shopカートアイテムリスト更新-Payload */
+export type ShopUpdateCartItemsPayload = {
+  __typename?: "ShopUpdateCartItemsPayload";
+  /** カート */
+  cart?: Maybe<ShopCart>;
 };
 
 export enum SignUpMethod {
@@ -3651,6 +4261,8 @@ export type Site = Node & {
   galleries: GalleryConnection;
   /** 写真管理リスト取得 */
   galleryGroups: Array<GalleryGroup>;
+  /** GMO-PG account */
+  gmoPgAccount?: Maybe<GmoPgAccount>;
   /** GoogleアナリティクスID */
   googleAnalyticsId: Scalars["String"]["output"];
   /** アイコン画像 */
@@ -3772,14 +4384,14 @@ export type SiteMembershipCard = {
   numberColor: Scalars["String"]["output"];
   /** 会員番号表示位置 */
   numberPosition: NumberPosition;
-  /** 会員番号プレフィックス（上2文字） */
+  /** 会員番号プレフィックス */
   prefix: Scalars["String"]["output"];
 };
 
 /** 会員証番号 */
 export type SiteMembershipNumber = {
   __typename?: "SiteMembershipNumber";
-  /** 会員番号プレフィックス（上2文字） */
+  /** 会員番号プレフィックス */
   prefix: Scalars["String"]["output"];
   /** 開始番号 */
   start: Scalars["Int"]["output"];
@@ -4083,6 +4695,10 @@ export type UserCoinHistoriesArgs = {
   first?: InputMaybe<Scalars["Int"]["input"]>;
   last?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<CoinHistoryOrderInput>;
+};
+
+export type UserCreditCardsArgs = {
+  useDefaultGMOPGAccount?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type UserMembersArgs = {

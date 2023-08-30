@@ -24,7 +24,7 @@ const convertFirstLastToNumber = <Type,>(
     PaginationVariables & {
       first?: string | number;
       last?: string | number;
-    }
+    },
 ) => {
   Object.entries(object).forEach(([key, value]) => {
     if (key !== "first" && key !== "last") {
@@ -45,7 +45,7 @@ const convertFirstLastToNumber = <Type,>(
  * @returns
  */
 const deletePagePropertyFromObject = <Type,>(
-  object: Type & PaginationVariables
+  object: Type & PaginationVariables,
 ) => {
   if (Object.hasOwn(object, "page")) {
     delete object.page;
@@ -59,10 +59,10 @@ const deletePagePropertyFromObject = <Type,>(
  * @returns
  */
 export const organizeQueryParamsToVariables = <Type,>(
-  object: Type & PaginationVariables
+  object: Type & PaginationVariables,
 ) => {
   return convertFirstLastToNumber<Type>(
-    deletePagePropertyFromObject<Type>(object)
+    deletePagePropertyFromObject<Type>(object),
   );
 };
 
@@ -84,7 +84,7 @@ const Pagination = <VariableType,>(props: {
     props;
   const pageInfoFragment = useFragment(
     PageInfoFragment,
-    props.pageInfoFragment
+    props.pageInfoFragment,
   );
 
   const router = useRouter();
@@ -108,7 +108,7 @@ const Pagination = <VariableType,>(props: {
 
   const pathWithoutQueryParams = useMemo(
     () => router.asPath.split("?")[0],
-    [router.asPath]
+    [router.asPath],
   );
 
   const handleClickPrevious = async () => {
@@ -135,7 +135,7 @@ const Pagination = <VariableType,>(props: {
         query: { ...newVariables, page: nextPage },
       },
       undefined,
-      { shallow: true }
+      { shallow: true },
     );
   };
 
@@ -165,7 +165,7 @@ const Pagination = <VariableType,>(props: {
       undefined,
       {
         shallow: true,
-      }
+      },
     );
   };
 

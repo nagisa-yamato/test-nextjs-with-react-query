@@ -69,7 +69,7 @@ const PagesBlog = () => {
             ...router.query,
             slug: BLOG_SLUG,
           }),
-    [router.query]
+    [router.query],
   );
   const [variables, setVariables] = useState<BlogQueryVariables>(baseVariables);
   /**
@@ -91,7 +91,7 @@ const PagesBlog = () => {
   });
   const blogPostConnectionFragment = useFragment(
     BlogPostConnectionFragment,
-    data?.posts
+    data?.posts,
   );
 
   if (isLoading) {

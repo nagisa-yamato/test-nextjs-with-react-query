@@ -18,7 +18,7 @@ const useCustomQueryClient = () => {
         queryCache: new QueryCache(),
         // https://tanstack.com/query/v4/docs/react/reference/MutationCache#global-callbacks
         mutationCache: new MutationCache(),
-      })
+      }),
   );
 
   return { customQueryClient };

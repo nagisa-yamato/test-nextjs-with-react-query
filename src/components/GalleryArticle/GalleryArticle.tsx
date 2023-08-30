@@ -15,15 +15,15 @@ const GalleryArticle = ({
   const galleryFragment = useFragment(GalleryFragment, gallery);
   const galleryContentFragment = useFragment(
     GalleryContentFragment,
-    galleryFragment.contents
+    galleryFragment.contents,
   );
   const sharedFileFragment = useFragment(
     SharedFileFragment,
-    galleryContentFragment?.[0].contentFile
+    galleryContentFragment?.[0].contentFile,
   );
   const imagePresetUrlFragment = useFragment(
     GalleryImagePresetUrlFragment,
-    galleryContentFragment?.[0].imagePresetUrl
+    galleryContentFragment?.[0].imagePresetUrl,
   );
   const searchParams = new URL(imagePresetUrlFragment?.xLarge ?? "")
     ?.searchParams;

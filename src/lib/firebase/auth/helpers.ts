@@ -10,7 +10,7 @@ export const login = async (email: string, password: string) => {
   const userCredential = await signInWithEmailAndPassword(
     auth,
     email,
-    password
+    password,
   );
   const accessToken = await userCredential.user.getIdToken();
   cookiesApi.set(COOKIE_NAME_ACCESS_TOKEN, accessToken);

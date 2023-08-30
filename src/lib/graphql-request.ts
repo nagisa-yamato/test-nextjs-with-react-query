@@ -32,7 +32,7 @@ export const client = new GraphQLClient(
         await user.getIdToken(true);
       }
     },
-  }
+  },
 );
 
 /**
@@ -42,7 +42,7 @@ export const client = new GraphQLClient(
  * @returns
  */
 export const createAuthorizationHeader = (
-  token: string | undefined
+  token: string | undefined,
 ): HeadersInit | undefined => {
   return token ? { Authorization: `Bearer ${token}` } : undefined;
 };

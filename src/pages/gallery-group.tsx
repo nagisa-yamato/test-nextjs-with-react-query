@@ -66,7 +66,7 @@ const PagesGalleryGroup = () => {
             ...router.query,
             slug: GALLERY_GROUP_SLUG,
           }),
-    [router.query]
+    [router.query],
   );
   const [variables, setVariables] =
     useState<GalleryGroupQueryVariables>(baseVariables);
@@ -87,7 +87,7 @@ const PagesGalleryGroup = () => {
   });
   const galleryConnectionFragment = useFragment(
     GalleryConnectionFragment,
-    data?.galleries
+    data?.galleries,
   );
 
   if (isLoading) {
