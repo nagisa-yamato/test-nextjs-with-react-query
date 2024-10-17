@@ -42,7 +42,7 @@
     "@graphql-eslint/eslint-plugin": "3.20.1",
     "@tanstack/eslint-plugin-query": "4.34.1",
     "@types/js-cookie": "3.0.3",
-    "@types/node": "18.15.11",
+    "@types/node": "18.19.56",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "@types/styled-components": "5.1.26",
